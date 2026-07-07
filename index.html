@@ -56,7 +56,10 @@
       />
     </div>
 
-    <section class="mt-10 w-[90%] md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-10 text-center shadow-xl backdrop-blur-sm">
+    <!-- Profile + motto: stacked on small screens, side-by-side on large -->
+    <div class="mt-10 flex w-[90%] md:w-4/5 max-w-[1024px] flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6">
+
+    <section class="flex flex-col justify-center rounded-2xl border border-white/15 bg-white/15 px-8 py-10 text-center shadow-xl backdrop-blur-sm lg:w-3/5">
 
       <!-- Name + tagline -->
       <h1 class="text-4xl font-bold tracking-tight text-white">
@@ -101,7 +104,7 @@
     </section>
 
     <!-- Motto -->
-    <section class="mt-8 w-[90%] md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-10 shadow-xl backdrop-blur-sm">
+    <section class="flex flex-col justify-center rounded-2xl border border-white/15 bg-white/15 px-8 py-10 shadow-xl backdrop-blur-sm lg:w-2/5">
       <blockquote class="text-center">
         <p class="font-serif text-2xl italic tracking-wide text-white md:text-3xl">
           nihil invitus facit sapiens
@@ -118,6 +121,8 @@
         <span class="mt-0.5 block text-xs text-slate-400">Epistulae Morales ad Lucilium, Liber VI, LIV</span>
       </figcaption>
     </section>
+
+    </div>
 
     <!-- Links -->
     <section class="mt-8 w-[90%] md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-8 shadow-xl backdrop-blur-sm">
