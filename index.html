@@ -31,30 +31,8 @@
           content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
     <meta name="twitter:image" content="https://amthonie.nl/images/og-image.jpg"/>
 
-    <!-- Tailwind Play CDN (dev-friendly, no build step) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            DEFAULT: '#FF7A00',
-                            50: '#FFF3E8',
-                            100: '#FFE1C2',
-                            500: '#FF7A00',
-                            600: '#E56E00',
-                            700: '#B85800',
-                        },
-                    },
-                    fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="styles.css"/>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",

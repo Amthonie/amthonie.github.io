@@ -10,3 +10,7 @@ CLAUDE.md
 # Editor / OS cruft
 *.swp
 Thumbs.db
+
+# Build tooling / output (CSS is rebuilt in CI; _site is CI-only)
+node_modules/
+_site/
