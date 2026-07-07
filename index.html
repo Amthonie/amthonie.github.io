@@ -38,10 +38,10 @@
   class="min-h-screen text-slate-200 antialiased"
   style="background: linear-gradient(in oklch to bottom, black 0% 80%, #FF7A00 100%) fixed;"
 >
-  <main class="flex min-h-screen flex-col items-center px-6 py-12">
+  <main class="flex min-h-screen flex-col items-center px-6 pt-12 pb-24">
 
     <!-- Header banner with overlaid avatar -->
-    <div class="relative w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
+    <div class="relative w-[90%] md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
       <img
         src="images/header_1.jpeg"
         alt="Header"
@@ -56,7 +56,7 @@
       />
     </div>
 
-    <section class="mt-10 w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-10 text-center shadow-xl backdrop-blur-sm">
+    <section class="mt-10 w-[90%] md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-10 text-center shadow-xl backdrop-blur-sm">
 
       <!-- Name + tagline -->
       <h1 class="text-4xl font-bold tracking-tight text-white">
@@ -89,6 +89,127 @@
         </a>
       </div>
 
+    </section>
+
+    <!-- Links -->
+    <section class="mt-8 w-[90%] md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-8 shadow-xl backdrop-blur-sm">
+      <h2 class="text-center text-2xl font-bold tracking-tight text-white">Links</h2>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+        <!-- Link card — duplicate this block per link -->
+        <a
+          href="https://www.evastraube.com/"
+          target="_blank"
+          rel="noopener"
+          class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+        >
+          <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
+            <img
+              src="images/links/evastraubecom.jpg"
+              alt="Eva Straube — 450km charity walk"
+              class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+              450km sponsor walk for rare blood diseases
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+              Sponsor my friend's massive 450&nbsp;km charity walk through Swedish Lapland.
+              All proceeds go directly toward research and support for rare blood diseases.
+            </p>
+          </div>
+        </a>
+
+        <a
+          href="https://bloedziekten.nl/"
+          target="_blank"
+          rel="noopener"
+          class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+        >
+          <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-200">
+            <!-- background photo (the ladies), aligned left -->
+            <img
+              src="images/links/szb-background.jpg"
+              alt=""
+              aria-hidden="true"
+              class="absolute inset-0 h-full w-full object-cover object-left transition duration-300 group-hover:scale-105"
+            />
+            <!-- logo, foreground right -->
+            <img
+              src="images/links/szb-logo.svg"
+              alt="Stichting Zeldzame Bloedziekten"
+              class="absolute right-[7%] top-1/2 h-[55%] w-auto -translate-y-1/2"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+              Stichting Zeldzame Bloedziekten (SZB)
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+              Rare diseases often go unsupported compared to more common ones.
+              Help us change that&mdash;please donate if you can.
+            </p>
+          </div>
+        </a>
+
+        <a
+          href="https://www.home-assistant.io/"
+          target="_blank"
+          rel="noopener"
+          class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+        >
+          <div class="relative aspect-[16/9] w-full overflow-hidden bg-sky-400">
+            <img
+              src="images/links/home-assistant.png"
+              alt="Awaken your home"
+              class="absolute inset-0 h-full w-full object-cover object-bottom transition duration-300 group-hover:scale-105"
+            />
+            <img
+              src="images/links/home-assistant-logo.svg"
+              alt="Home Assistant"
+              class="absolute left-1/2 top-4 h-8 w-auto -translate-x-1/2 drop-shadow"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+              Home Assistant
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+              Open source home automation that puts local control and privacy first.
+              Powered by a worldwide community of tinkerers and DIY enthusiasts.
+            </p>
+          </div>
+        </a>
+
+        <a
+          href="https://nextpax.com/"
+          target="_blank"
+          rel="noopener"
+          class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+        >
+          <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
+            <img
+              src="images/links/nextpax.jpg"
+              alt="NextPax Travel Technology"
+              class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+              NextPax Travel Technology
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+              NextPax empowers vacation rentals, hotels, resorts, city apartments, and
+              holiday parks to streamline operations, improve guest experience, and optimize
+              commercial performance. Connect to 100+ global channels with fast, automated
+              distribution that boosts bookings and reduces manual work.
+            </p>
+          </div>
+        </a>
+
+      </div>
     </section>
   </main>
 
