@@ -21,11 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Assemble site
+      - name: Assemble site (static files + built Tailwind CSS)
         run: |
           mkdir -p _site
           # Copy everything except source/build/VCS/tooling into the publish dir
@@ -36,8 +32,12 @@ jobs:
             --exclude='_site' \
             --exclude='node_modules' \
             ./ _site/
-          # Build the (fresh) Tailwind CSS straight into the publish dir
-          npx --yes @tailwindcss/cli@4 -i src/input.css -o _site/styles.css --minify
+          # Standalone Tailwind v4 CLI — self-contained (bundles the tailwindcss
+          # package), so no Node/node_modules and no module-resolution issues.
+          curl -sL -o tailwindcss \
+            https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.2/tailwindcss-linux-x64
+          chmod +x tailwindcss
+          ./tailwindcss -i src/input.css -o _site/styles.css --minify
 
       - uses: actions/configure-pages@v5
 
