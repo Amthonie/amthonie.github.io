@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Scan the page for the utility classes actually used */
+@source "../index.html";
+
+/* Class-based dark mode — the page hard-sets class="dark" on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: #FFF3E8;
+  --color-brand-100: #FFE1C2;
+  --color-brand-500: #FF7A00;
+  --color-brand-600: #E56E00;
+  --color-brand-700: #B85800;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
