@@ -3,15 +3,17 @@
 /* Scan the page for the utility classes actually used */
 @source "../index.html";
 
-/* Class-based dark mode — the page hard-sets class="dark" on <html> */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Dark mode follows the visitor's OS setting (prefers-color-scheme) */
 
 @theme {
-  --color-brand-50: #FFF3E8;
-  --color-brand-100: #FFE1C2;
-  --color-brand-500: #FF7A00;
-  --color-brand-600: #E56E00;
-  --color-brand-700: #B85800;
+  /* Antique-paper background for light mode */
+  --color-paper: #f3ead6;
+
+  /* Terracotta / sepia accent, pulled from the map art */
+  --color-brand-400: #c77b5e;
+  --color-brand-500: #b5533c;
+  --color-brand-600: #9a4430;
+  --color-brand-700: #7e3626;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
