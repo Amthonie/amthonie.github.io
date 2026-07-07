@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,15 +9,15 @@
     <link rel="icon" type="image/png" href="images/a.png"/>
     <meta name="description"
           content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
-    <meta name="theme-color" content="#E56E00" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#B85800" media="(prefers-color-scheme: dark)"/>
+    <meta name="theme-color" content="#F3EAD6" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)"/>
 
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://amthonie.nl/"/>
     <meta property="og:title" content="Amthonie - Software Engineer & Home Automation Enthusiast"/>
     <meta property="og:description"
           content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
-    <meta property="og:image" content="https://amthonie.nl/images/og-image.jpg"/>
+    <meta property="og:image" content="https://amthonie.nl/images/header.webp"/>
     <meta property="og:image:width" content="2048"/>
     <meta property="og:image:height" content="508"/>
     <meta property="og:image:alt" content="Amthonie"/>
@@ -29,7 +29,7 @@
     <meta name="twitter:title" content="Amthonie - Software Engineer & Home Automation Enthusiast"/>
     <meta name="twitter:description"
           content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
-    <meta name="twitter:image" content="https://amthonie.nl/images/og-image.jpg"/>
+    <meta name="twitter:image" content="https://amthonie.nl/images/header.webp"/>
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="styles.css"/>
@@ -39,7 +39,7 @@
             "@type": "Person",
             "name": "Amthonie",
             "jobTitle": "Software Engineer",
-            "image": "https://amthonie.nl/images/og-image.jpg",
+            "image": "https://amthonie.nl/images/header.webp",
             "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Naarden",
@@ -54,24 +54,21 @@
     </script>
 </head>
 
-<body
-        class="flex flex-col min-h-screen text-slate-200 antialiased"
-        style="background: linear-gradient(in oklch to bottom, black 0% 84%, #FF7A00 100%) fixed;"
->
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
 <main class="flex min-h-screen flex-col items-center px-5 md:px-6 pt-12 pb-24">
 
     <!-- Header banner with overlaid avatar -->
     <div class="relative w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
         <img
-                src="images/header_2.jpg"
+                src="images/header.jpg"
                 alt="Header"
                 class="absolute inset-0 h-full w-full object-cover object-top"
                 draggable="false"
         />
         <img
-                src="images/avatar.jpeg"
+                src="images/avatar.webp"
                 alt="Amthonie"
-                class="absolute bottom-4 left-4 aspect-square h-1/2 rounded-full object-cover bg-brand-500 ring-4 ring-brand-500 shadow-md"
+                class="absolute bottom-4 left-4 aspect-square h-1/2 rounded-full object-cover bg-stone-400 ring-4 ring-stone-400 shadow-md"
                 draggable="false"
         />
     </div>
@@ -80,18 +77,18 @@
     <div class="mt-6 flex w-full md:w-4/5 max-w-[1024px] flex-col gap-5 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-6">
 
         <section
-                class="flex flex-col justify-center rounded-2xl border border-white/15 bg-white/15 px-8 py-10 text-center shadow-xl backdrop-blur-sm lg:w-3/5">
+                class="flex flex-col justify-center rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-8 py-10 text-center shadow-xl lg:w-3/5">
 
             <!-- Name + tagline -->
-            <h1 class="text-4xl font-bold tracking-tight text-white">
+            <h1 class="text-4xl font-bold tracking-tight text-stone-900 dark:text-white">
                 Amthonie
             </h1>
-            <p class="mt-2 text-lg text-brand-500 font-medium">
+            <p class="mt-2 text-lg text-brand-600 dark:text-brand-400 font-medium">
                 Software Engineer &amp; Home Automation Enthusiast
             </p>
 
             <!-- Location -->
-            <p class="mt-4 flex items-center justify-center gap-1.5 text-sm text-slate-300/80">
+            <p class="mt-4 flex items-center justify-center gap-1.5 text-sm text-stone-600 dark:text-stone-400">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
@@ -104,7 +101,7 @@
             <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <a
                         href="https://github.com/Amthonie"
-                        class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                        class="inline-flex items-center gap-2 rounded-full bg-stone-800 px-5 py-2.5 text-sm font-medium text-stone-50 transition hover:bg-stone-700 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200"
                 >
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z"/>
@@ -114,7 +111,7 @@
 
                 <a
                         href="https://bsky.app/profile/amthonie.bsky.social"
-                        class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                        class="inline-flex items-center gap-2 rounded-full bg-stone-800 px-5 py-2.5 text-sm font-medium text-stone-50 transition hover:bg-stone-700 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200"
                 >
                     <svg class="h-4 w-4" viewBox="0 0 568 501" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
                          aria-hidden="true">
@@ -128,23 +125,23 @@
 
         <!-- Motto -->
         <section
-                class="flex flex-col justify-center rounded-2xl border border-white/15 bg-white/15 px-8 py-10 shadow-xl backdrop-blur-sm lg:w-2/5">
+                class="flex flex-col justify-center rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-8 py-10 shadow-xl lg:w-2/5">
             <figure class="w-full">
                 <blockquote class="text-center">
-                    <p class="font-serif text-2xl italic tracking-wide text-white md:text-3xl">
+                    <p class="font-serif text-2xl italic tracking-wide text-stone-900 dark:text-white md:text-3xl">
                         nihil invitus facit sapiens
                     </p>
-                    <p class="mt-2 font-serif text-base italic tracking-wide text-slate-300 md:text-lg">
+                    <p class="mt-2 font-serif text-base italic tracking-wide text-stone-600 dark:text-stone-300 md:text-lg">
                         necessitatem effugit, quia vult quod coactura est.
                     </p>
-                    <p class="mx-auto mt-4 max-w-lg text-sm text-slate-400/80">
+                    <p class="mx-auto mt-4 max-w-lg text-sm text-stone-500 dark:text-stone-400">
                         A wise man does nothing against his will; he escapes necessity because he wills what he will be
                         forced to do.
                     </p>
                 </blockquote>
                 <figcaption class="mt-5 text-right not-italic">
-                    <span class="text-sm font-medium text-slate-200">— Seneca</span>
-                    <span class="mt-0.5 block text-xs text-slate-400">Epistulae Morales ad Lucilium, Liber VI, LIV</span>
+                    <span class="text-sm font-medium text-stone-700 dark:text-stone-200">— Seneca</span>
+                    <span class="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">Epistulae Morales ad Lucilium, Liber VI, LIV</span>
                 </figcaption>
             </figure>
         </section>
@@ -153,8 +150,8 @@
 
     <!-- Links -->
     <section
-            class="mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-white/15 bg-white/15 px-8 py-8 shadow-xl backdrop-blur-sm">
-        <h2 class="text-center text-2xl font-bold tracking-tight text-white">Links</h2>
+            class="mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-8 py-8 shadow-xl">
+        <h2 class="text-center text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Links</h2>
 
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
 
@@ -163,7 +160,7 @@
                     href="https://www.evastraube.com/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
                     <img
@@ -173,10 +170,10 @@
                     />
                 </div>
                 <div class="p-4">
-                    <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         450km sponsor walk for rare blood diseases
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                         Sponsor my friend's massive 450&nbsp;km charity walk through Swedish Lapland.
                         All proceeds go directly toward research and support for rare blood diseases.
                     </p>
@@ -187,7 +184,7 @@
                     href="https://bloedziekten.nl/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
             >
                 <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-200">
                     <!-- background photo (the ladies), aligned left -->
@@ -205,10 +202,10 @@
                     />
                 </div>
                 <div class="p-4">
-                    <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         Stichting Zeldzame Bloedziekten (SZB)
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                         Rare diseases often go unsupported compared to more common ones.
                         Help us change that&mdash;please donate if you can.
                     </p>
@@ -219,7 +216,7 @@
                     href="https://www.home-assistant.io/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
             >
                 <div class="relative aspect-[16/9] w-full overflow-hidden bg-sky-400">
                     <img
@@ -234,10 +231,10 @@
                     />
                 </div>
                 <div class="p-4">
-                    <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         Home Assistant
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                         Open source home automation that puts local control and privacy first.
                         Powered by a worldwide community of tinkerers and DIY enthusiasts.
                     </p>
@@ -248,7 +245,7 @@
                     href="https://nextpax.com/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 text-left transition hover:border-white/25 hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
                     <img
@@ -258,10 +255,10 @@
                     />
                 </div>
                 <div class="p-4">
-                    <h3 class="font-semibold text-white transition group-hover:text-brand-500">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         NextPax Travel Technology
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-slate-300/80">
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                         NextPax empowers vacation rentals, hotels, resorts, city apartments, and
                         holiday parks to streamline operations, improve guest experience, and optimize
                         commercial performance. Connect to 100+ global channels with fast, automated
@@ -275,7 +272,7 @@
 </main>
 
 <!-- Footer -->
-<footer class="w-full mt-auto py-4 text-center text-xs text-slate-300/80">
+<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
     &copy; <span id="year"></span> Amthonie
 </footer>
 
