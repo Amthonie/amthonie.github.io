@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Amthonie - Software Engineer & Home Automation Enthusiast</title>
+    <title>Amthonie | Software Engineer & Tinkerer</title>
     <link rel="canonical" href="https://amthonie.nl/">
     <link rel="icon" href="favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="images/a.png"/>
     <meta name="description"
-          content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
-    <meta name="theme-color" content="#F3EAD6" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)"/>
+          content="Personal profile of Amthonie: a Naarden-based software engineer specializing in PHP and home automation, focused on privacy, local control, and travel technology."/>
+    <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
 
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://amthonie.nl/"/>
-    <meta property="og:title" content="Amthonie - Software Engineer & Home Automation Enthusiast"/>
+    <meta property="og:title" content="Amthonie | Software Engineer & Tinkerer"/>
     <meta property="og:description"
-          content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
+          content="Personal profile of Amthonie: a Naarden-based software engineer specializing in PHP and home automation, focused on privacy, local control, and travel technology."/>
     <meta property="og:image" content="https://amthonie.nl/images/og-image.jpg"/>
     <meta property="og:image:width" content="1200"/>
     <meta property="og:image:height" content="627"/>
@@ -26,9 +26,9 @@
 
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:url" content="https://amthonie.nl/"/>
-    <meta name="twitter:title" content="Amthonie - Software Engineer & Home Automation Enthusiast"/>
+    <meta name="twitter:title" content="Amthonie | Software Engineer & Tinkerer"/>
     <meta name="twitter:description"
-          content="Personal profile of Amthonie: Software Engineer and Home Automation enthusiast based in Naarden. A backend developer in PHP with over 15 years of experience."/>
+          content="Personal profile of Amthonie: a Naarden-based software engineer specializing in PHP and home automation, focused on privacy, local control, and travel technology."/>
     <meta name="twitter:image" content="https://amthonie.nl/images/og-image.jpg"/>
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
@@ -55,11 +55,15 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
 
-      gtag('config', 'G-EX67104T6F');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-EX67104T6F');
     </script>
 </head>
 
@@ -103,6 +107,12 @@
                     <circle cx="12" cy="10" r="3"/>
                 </svg>
                 Naarden, The Netherlands
+            </p>
+
+            <p class="mt-5 text-base leading-relaxed text-stone-700 dark:text-stone-300 max-w-md mx-auto">
+                I’m Amthonie, a software engineer specializing in PHP. When I’m not working on travel technology
+                projects, you’ll find me experimenting with smart home automation or enjoying the nature around Naarden.
+                I’m driven by a focus on local control, privacy, and continuous learning.
             </p>
 
             <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -161,7 +171,32 @@
 
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
 
-            <!-- Link card — duplicate this block per link -->
+            <a
+                    href="https://www.visitgooivecht.nl/en/plan-your-visit/see-all-destinations/naarden"
+                    target="_blank"
+                    rel="noopener"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
+            >
+                <div class="aspect-[16/9] w-full overflow-hidden bg-sky-400">
+                    <img
+                            src="images/links/naarden.webp"
+                            alt="Visit Naarden, a beautifully preserved town"
+                            class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    />
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                        Visit Naarden
+                    </h3>
+                    <p data-nosnippet class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                        Explore the cobblestone streets of Naarden, one of Europe’s best-preserved star-shaped
+                        fortified towns. Learn about its rich history at the Dutch Fortress Museum, take a boat trip
+                        on the moat, or discover the nearby Naardermeer nature reserve. Afterwards, unwind at a cosy
+                        café within the ramparts or in neighbouring Bussum.
+                    </p>
+                </div>
+            </a>
+
             <a
                     href="https://www.evastraube.com/"
                     target="_blank"
@@ -212,8 +247,35 @@
                         Stichting Zeldzame Bloedziekten (SZB)
                     </h3>
                     <p data-nosnippet class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                        Because rare conditions affect fewer people, they are often overlooked and underfunded. Join us in
-                        supporting the people affected by rare blood disorders, raising awareness, and promoting research.
+                        Because rare conditions affect fewer people, they are often overlooked and underfunded. Join us
+                        in supporting the people affected by rare blood disorders, raising awareness, and promoting
+                        research.
+                    </p>
+                </div>
+            </a>
+
+
+            <a
+                    href="https://gattp.org.uk/"
+                    target="_blank"
+                    rel="noopener"
+                    class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10"
+            >
+                <div class="aspect-[16/9] w-full overflow-hidden bg-sky-400">
+                    <img
+                            src="images/links/gattp.webp"
+                            alt="Uniting the Global TTP Community"
+                            class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    />
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                        Global Alliance for TTP
+                    </h3>
+                    <p data-nosnippet class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                        The Global Alliance for TTP brings together patient advocacy organisations across the globe to
+                        advance understanding, support, and equity in TTP care. We invite patient groups, clinicians,
+                        and supporters to join our global alliance.
                     </p>
                 </div>
             </a>
