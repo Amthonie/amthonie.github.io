@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Amthonie | Gallery</title>
+    <link rel="canonical" href="https://amthonie.nl/gallery/">
+    <link rel="icon" href="../favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="../images/a.png"/>
+    <meta name="description"
+          content="A small photo gallery by Amthonie."/>
+    <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="../styles.css"/>
+
+    <!--
+      PhotoSwipe stylesheet, loaded from a CDN.
+      Privacy note: to avoid a third-party dependency you can self-host instead —
+      copy dist/photoswipe.css and dist/*.esm.js from the photoswipe npm package
+      into e.g. ../vendor/photoswipe/ and point the href/import below at them.
+    -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css"/>
+</head>
+
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
+<main class="flex min-h-screen flex-col items-center px-5 md:px-6 pt-12 pb-24">
+
+    <!-- Header banner (same as index) — links back to the home page -->
+    <a
+            href="../"
+            aria-label="Back to home"
+            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+        <img
+                src="../images/header.jpg"
+                alt="Decorative abstract header background"
+                aria-hidden="true"
+                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                draggable="false"
+        />
+        <img
+                src="../images/avatar.webp"
+                alt="Profile picture of Amthonie"
+                class="absolute bottom-4 left-4 aspect-square h-1/2 rounded-full object-cover bg-stone-400 ring-4 ring-stone-400 shadow-md"
+                draggable="false"
+        />
+    </a>
+
+    <!-- Gallery -->
+    <section
+            class="mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-8 py-8 shadow-xl">
+
+        <div class="flex items-center justify-between gap-4">
+            <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Gallery</h1>
+            <a href="../"
+               class="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+                </svg>
+                Back home
+            </a>
+        </div>
+
+        <!--
+          The gallery. Each item is an <a> linking to the full-size image
+          (in images/), with the smaller thumbnail shown in the grid (in
+          thumbnails/). PhotoSwipe needs the natural width/height of the
+          FULL image via data-pswp-width / data-pswp-height. The alt text is
+          also used as the caption in the lightbox — edit it per photo.
+        -->
+        <div id="gallery" class="mt-6 grid gap-4 grid-cols-2 sm:grid-cols-3">
+
+            <a href="images/20220123_132922.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20220123_132922.webp" alt="Naarden — 23 January 2022"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+            <a href="images/20220911_150843.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20220911_150843.webp" alt="Naarden — 11 September 2022"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+            <a href="images/20220911_115831.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20220911_115831.webp" alt="Naarden — 11 September 2022"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+            <a href="images/20211120_122115.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20211120_122115.webp" alt="'s-Graveland — 20 November 2021"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+            <a href="images/20220130.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20220130.webp" alt="Naardermeer — 30 January 2022"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+            <a href="images/20230813_135238.webp"
+               data-pswp-width="2048" data-pswp-height="1536"
+               target="_blank" rel="noopener"
+               class="group block aspect-[16/9] overflow-hidden rounded-xl bg-black/10 dark:bg-white/5">
+                <img src="thumbnails/20230813_135238.webp" alt="Bussummer Heide — 13 August 2023"
+                     loading="lazy"
+                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+            </a>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
+    &copy; <span id="year"></span> Amthonie
+</footer>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<!-- PhotoSwipe: initialise the lightbox on the gallery -->
+<script type="module">
+    import PhotoSwipeLightbox from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '#gallery',
+        children: 'a',
+        // The main PhotoSwipe module is loaded on demand the first time you
+        // open an image, so nothing heavy runs on page load.
+        pswpModule: () => import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js'),
+    });
+
+    // Show the image's alt text as a caption inside the lightbox.
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const img = pswp.currSlide.data.element?.querySelector('img');
+                    el.textContent = img ? img.getAttribute('alt') : '';
+                });
+            },
+        });
+    });
+
+    lightbox.init();
+</script>
+</body>
+</html>
