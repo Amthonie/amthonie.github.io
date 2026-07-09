@@ -1,5 +1,6 @@
-# Local-only Claude Code notes (kept out of this public repo)
+# Local-only Claude Code notes & tooling (kept out of this public repo)
 CLAUDE.md
+.claude/
 
 # JetBrains IDEs
 .idea/

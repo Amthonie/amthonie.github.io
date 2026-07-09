@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-/* Scan the page for the utility classes actually used */
+/* Scan the pages for the utility classes actually used */
 @source "../index.html";
+@source "../gallery/index.html";
 
 /* Dark mode follows the visitor's OS setting (prefers-color-scheme) */
 
