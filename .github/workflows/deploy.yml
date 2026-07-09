@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # need the previous commit to diff against
 
       - name: Assemble site (static files + built Tailwind CSS)
         run: |
@@ -34,10 +36,22 @@ jobs:
             ./ _site/
           # Standalone Tailwind v4 CLI — self-contained (bundles the tailwindcss
           # package), so no Node/node_modules and no module-resolution issues.
-          curl -sL -o tailwindcss \
-            https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.2/tailwindcss-linux-x64
-          chmod +x tailwindcss
-          ./tailwindcss -i src/input.css -o _site/styles.css --minify
+          # The Tailwind output only changes when the HTML it scans or the
+          # Tailwind input changes; image-only edits don't affect the CSS. Since
+          # styles.css is committed (and copied above), we can safely reuse it
+          # and skip the rebuild. Manual runs (no HEAD^) always rebuild.
+          if ! git rev-parse HEAD^ >/dev/null 2>&1 || \
+             git diff --name-only HEAD^ HEAD | grep -qE '\.html$|^src/input\.css$'; then
+            echo "HTML/input.css changed — rebuilding Tailwind CSS"
+            # Standalone Tailwind v4 CLI — self-contained (bundles the tailwindcss
+            # package), so no Node/node_modules and no module-resolution issues.
+            curl -sL -o tailwindcss \
+              https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.2/tailwindcss-linux-x64
+            chmod +x tailwindcss
+            ./tailwindcss -i src/input.css -o _site/styles.css --minify
+          else
+            echo "No HTML/input.css changes — using committed styles.css"
+          fi
 
       - uses: actions/configure-pages@v5
 
