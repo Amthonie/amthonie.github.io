@@ -14,16 +14,53 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 
 ```
 .
-├── index.html         # home page
+├── index.html         # home page (Updates teasers are generated — see below)
 ├── gallery/
 │   ├── index.html     # gallery page (served at /gallery/)
 │   ├── images/        # full-size photos (~2048px long edge)
 │   └── thumbnails/    # grid thumbnails (~640px long edge)
+├── updates/
+│   └── index.html     # updates page (served at /updates/) — GENERATED
+├── content/updates/   # markdown sources for the updates (one file per update)
+├── scripts/
+│   └── build_updates.py  # generates the updates page + homepage teasers
 ├── src/input.css      # Tailwind entry point (source)
 ├── styles.css         # compiled stylesheet (committed)
 ├── images/            # shared static assets
 └── .github/workflows  # build & deploy pipeline
 ```
+
+## Updates / news
+
+Updates are plain markdown files under `content/updates/`, one per update, each
+starting with a small frontmatter block:
+
+```markdown
+---
+date: 2026-07-16
+title: A short headline
+summary: Optional one-line teaser for the homepage (defaults to the first paragraph).
+---
+
+The body is regular **markdown** — links, lists, etc.
+```
+
+`scripts/build_updates.py` turns those into:
+
+- `updates/index.html` — the full list, newest first, served at `/updates/`;
+- the teaser cards on the home page (between the `<!-- UPDATES:START -->` /
+  `<!-- UPDATES:END -->` markers in `index.html`);
+- the `/updates/` entry in `sitemap.xml` (its `lastmod` tracks the newest post).
+
+To add an update: drop a new `.md` file in `content/updates/` and push. The
+deploy workflow runs the generator automatically, so you don't have to build
+anything by hand. To preview locally, run it yourself (needs the `markdown`
+package): `python3 scripts/build_updates.py`. The generated `updates/index.html`
+is committed as a build artifact (like `styles.css`), so re-run the generator
+and commit its output when you want the committed copy to stay current.
+
+`content/` and `scripts/` are build inputs and are excluded from the published
+site. The markdown content itself is never served raw.
 
 ## Local development
 
