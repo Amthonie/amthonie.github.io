@@ -240,7 +240,7 @@ def build_updates_page(posts: list[dict]) -> None:
             aria-label="Back to home"
             class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
-                src="../images/header.jpg"
+                src="../images/header.webp"
                 alt="Decorative abstract header background"
                 aria-hidden="true"
                 class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
