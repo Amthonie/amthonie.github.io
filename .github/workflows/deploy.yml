@@ -68,3 +68,34 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      # Notify IndexNow (Bing/Yandex/etc.) that the site was (re)published, so
+      # search engines re-crawl promptly. The key is public by design — it's
+      # served at https://amthonie.nl/<key>.txt. Runs after a successful deploy
+      # and is non-fatal: an IndexNow outage must not fail the deployment.
+      - name: Check out sitemap
+        uses: actions/checkout@v4
+
+      - name: Ping IndexNow
+        continue-on-error: true
+        env:
+          INDEXNOW_KEY: 4fa213b807404cff976bb1959a989823
+          HOST: amthonie.nl
+        run: |
+          URL_LIST=$(grep -oP '(?<=<loc>)[^<]+' sitemap.xml | jq -R . | jq -s .)
+          if [ "$URL_LIST" = "[]" ]; then
+            echo "No <loc> URLs found in sitemap.xml — nothing to submit."
+            exit 0
+          fi
+          BODY=$(jq -n \
+            --arg host "$HOST" \
+            --arg key "$INDEXNOW_KEY" \
+            --arg keyLocation "https://$HOST/$INDEXNOW_KEY.txt" \
+            --argjson urlList "$URL_LIST" \
+            '{host: $host, key: $key, keyLocation: $keyLocation, urlList: $urlList}')
+          echo "Submitting to IndexNow:"
+          echo "$BODY"
+          curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "$BODY" \
+            -w "\nHTTP %{http_code}\n"
