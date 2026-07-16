@@ -279,7 +279,8 @@ def build_updates_page(posts: list[dict]) -> None:
 
 <!-- Footer -->
 <footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
-    &copy; <span id="year"></span> Amthonie
+    <p>Built to be light — a static site with a minimal footprint.</p>
+    <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
 </footer>
 
 <script>
