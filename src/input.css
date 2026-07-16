@@ -3,6 +3,7 @@
 /* Scan the pages for the utility classes actually used */
 @source "../index.html";
 @source "../gallery/index.html";
+@source "../updates/index.html";
 
 /* Dark mode follows the visitor's OS setting (prefers-color-scheme) */
 
@@ -18,4 +19,91 @@
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
+}
+
+/*
+  Styling for markdown-generated update content (see scripts/build_updates.py).
+  Markdown produces class-less <p>/<h2>/<ul>/<a>… elements, so these rules give
+  them the site's look without needing the Tailwind typography plugin (which
+  would require Node/node_modules). Colours are hard-coded from the palette
+  above so they never depend on Tailwind emitting a particular utility var.
+  Dark mode follows prefers-color-scheme, matching the rest of the site.
+*/
+.update-body {
+  color: #44403c; /* stone-700 */
+  line-height: 1.7;
+}
+.update-body > * + * {
+  margin-top: 1rem;
+}
+.update-body h2,
+.update-body h3 {
+  font-weight: 700;
+  color: #1c1917; /* stone-900 */
+  margin-top: 1.75rem;
+}
+.update-body h2 {
+  font-size: 1.25rem;
+}
+.update-body h3 {
+  font-size: 1.1rem;
+}
+.update-body a {
+  color: #9a4430; /* brand-600 */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.update-body a:hover {
+  color: #7e3626; /* brand-700 */
+}
+.update-body ul,
+.update-body ol {
+  padding-left: 1.5rem;
+}
+.update-body ul {
+  list-style: disc;
+}
+.update-body ol {
+  list-style: decimal;
+}
+.update-body li + li {
+  margin-top: 0.25rem;
+}
+.update-body img {
+  border-radius: 0.75rem;
+}
+.update-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 0.35rem;
+}
+.update-body blockquote {
+  border-left: 3px solid #b5533c; /* brand-500 */
+  padding-left: 1rem;
+  font-style: italic;
+  color: #57534e; /* stone-600 */
+}
+
+@media (prefers-color-scheme: dark) {
+  .update-body {
+    color: #d6d3d1; /* stone-300 */
+  }
+  .update-body h2,
+  .update-body h3 {
+    color: #ffffff;
+  }
+  .update-body a {
+    color: #c77b5e; /* brand-400 */
+  }
+  .update-body a:hover {
+    color: #d89a80; /* lighter brand */
+  }
+  .update-body code {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .update-body blockquote {
+    color: #a8a29e; /* stone-400 */
+  }
 }
