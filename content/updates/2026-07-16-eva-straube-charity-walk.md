@@ -8,7 +8,7 @@ A quick update on a cause close to my heart. My friend Eva is taking on somethin
 
 As of today she has raised €764 — a wonderful start, and I’m genuinely moved by everyone who has contributed already. That puts her just past the halfway mark. She hasn’t yet reached her target of €1500, so there is still a good way to go.
 
-If you have a little to spare, please consider supporting this incredibly kind and courageous initiative. Every contribution, however small, goes directly towards helping people living with rare blood disorders — and it would mean a great deal to Eva as she takes on each of those 450 kilometres.
+If you have a little to spare, please consider supporting this incredibly kind and courageous initiative. Every contribution, however small, goes directly towards helping people living with rare blood disorders — and it would mean a great deal to Eva as she takes on each of those 450 kilometres.
 
 👉 **[Support Eva’s walk at evastraube.com](https://www.evastraube.com/)**
 
