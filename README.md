@@ -30,6 +30,21 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 └── .github/workflows  # build & deploy pipeline
 ```
 
+## Images
+
+All images are **WebP**. The target sizes below are what the layout actually
+needs — no larger, which is what keeps the pages loading instantly.
+
+| Image | Location | Target size | Notes |
+|---|---|---|---|
+| **Link cards** | `images/links/` | **640×360** (16:9) | Shown in a 16:9 card with `object-cover`. Crop the source to 16:9 and nothing needs aligning. If it isn't 16:9, keep it as-is and add an `object-*` class (e.g. `object-bottom`, `object-left`) so the auto-crop keeps the important part — otherwise it centre-crops. |
+| **Gallery photos** | `gallery/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
+| **Gallery thumbnails** | `gallery/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
+
+640px-wide link images match the desktop 3-column layout at 2× (retina). If you
+ever want them sharper when a card is shown full-width on a high-DPI phone,
+export at ~1280×720 — still only tens of KB as WebP.
+
 ## Updates / news
 
 Updates are plain markdown files under `content/updates/`, one per update, each
