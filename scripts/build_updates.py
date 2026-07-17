@@ -171,7 +171,7 @@ def render_teasers(posts: list[dict]) -> str:
         summary = html.escape(post["summary"])
         cards.append(
             f"""<a href="updates/#{post['slug']}"
-               class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
@@ -232,7 +232,7 @@ def build_updates_page(posts: list[dict]) -> None:
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
-<main class="flex min-h-screen flex-col items-center px-5 md:px-6 pt-12 pb-24">
+<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
 
     <!-- Header banner (same as index) — links back to the home page -->
     <a
@@ -256,7 +256,7 @@ def build_updates_page(posts: list[dict]) -> None:
 
     <!-- Updates -->
     <section
-            class="mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-8 py-8 shadow-xl">
+            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
 
         <div class="flex items-center justify-between gap-4">
             <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Updates</h1>
@@ -271,7 +271,7 @@ def build_updates_page(posts: list[dict]) -> None:
             </a>
         </div>
 
-        <div class="mt-8">
+        <div class="mt-4 md:mt-8">
             {articles}
         </div>
     </section>
