@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 2 # need the previous commit to diff against
 
@@ -74,9 +74,9 @@ jobs:
             echo "No HTML/input.css changes — using committed styles.css"
           fi
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
@@ -88,14 +88,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # Notify IndexNow (Bing/Yandex/etc.) that the site was (re)published, so
       # search engines re-crawl promptly. The key is public by design — it's
       # served at https://amthonie.nl/<key>.txt. Runs after a successful deploy
       # and is non-fatal: an IndexNow outage must not fail the deployment.
       - name: Check out sitemap
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Ping IndexNow
         continue-on-error: true
