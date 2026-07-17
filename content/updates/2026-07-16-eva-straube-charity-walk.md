@@ -1,7 +1,7 @@
 ---
 date: 2026-07-16
-title: Eva’s 450 km charity walk — €764 raised so far
-summary: My friend Eva is walking 450 km across Swedish Lapland for people living with rare blood disorders. She’s just past halfway to her €1500 goal — please chip in if you can.
+title: Eva’s 450 km charity walk — €764 raised so far
+summary: My friend Eva is walking 450 km across Swedish Lapland for people living with rare blood disorders. She’s just past halfway to her €1500 goal — please chip in if you can.
 ---
 
 A quick update on a cause close to my heart. My friend Eva is taking on something extraordinary: a 450 km walk across Swedish Lapland to raise money for research into and support for rare blood disorders.
