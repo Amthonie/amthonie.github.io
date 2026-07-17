@@ -56,6 +56,14 @@ SITE = "https://amthonie.nl"
 
 TITLE = "The Interplanetary Chronicle"
 TAGLINE = "Because reality isn’t ridiculous enough."
+# The <title> tag (SERP/tab). Kept short (≤60 chars) and keyword-clear; the
+# playful TAGLINE stays as the visible masthead sub-line, not in <title>.
+META_TITLE = "The Interplanetary Chronicle: Reality Isn’t Ridiculous Enough"
+# <meta name="description"> — aim for ~120-155 chars.
+META_DESCRIPTION = (
+    "A satirical, entirely fictional interplanetary news outlet delivering dry "
+    "humour, fabricated reporting and absurd commentary. Nothing here is real."
+)
 DISCLAIMER = (
     "Everything below is entirely fictional. Any resemblance to real people, "
     "events or planets is purely unfortunate."
@@ -283,15 +291,14 @@ def build_chronicle_page(posts: list[dict]) -> None:
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{TITLE} | {TAGLINE}</title>
+    <title>{META_TITLE}</title>
     <link rel="canonical" href="{SITE}/chronicle/">
     <link rel="icon" href="../favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
-          content="A fully satirical and entirely fictional interplanetary news outlet — dry corporate humour, fabricated reporting, and absurd takes on the elite. None of this is real."/>
+          content="{META_DESCRIPTION}"/>
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
-    <meta name="robots" content="index,follow,noarchive"/>
 
     <meta property="og:type" content="article"/>
     <meta property="og:url" content="{SITE}/chronicle/"/>
