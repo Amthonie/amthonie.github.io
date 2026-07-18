@@ -4,14 +4,18 @@ title: Rediscovering the simple joy of raw HTML
 summary: Moving away from heavy frameworks to appreciate how much the web has changed since the nineties — for better and for worse.
 ---
 
-For longer than I’d care to admit, amthonie.nl simply redirected to a Gravatar profile page. Perfectly functional, but not exactly mine — and as a developer, it always felt a little odd not to have a home of my own on the web.
+For longer than I’d care to confess, amthonie.nl led visitors straight to a Gravatar page — perfectly functional, but about as personal as a waiting room leaflet. As a developer, it felt faintly embarrassing not to have a small digital home of my own.
 
-So I finally sat down and built one. This is the first version, now live: a small, hand‑built static site that I own end to end.
+So I finally built one. This first version is now alive and quietly humming: a modest, hand‑crafted static site that I own entirely.
 
-Getting back to basics has been incredibly refreshing. We often get so bogged down in heavy frameworks, sprawling ecosystem tools, or massive content management systems that we forget the simple satisfaction of writing raw HTML. Building this without a heavy backend setup or a clunky WordPress instance felt deeply liberating. 
+Returning to the basics has been unexpectedly pleasant. After years of grappling with heavyweight frameworks and labyrinthine tools, writing plain HTML again felt like rediscovering a small, forgotten joy. Building something without a lumbering backend or a sulking WordPress instance was wonderfully liberating.
 
-It is fascinating to look at how much the web has evolved since I put together my very first webpage back in the nineties. On one hand, modern CSS gives us incredible layout power and customisation options that we could only dream of back in the days of nested tables and spacer GIFs. On the other hand, the open web has become oddly rigid. 
+Comparing today’s web with the one I first tinkered with in the nineties remains a peculiar delight. Back then, we heroically assembled pages with nested tables and spacer GIFs, like digital Lego bricks. Now, modern CSS performs feats that would have caused my younger self to faint politely.
 
-Search engines have grown incredibly finicky and particular, demanding meticulous technical optimisation just to be noticed, rather than simply celebrating the organic, quirky corners of the internet. Still, carving out this tiny, independent space feels right. 
+And yet, the open web has become curiously rigid. Search engines behave like fussy librarians, insisting on immaculate structure before acknowledging your existence. Still, claiming this tiny, independent corner feels entirely sensible.
 
-More to come — and thanks for stopping by.
+A polite round of applause goes to GitHub Pages, which hosts this tiny outpost with admirable patience. Each time I nudge an update into the void, a small collection of automated helpers scurry about: one compresses my styles, another turns my scribbles into actual pages, and together they ensure the whole thing doesn’t collapse into a dignified heap. It’s a pleasantly low‑maintenance arrangement — the sort of system that behaves itself without demanding biscuits.
+
+The layout and design are still in their awkward teenage years — full of potential, but not yet behaving as they should. I’ll keep nudging and tidying the interface until it grows into something presentable. With luck, it may even become charming.
+
+Thanks for stopping by. Your visit has greatly improved the local atmosphere.
