@@ -9,76 +9,93 @@
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
           content="A satirical, entirely fictional interplanetary news outlet delivering dry humour, fabricated reporting and absurd commentary. Nothing here is real."/>
-
-    <meta name="robots" content="index,follow"/>
-
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="article"/>
     <meta property="og:url" content="https://amthonie.nl/chronicle/"/>
     <meta property="og:title" content="The Interplanetary Chronicle"/>
     <meta property="og:description"
           content="A fully satirical, entirely fictional interplanetary news outlet. Nothing here is real."/>
+    <meta property="og:image" content="https://amthonie.nl/chronicle/header.webp"/>
+    <meta property="og:image:alt" content="The Interplanetary Chronicle"/>
     <meta property="og:site_name" content="The Interplanetary Chronicle"/>
     <meta property="og:locale" content="en_GB"/>
 
     <!-- schema.org structured data: NewsMediaOrganization publisher +
          SatiricalArticle per post (the canonical "this is satire" signal). -->
     <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "NewsMediaOrganization",
-      "@id": "https://amthonie.nl/chronicle/#publisher",
-      "name": "The Interplanetary Chronicle",
-      "url": "https://amthonie.nl/chronicle/",
-      "slogan": "Because reality isn’t ridiculous enough.",
-      "description": "A fully satirical, entirely fictional interplanetary news outlet. All names, quotes, events and reporting are invented for comic effect and are not real.",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://amthonie.nl/images/a.png"
-      }
-    },
-    {
-      "@type": "SatiricalArticle",
-      "@id": "https://amthonie.nl/chronicle/#tech-visionary-still-alive",
-      "mainEntityOfPage": "https://amthonie.nl/chronicle/#tech-visionary-still-alive",
-      "headline": "'I Am Still Alive!' Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol",
-      "description": "Local tech billionaire successfully avoids Earth's regulatory frameworks by vaporizing the planet for fuel. Reports from Mars indicate a 90% workforce reduction due to local \"hostilities,\" but the CEO remains highly bullish. \"Hey, I am still alive!\" 🚀💥",
-      "datePublished": "2026-07-17",
-      "inLanguage": "en-GB",
-      "isFamilyFriendly": true,
-      "abstract": "Satire — a work of fiction. Nothing described here is real.",
-      "author": {
-        "@type": "Person",
-        "name": "Amthonie Vandenberg"
-      },
-      "publisher": {
-        "@id": "https://amthonie.nl/chronicle/#publisher"
-      }
-    },
-    {
-      "@type": "SatiricalArticle",
-      "@id": "https://amthonie.nl/chronicle/#greenland-compromise",
-      "mainEntityOfPage": "https://amthonie.nl/chronicle/#greenland-compromise",
-      "headline": "Flevoland Ceded to US in Global 'Greenland Compromise' as President Celebrates 'Beautiful New Island'",
-      "description": "A diplomatic masterstroke leaves the Netherlands “devastated” as Flevoland is ceded to the US — while ministers quietly celebrate keeping the Waddeneilanden out of American hands.",
-      "datePublished": "2026-07-13",
-      "inLanguage": "en-GB",
-      "isFamilyFriendly": true,
-      "abstract": "Satire — a work of fiction. Nothing described here is real.",
-      "author": {
-        "@type": "Person",
-        "name": "Amthonie Vandenberg"
-      },
-      "publisher": {
-        "@id": "https://amthonie.nl/chronicle/#publisher"
-      }
-    }
-  ]
-}
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "NewsMediaOrganization",
+                    "@id": "https://amthonie.nl/chronicle/#publisher",
+                    "name": "The Interplanetary Chronicle",
+                    "url": "https://amthonie.nl/chronicle/",
+                    "slogan": "Because reality isn’t ridiculous enough.",
+                    "description": "A fully satirical, entirely fictional interplanetary news outlet. All names, quotes, events and reporting are invented for comic effect and are not real.",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/images/a.png"
+                    }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Home",
+                            "item": "https://amthonie.nl/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "The Interplanetary Chronicle",
+                            "item": "https://amthonie.nl/chronicle/"
+                        }
+                    ]
+                },
+                {
+                    "@type": "SatiricalArticle",
+                    "@id": "https://amthonie.nl/chronicle/#tech-visionary-still-alive",
+                    "mainEntityOfPage": "https://amthonie.nl/chronicle/#tech-visionary-still-alive",
+                    "headline": "'I Am Still Alive!' Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol",
+                    "description": "Local tech billionaire successfully avoids Earth's regulatory frameworks by vaporizing the planet for fuel. Reports from Mars indicate a 90% workforce reduction due to local \"hostilities,\" but the CEO remains highly bullish. \"Hey, I am still alive!\" 🚀💥",
+                    "datePublished": "2026-07-17",
+                    "inLanguage": "en-GB",
+                    "isFamilyFriendly": true,
+                    "abstract": "Satire — a work of fiction. Nothing described here is real.",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Amthonie Vandenberg"
+                    },
+                    "publisher": {
+                        "@id": "https://amthonie.nl/chronicle/#publisher"
+                    }
+                },
+                {
+                    "@type": "SatiricalArticle",
+                    "@id": "https://amthonie.nl/chronicle/#greenland-compromise",
+                    "mainEntityOfPage": "https://amthonie.nl/chronicle/#greenland-compromise",
+                    "headline": "Flevoland Ceded to US in Global 'Greenland Compromise' as President Celebrates 'Beautiful New Island'",
+                    "description": "A diplomatic masterstroke leaves the Netherlands “devastated” as Flevoland is ceded to the US — while ministers quietly celebrate keeping the Waddeneilanden out of American hands.",
+                    "datePublished": "2026-07-13",
+                    "inLanguage": "en-GB",
+                    "isFamilyFriendly": true,
+                    "abstract": "Satire — a work of fiction. Nothing described here is real.",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Amthonie Vandenberg"
+                    },
+                    "publisher": {
+                        "@id": "https://amthonie.nl/chronicle/#publisher"
+                    }
+                }
+            ]
+        }
     </script>
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
@@ -202,13 +219,13 @@ Senior Interplanetary Correspondent</em></p>
 <p><em>By Amthonie Vandenberg,
 European Geopolitical Correspondent</em></p>
 <p><strong>THE HAGUE</strong> — In an extraordinary diplomatic maneuver aimed at pacifying American territorial ambitions, the Dutch government has formally signed over the entire province of Flevoland to the United States of America.</p>
-<p>The transaction is the first of many under the newly ratified "Greenland Compromise." The treaty was drafted after the US President, Randol Dump, renewed his aggressive bidirectional bid to purchase Greenland. Following a unified blockade from European leaders refusing to sell the world's largest island, a frantic compromise was brokered: every European nation must instead surrender one of their own domestic islands to satisfy the American real estate appetite.</p>
-<p>According to leaked diplomatic cables, the Netherlands originally offered the pristine, ecologically protected Waddeneilanden (Frisian Islands) to the Americans. However, President Dump reportedly rejected the offer during a heated telephone exchange, dismissing the UNESCO World Heritage site as "low-energy sandbanks with too many birds" and demanding "something firmer, ideally with a Lelystad Airport."</p>
+<p>The transaction is the first of many under the newly ratified "Greenland Compromise." The treaty was drafted after the US President, Laddon Prumt, renewed his aggressive bidirectional bid to purchase Greenland. Following a unified blockade from European leaders refusing to sell the world's largest island, a frantic compromise was brokered: every European nation must instead surrender one of their own domestic islands to satisfy the American real estate appetite.</p>
+<p>According to leaked diplomatic cables, the Netherlands originally offered the pristine, ecologically protected Waddeneilanden (Frisian Islands) to the Americans. However, President Prumt reportedly rejected the offer during a heated telephone exchange, dismissing the UNESCO World Heritage site as "low-energy sandbanks with too many birds" and demanding "something firmer, ideally with a Lelystad Airport."</p>
 <p>Enter Flevoland—the world’s largest artificial island, drained entirely from the Zuiderzee by Dutch engineers in the 20th century.</p>
 <p>"It is a regrettable, though hardly unexpected day for the Kingdom," the Dutch Prime Minister announced to a somber press room, while visibly biting the inside of his cheek to stop himself from smiling. "we mourn the regrettable departure of Almere, but geopolitics requires sacrifice."</p>
 <p>Sources close to the Prime Minister report that as soon as the American delegation left the room, senior cabinet members quietly opened a modest bottle of champagne, thrilled to have successfully tricked the US administration into taking a giant, flat expanse of reclaimed polder while keeping the beloved Waddeneilanden firmly in Dutch hands.</p>
-<p>President Dump, speaking from a newly constructed golf course blueprint superimposed over Urk, praised his own negotiating prowess.</p>
-<p>"The Dutch tried to give us some weak islands. Very wet. No infrastructure. I said no, give us the big one," Dump told reporters. "Flevoland. Great name. A lot of people are saying it’s the best land. It’s six meters below sea level, which means we get more atmosphere than anyone else. Tremendous leverage."</p>
+<p>President Prumt, speaking from a newly constructed golf course blueprint superimposed over Urk, praised his own negotiating prowess.</p>
+<p>"The Dutch tried to give us some weak islands. Very wet. No infrastructure. I said no, give us the big one," Prumt told reporters. "Flevoland. Great name. A lot of people are saying it’s the best land. It’s six meters below sea level, which means we get more atmosphere than anyone else. Tremendous leverage."</p>
 <p>Under the terms of the cession, Flevoland will immediately be integrated as the 51st US State, with local traffic laws expected to be replaced by six-lane highways by Tuesday. The Dutch government has politely declined to mention that the dikes require continuous, highly complex maintenance, leaving the US Army Corps of Engineers to figure out the pumps on their own.</p>
             </div>
         </article>

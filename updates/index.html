@@ -9,11 +9,9 @@
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
           content="Updates and news from Amthonie — new photos, projects, and tinkering from Naarden."/>
-
-    <meta name="robots" content="index,follow"/>
-
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://amthonie.nl/updates/"/>
@@ -24,22 +22,43 @@
     <meta property="og:site_name" content="Amthonie"/>
     <meta property="og:locale" content="en_GB"/>
 
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "CollectionPage",
+                    "@id": "https://amthonie.nl/updates/#webpage",
+                    "url": "https://amthonie.nl/updates/",
+                    "name": "Updates",
+                    "description": "Updates and small notes from Amthonie.",
+                    "isPartOf": {
+                        "@id": "https://amthonie.nl/#website"
+                    }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Home",
+                            "item": "https://amthonie.nl/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "Updates",
+                            "item": "https://amthonie.nl/updates/"
+                        }
+                    ]
+                }
+            ]
+        }
+    </script>
+
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "url": "https://amthonie.nl/updates",
-  "name": "Updates",
-  "description": "Updates and small notes from Amthonie.",
-  "isPartOf": {
-    "@type": "WebSite",
-    "url": "https://amthonie.nl/"
-  }
-}
-</script>
 
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
