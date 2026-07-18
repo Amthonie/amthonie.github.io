@@ -13,7 +13,7 @@
 #
 # Notes:
 #   - The generators write the regenerated pages back into the working tree
-#     (updates/, chronicle/, the homepage teasers, sitemap.xml) — exactly as in
+#     (jottings/, chronicle/, the homepage teasers, sitemap.xml) — exactly as in
 #     CI. Commit or discard those as you see fit.
 #   - Serving from _site/ (not the repo root) means root-absolute paths and the
 #     custom 404 behave just like they do on GitHub Pages.
@@ -41,7 +41,7 @@ if [ ! -x .venv/bin/python ]; then
     python3 -m venv .venv
 fi
 .venv/bin/pip install --quiet markdown
-.venv/bin/python scripts/build_updates.py
+.venv/bin/python scripts/build_jottings.py
 .venv/bin/python scripts/build_chronicle.py
 
 echo "==> 2/3  Assemble _site/ (working tree, minus build inputs & gitignored files)"

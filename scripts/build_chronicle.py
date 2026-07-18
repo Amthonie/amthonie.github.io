@@ -3,7 +3,7 @@
 Build the /chronicle/ page from markdown sources.
 
 The Interplanetary Chronicle is a fully satirical, entirely fictional "news"
-outlet. This generator is a sibling of scripts/build_updates.py and shares its
+outlet. This generator is a sibling of scripts/build_jottings.py and shares its
 frontmatter format:
 
   - It writes chronicle/index.html.
@@ -27,12 +27,12 @@ with a small frontmatter block:
 
 Layout of the generated page:
   - a masthead box (title + tagline + satire disclaimer + back-home button)
-  - an index box: teaser cards (same format as the homepage update cards) that
+  - an index box: teaser cards (same format as the homepage jotting cards) that
     link down to each article's anchor on this same page
   - one box per article, newest first
 
 Run from the repo root:  python3 scripts/build_chronicle.py
-Requires the `markdown` package (same venv step as build_updates.py).
+Requires the `markdown` package (same venv step as build_jottings.py).
 
 Reuses only Tailwind utility classes and the .update-body rules already present
 in the committed styles.css, so no CSS rebuild is needed.
@@ -82,7 +82,7 @@ PUBLISHER_DESCRIPTION = (
     "not real."
 )
 
-# Shared section-box styling, lifted verbatim from the updates page so the
+# Shared section-box styling, lifted verbatim from the jottings page so the
 # Chronicle sits in the same visual language as the rest of the site.
 SECTION_FIRST = (
     "mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl "
@@ -179,7 +179,7 @@ def load_posts() -> list[dict]:
 def render_index(posts: list[dict]) -> str:
     """The in-page table of contents — teaser cards linking to each article.
 
-    Same card markup as the homepage update teasers, but the href is an in-page
+    Same card markup as the homepage jotting teasers, but the href is an in-page
     anchor (#slug) rather than a link to another page.
     """
     if not posts:

@@ -23,18 +23,18 @@ jobs:
         with:
           fetch-depth: 2 # need the previous commit to diff against
 
-      - name: Build updates & chronicle pages from markdown
+      - name: Build jottings & chronicle pages from markdown
         run: |
           # Regenerate the generated pages from their markdown sources so the
           # published output always reflects the latest content, even if the
           # committed artifacts are stale. A venv keeps this PEP 668-proof on
           # the hosted runner.
-          #   build_updates.py   -> updates/index.html, homepage teasers,
-          #                         sitemap /updates/ + home lastmod
+          #   build_jottings.py  -> jottings/index.html, homepage teasers,
+          #                         sitemap /jottings/ + home lastmod
           #   build_chronicle.py -> chronicle/index.html, sitemap /chronicle/
           python3 -m venv .venv
           .venv/bin/pip install --quiet markdown
-          .venv/bin/python scripts/build_updates.py
+          .venv/bin/python scripts/build_jottings.py
           .venv/bin/python scripts/build_chronicle.py
 
       - name: Assemble site (static files + built Tailwind CSS)
@@ -59,11 +59,11 @@ jobs:
           # Tailwind input changes; image-only edits don't affect the CSS. Since
           # styles.css is committed (and copied above), we can safely reuse it
           # and skip the rebuild. Manual runs (no HEAD^) always rebuild.
-          # Rebuild when the HTML, the Tailwind input, or the updates content/
-          # generator change (the last two can alter the generated updates page).
+          # Rebuild when the HTML, the Tailwind input, or the jottings content/
+          # generator change (the last two can alter the generated jottings page).
           if ! git rev-parse HEAD^ >/dev/null 2>&1 || \
-             git diff --name-only HEAD^ HEAD | grep -qE '\.html$|^src/input\.css$|^content/updates/|^scripts/build_updates\.py$|^content/chronicle/|^scripts/build_chronicle\.py$'; then
-            echo "HTML/input.css/updates changed — rebuilding Tailwind CSS"
+             git diff --name-only HEAD^ HEAD | grep -qE '\.html$|^src/input\.css$|^content/jottings/|^scripts/build_jottings\.py$|^content/chronicle/|^scripts/build_chronicle\.py$'; then
+            echo "HTML/input.css/jottings changed — rebuilding Tailwind CSS"
             # Standalone Tailwind v4 CLI — self-contained (bundles the tailwindcss
             # package), so no Node/node_modules and no module-resolution issues.
             curl -sL -o tailwindcss \

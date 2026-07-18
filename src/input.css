@@ -3,7 +3,7 @@
 /* Scan the pages for the utility classes actually used */
 @source "../index.html";
 @source "../gallery/index.html";
-@source "../updates/index.html";
+@source "../jottings/index.html";
 @source "../chronicle/index.html";
 @source "../404.html";
 
@@ -24,7 +24,8 @@
 }
 
 /*
-  Styling for markdown-generated update content (see scripts/build_updates.py).
+  Styling for markdown-generated content (see scripts/build_jottings.py and
+  scripts/build_chronicle.py — both reuse the .update-body rules below).
   Markdown produces class-less <p>/<h2>/<ul>/<a>… elements, so these rules give
   them the site's look without needing the Tailwind typography plugin (which
   would require Node/node_modules). Colours are hard-coded from the palette
