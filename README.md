@@ -9,7 +9,7 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 - Photo gallery at `/gallery/` using [PhotoSwipe](https://photoswipe.com/), self-hosted
   under `gallery/vendor/photoswipe/` (no third-party CDN — see the note in
   `gallery/index.html` for how to update it).
-- `/updates/` and `/chronicle/` are generated from markdown sources at build time
+- `/jottings/` and `/chronicle/` are generated from markdown sources at build time
   (see [Generated pages](#generated-pages)).
 - A custom `404.html` and `sitemap.xml`, plus JSON-LD structured data and Open Graph
   tags on every page.
@@ -19,23 +19,23 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 
 ```
 .
-├── index.html          # home page (Updates teasers are generated — see below)
+├── index.html          # home page (Jottings teasers are generated — see below)
 ├── 404.html            # custom not-found page (root-absolute asset paths)
 ├── gallery/
 │   ├── index.html      # gallery page (served at /gallery/)
 │   ├── images/         # full-size photos (~2048px long edge)
 │   ├── thumbnails/     # grid thumbnails (~640px wide)
 │   └── vendor/photoswipe/  # self-hosted PhotoSwipe (lightbox)
-├── updates/
-│   └── index.html      # updates page (served at /updates/) — GENERATED
+├── jottings/
+│   └── index.html      # jottings page (served at /jottings/) — GENERATED
 ├── chronicle/
 │   ├── index.html      # The Interplanetary Chronicle (served at /chronicle/) — GENERATED
 │   └── header.webp     # masthead image
 ├── content/
-│   ├── updates/        # markdown sources for updates (one file per update)
+│   ├── jottings/       # markdown sources for jottings (one file per jotting)
 │   └── chronicle/      # markdown sources for chronicle articles
 ├── scripts/
-│   ├── build_updates.py    # generates the updates page + homepage teasers
+│   ├── build_jottings.py   # generates the jottings page + homepage teasers
 │   └── build_chronicle.py  # generates the chronicle page
 ├── src/input.css       # Tailwind entry point (source)
 ├── styles.css          # compiled stylesheet (committed)
@@ -62,13 +62,13 @@ export at ~1280×720 — still only tens of KB as WebP.
 ## Generated pages
 
 Two sections are generated from markdown at build time by sibling scripts in
-`scripts/`, sharing the same frontmatter format: **Updates** (`/updates/`) and
+`scripts/`, sharing the same frontmatter format: **Jottings** (`/jottings/`) and
 **The Interplanetary Chronicle** (`/chronicle/`, a satirical, entirely fictional
 "news" section).
 
-### Updates
+### Jottings
 
-Updates are plain markdown files under `content/updates/`, one per update, each
+Jottings are plain markdown files under `content/jottings/`, one per jotting, each
 starting with a small frontmatter block:
 
 ```markdown
@@ -81,26 +81,26 @@ summary: Optional one-line teaser for the homepage (defaults to the first paragr
 The body is regular **markdown** — links, lists, etc.
 ```
 
-`scripts/build_updates.py` turns those into:
+`scripts/build_jottings.py` turns those into:
 
-- `updates/index.html` — the full list, newest first, served at `/updates/`;
-- the teaser cards on the home page (between the `<!-- UPDATES:START -->` /
-  `<!-- UPDATES:END -->` markers in `index.html`);
-- the `/updates/` entry in `sitemap.xml` (its `lastmod` tracks the newest post).
+- `jottings/index.html` — the full list, newest first, served at `/jottings/`;
+- the teaser cards on the home page (between the `<!-- JOTTINGS:START -->` /
+  `<!-- JOTTINGS:END -->` markers in `index.html`);
+- the `/jottings/` entry in `sitemap.xml` (its `lastmod` tracks the newest post).
 
-To add an update: drop a new `.md` file in `content/updates/` and push. The
+To add a jotting: drop a new `.md` file in `content/jottings/` and push. The
 deploy workflow runs the generator automatically, so you don't have to build
 anything by hand. To preview locally, run it yourself (needs the `markdown`
-package): `python3 scripts/build_updates.py`. The generated `updates/index.html`
+package): `python3 scripts/build_jottings.py`. The generated `jottings/index.html`
 is committed as a build artifact (like `styles.css`), so re-run the generator
 and commit its output when you want the committed copy to stay current.
 
 ### The Interplanetary Chronicle
 
 `/chronicle/` is a satirical, entirely fictional newspaper. Its articles live in
-`content/chronicle/*.md` (same frontmatter as updates) and are turned by
+`content/chronicle/*.md` (same frontmatter as jottings) and are turned by
 `scripts/build_chronicle.py` into `chronicle/index.html` and the `/chronicle/`
-entry in `sitemap.xml`. Unlike updates, it deliberately does **not** touch the
+entry in `sitemap.xml`. Unlike jottings, it deliberately does **not** touch the
 home page — the homepage links to it via a hand-written, static promo box, so
 the satirical content never bleeds onto the main site. Preview it the same way:
 `python3 scripts/build_chronicle.py`.
@@ -131,7 +131,7 @@ Tailwind CLI against the input file and output to `styles.css`.
 
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
-`gallery/index.html`, `updates/index.html`, `chronicle/index.html` and
+`gallery/index.html`, `jottings/index.html`, `chronicle/index.html` and
 `404.html` are listed) — otherwise its utility classes are dropped from the
 build.
 
