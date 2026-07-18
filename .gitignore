@@ -16,3 +16,7 @@ Thumbs.db
 node_modules/
 _site/
 .venv/
+
+# Python bytecode cache (from the build scripts)
+__pycache__/
+*.pyc

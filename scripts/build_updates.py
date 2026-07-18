@@ -31,6 +31,7 @@ the committed styles.css stays valid.
 """
 
 import html
+import json
 import re
 import sys
 from datetime import datetime
@@ -187,8 +188,43 @@ def render_teasers(posts: list[dict]) -> str:
     return "\n".join(cards)
 
 
+def build_jsonld() -> str:
+    """schema.org CollectionPage for the updates listing.
+
+    Built with json.dumps (not inlined into the page f-string) so the JSON
+    braces don't collide with f-string substitution — the same approach used by
+    build_chronicle.py. Cross-links to the homepage graph via @id references.
+    """
+    data = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "CollectionPage",
+                "@id": f"{SITE}/updates/#webpage",
+                "url": f"{SITE}/updates/",
+                "name": "Updates",
+                "description": "Updates and small notes from Amthonie.",
+                "isPartOf": {"@id": f"{SITE}/#website"},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+                    {"@type": "ListItem", "position": 2, "name": "Updates", "item": f"{SITE}/updates/"},
+                ],
+            },
+        ],
+    }
+    payload = json.dumps(data, indent=4, ensure_ascii=False).replace("<", "\\u003c")
+    # Indent the JSON under the <script> tag (8 spaces) so the block aligns with
+    # the hand-authored JSON-LD on the other pages.
+    payload = "\n".join(f"        {line}" for line in payload.splitlines())
+    return f'<script type="application/ld+json">\n{payload}\n    </script>'
+
+
 def build_updates_page(posts: list[dict]) -> None:
     articles = render_articles(posts)
+    jsonld = build_jsonld()
     page = f"""<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -202,6 +238,7 @@ def build_updates_page(posts: list[dict]) -> None:
           content="Updates and news from Amthonie — new photos, projects, and tinkering from Naarden."/>
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="{SITE}/updates/"/>
@@ -211,6 +248,8 @@ def build_updates_page(posts: list[dict]) -> None:
     <meta property="og:image" content="{SITE}/images/og-image.jpg"/>
     <meta property="og:site_name" content="Amthonie"/>
     <meta property="og:locale" content="en_GB"/>
+
+    {jsonld}
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>

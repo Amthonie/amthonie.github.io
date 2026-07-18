@@ -256,7 +256,15 @@ def build_jsonld(posts: list[dict]) -> str:
         },
     }
 
-    graph: list[dict] = [publisher]
+    breadcrumb = {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": TITLE, "item": f"{SITE}/chronicle/"},
+        ],
+    }
+
+    graph: list[dict] = [publisher, breadcrumb]
     for post in posts:
         url = f"{SITE}/chronicle/#{post['slug']}"
         graph.append(
@@ -278,7 +286,10 @@ def build_jsonld(posts: list[dict]) -> str:
     data = {"@context": "https://schema.org", "@graph": graph}
     # ensure_ascii=False keeps curly quotes/emoji readable; escaping '<' keeps
     # the payload safe to embed inside a <script> element.
-    payload = json.dumps(data, indent=2, ensure_ascii=False).replace("<", "\\u003c")
+    payload = json.dumps(data, indent=4, ensure_ascii=False).replace("<", "\\u003c")
+    # Indent the JSON under the <script> tag (8 spaces) so the block aligns with
+    # the hand-authored JSON-LD on the other pages.
+    payload = "\n".join(f"        {line}" for line in payload.splitlines())
     return f'<script type="application/ld+json">\n{payload}\n    </script>'
 
 
@@ -299,12 +310,15 @@ def build_chronicle_page(posts: list[dict]) -> None:
           content="{META_DESCRIPTION}"/>
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="article"/>
     <meta property="og:url" content="{SITE}/chronicle/"/>
     <meta property="og:title" content="{TITLE}"/>
     <meta property="og:description"
           content="A fully satirical, entirely fictional interplanetary news outlet. Nothing here is real."/>
+    <meta property="og:image" content="{SITE}/chronicle/header.webp"/>
+    <meta property="og:image:alt" content="The Interplanetary Chronicle"/>
     <meta property="og:site_name" content="{TITLE}"/>
     <meta property="og:locale" content="en_GB"/>
 

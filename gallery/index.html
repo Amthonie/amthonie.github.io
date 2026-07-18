@@ -9,11 +9,64 @@
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
           content="A small photo gallery by Amthonie."/>
-
-    <meta name="robots" content="index,follow"/>
-
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://amthonie.nl/gallery/"/>
+    <meta property="og:title" content="Amthonie | Gallery"/>
+    <meta property="og:description" content="A small photo gallery by Amthonie."/>
+    <meta property="og:image" content="https://amthonie.nl/images/og-image.jpg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="627"/>
+    <meta property="og:image:alt" content="Amthonie"/>
+    <meta property="og:site_name" content="Amthonie"/>
+    <meta property="og:locale" content="en_GB"/>
+
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:url" content="https://amthonie.nl/gallery/"/>
+    <meta name="twitter:title" content="Amthonie | Gallery"/>
+    <meta name="twitter:description" content="A small photo gallery by Amthonie."/>
+    <meta name="twitter:image" content="https://amthonie.nl/images/og-image.jpg"/>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": "https://amthonie.nl/gallery/#webpage",
+            "url": "https://amthonie.nl/gallery/",
+            "name": "Gallery",
+            "description": "A small collection of photos by Amthonie.",
+            "isPartOf": {
+                "@id": "https://amthonie.nl/#website"
+            },
+            "creator": {
+                "@id": "https://amthonie.nl/#person"
+            }
+        }
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://amthonie.nl/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Gallery",
+                    "item": "https://amthonie.nl/gallery/"
+                }
+            ]
+        }
+    </script>
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
@@ -24,24 +77,6 @@
       two *.esm.min.js files from the matching npm release into that folder.
     -->
     <link rel="stylesheet" href="vendor/photoswipe/photoswipe.css"/>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "url": "https://amthonie.nl/gallery",
-  "name": "Gallery",
-  "description": "A small collection of photos by Amthonie.",
-  "isPartOf": {
-    "@type": "WebSite",
-    "url": "https://amthonie.nl/"
-  },
-  "creator": {
-    "@type": "Person",
-    "name": "Amthonie"
-  }
-}
-</script>
 
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>

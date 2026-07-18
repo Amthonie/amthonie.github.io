@@ -11,7 +11,6 @@
           content="Naarden‑based PHP developer in travel tech, focused on privacy, local autonomy, sustainability and practical home automation"/>
     <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
-
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="website"/>
@@ -33,51 +32,70 @@
           content="Amthonie is a Naarden‑based PHP developer working in travel technology, with a focus on privacy, local autonomy and sustainability — plus a considered approach to home automation and building software that provides real value."/>
     <meta name="twitter:image" content="https://amthonie.nl/images/og-image.jpg"/>
 
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Person",
+                    "@id": "https://amthonie.nl/#person",
+                    "name": "Amthonie",
+                    "jobTitle": "Software Developer",
+                    "description": "PHP developer in travel technology, focused on privacy, local autonomy, sustainability and practical home automation.",
+                    "image": "https://amthonie.nl/images/header.webp",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Naarden",
+                        "addressCountry": "NL"
+                    },
+                    "url": "https://amthonie.nl/",
+                    "worksFor": {
+                        "@type": "Organization",
+                        "name": "NextPax",
+                        "url": "https://nextpax.com/"
+                    },
+                    "knowsAbout": [
+                        "PHP",
+                        "Travel technology",
+                        "Home automation",
+                        "Home Assistant"
+                    ],
+                    "sameAs": [
+                        "https://github.com/Amthonie",
+                        "https://bsky.app/profile/amthonie.bsky.social"
+                    ]
+                },
+                {
+                    "@type": "WebSite",
+                    "@id": "https://amthonie.nl/#website",
+                    "url": "https://amthonie.nl/",
+                    "name": "Amthonie",
+                    "publisher": {
+                        "@id": "https://amthonie.nl/#person"
+                    }
+                },
+                {
+                    "@type": ["AboutPage", "ProfilePage"],
+                    "@id": "https://amthonie.nl/#webpage",
+                    "url": "https://amthonie.nl/",
+                    "name": "About Amthonie",
+                    "description": "PHP developer in Naarden focused on travel tech, privacy, sustainability and thoughtful home automation.",
+                    "isPartOf": {
+                        "@id": "https://amthonie.nl/#website"
+                    },
+                    "about": {
+                        "@id": "https://amthonie.nl/#person"
+                    },
+                    "mainEntity": {
+                        "@id": "https://amthonie.nl/#person"
+                    }
+                }
+            ]
+        }
+    </script>
+
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="styles.css"/>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Amthonie",
-  "jobTitle": "Software Developer",
-  "image": "https://amthonie.nl/images/header.webp",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Naarden",
-    "addressCountry": "NL"
-  },
-  "url": "https://amthonie.nl/",
-  "sameAs": [
-    "https://github.com/Amthonie",
-    "https://bsky.app/profile/amthonie.bsky.social"
-  ]
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "url": "https://amthonie.nl/",
-  "name": "Amthonie",
-  "publisher": {
-    "@type": "Person",
-    "name": "Amthonie"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "url": "https://amthonie.nl/",
-  "name": "About Amthonie",
-  "description": "PHP developer in Naarden focused on travel tech, privacy, sustainability and thoughtful home automation."
-}
-</script>
 
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
@@ -279,16 +297,20 @@
                 draggable="false"
         />
         <div class="flex flex-1 flex-col justify-center">
-            <p class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">Satire · Fiction</p>
+            <p class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">Satire ·
+                Fiction</p>
             <h2 class="mt-1 text-2xl font-bold tracking-tight text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                 The Interplanetary Chronicle
             </h2>
             <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                Because reality isn’t ridiculous enough — a wholly fictional, satirical newspaper covering planetary mishaps, geopolitical misunderstandings and the occasional interstellar catastrophe, all entirely invented and regrettably plausible.
+                Because reality isn’t ridiculous enough — a wholly fictional, satirical newspaper covering planetary
+                mishaps, geopolitical misunderstandings and the occasional interstellar catastrophe, all entirely
+                invented and regrettably plausible.
             </p>
             <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-stone-700 dark:text-stone-200">
                 Read the Chronicle
-                <svg class="h-4 w-4 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                <svg class="h-4 w-4 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M5 12h14"/>
                     <path d="m12 5 7 7-7 7"/>
