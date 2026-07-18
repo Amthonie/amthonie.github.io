@@ -20,3 +20,6 @@ _site/
 # Python bytecode cache (from the build scripts)
 __pycache__/
 *.pyc
+
+# Standalone Tailwind CLI downloaded by scripts/build-site.sh
+/tailwindcss
