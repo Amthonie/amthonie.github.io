@@ -135,6 +135,23 @@ adding a **new** HTML page, register it there too (currently `index.html`,
 `404.html` are listed) — otherwise its utility classes are dropped from the
 build.
 
+### Production-parity preview
+
+To preview the site **exactly as GitHub Pages builds and serves it** — both
+generators run, `_site/` assembled with the same exclusions, Tailwind rebuilt —
+use the helper script instead of serving the repo root:
+
+```bash
+scripts/build-site.sh             # build _site/ and serve http://localhost:4599
+scripts/build-site.sh --no-serve  # build only
+```
+
+It mirrors the steps in `.github/workflows/deploy.yml`, so what you see is what
+deploys — the custom 404 and root-absolute paths included. The generators write
+their regenerated output back into the working tree (as they do in CI), and it
+downloads a pinned standalone Tailwind CLI on first run (gitignored). Keep the
+`TAILWIND_VERSION` in the script in sync with the workflow.
+
 ## Deployment
 
 Pushing to `main` triggers the GitHub Actions workflow, which assembles the
