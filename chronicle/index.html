@@ -60,6 +60,24 @@
                 },
                 {
                     "@type": "SatiricalArticle",
+                    "@id": "https://amthonie.nl/chronicle/#mohjang-grand-experiment",
+                    "mainEntityOfPage": "https://amthonie.nl/chronicle/#mohjang-grand-experiment",
+                    "headline": "Mohjang’s Grand Experiment",
+                    "description": "Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves",
+                    "datePublished": "2026-07-19",
+                    "inLanguage": "en-GB",
+                    "isFamilyFriendly": true,
+                    "abstract": "Satire — a work of fiction. Nothing described here is real.",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Amthonie Vandenberg"
+                    },
+                    "publisher": {
+                        "@id": "https://amthonie.nl/chronicle/#publisher"
+                    }
+                },
+                {
+                    "@type": "SatiricalArticle",
                     "@id": "https://amthonie.nl/chronicle/#naarden-for-mars",
                     "mainEntityOfPage": "https://amthonie.nl/chronicle/#naarden-for-mars",
                     "headline": "Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire",
@@ -118,6 +136,8 @@
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
+    <!-- PhotoSwipe styles for the click-to-zoom article heroes -->
+    <link rel="stylesheet" href="../gallery/vendor/photoswipe/photoswipe.css"/>
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
@@ -127,7 +147,7 @@
     <a
             href="../"
             aria-label="Back to home"
-            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
                 src="header.webp"
                 alt="Decorative abstract header background for The Interplanetary Chronicle"
@@ -137,31 +157,47 @@
         />
     </a>
 
-    <!-- Masthead -->
-    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">The Interplanetary Chronicle</h1>
-                <p class="mt-1 text-sm font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">Because reality isn’t ridiculous enough.</p>
-            </div>
-            <a href="../"
-               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M19 12H5"/>
-                    <path d="m12 19-7-7 7-7"/>
-                </svg>
-                Back home
-            </a>
-        </div>
-        <p class="mt-4 text-sm italic leading-relaxed text-stone-600 dark:text-stone-400">Everything below is entirely fictional. Any resemblance to real people, events or planets is purely unfortunate.</p>
+    <!-- Sub-masthead (boxless): the banner image already carries the title in
+         large type, so the tagline stands in as the page's visible <h1> (the
+         site name still lives in <title>, og:title and the JSON-LD). It and the
+         back button sit directly under the image, no box, flush with the outer
+         edges of the boxes below (no side padding). -->
+    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
+        <h1 class="text-xl md:text-2xl font-medium uppercase tracking-wide text-stone-900 dark:text-white">Because reality isn’t ridiculous enough.</h1>
+        <a href="../"
+           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            amthonie.nl
+        </a>
+    </div>
+
+    <!-- Disclaimer (kept in a box, compact padding at all sizes) -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 shadow-xl">
+        <p class="text-sm italic leading-relaxed text-stone-600 dark:text-stone-400">Everything below is entirely fictional. Any resemblance to real people, events or planets is purely unfortunate.</p>
     </section>
 
     <!-- Index -->
     <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">In this edition</h2>
         <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2">
-            <a href="#naarden-for-mars"
+            <a href="#mohjang-grand-experiment"
+               class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+                <time datetime="2026-07-19"
+                      class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                    19 July 2026
+                </time>
+                <h3 class="mt-1 font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                    Mohjang’s Grand Experiment
+                </h3>
+                <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                    Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves
+                </p>
+            </a>
+<a href="#naarden-for-mars"
                class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
                 <time datetime="2026-07-18"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
@@ -204,6 +240,37 @@
     </section>
 
     <!-- Articles -->
+    <section id="mohjang-grand-experiment" class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl scroll-mt-28">
+        <article>
+            <time datetime="2026-07-19"
+                  class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                19 July 2026
+            </time>
+            <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
+                Mohjang’s Grand Experiment
+            </h2>
+            <a href="images/mohjang-grand-experiment.webp"
+               data-pswp-width="1024" data-pswp-height="683"
+               target="_blank" rel="noopener"
+               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
+                <img src="images/mohjang-grand-experiment.webp"
+                     alt="Mohjang’s Grand Experiment"
+                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
+                     width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
+            </a>
+            <div class="update-body mt-4">
+                <h3>THE FIRST THEME PARK IN HUMAN HISTORY WHERE VISITORS ACCIDENTALLY TERRAFORM AN ENTIRE PLANET</h3>
+<p><em>By Amthonie Vandenberg,
+Senior Interplanetary Correspondent</em></p>
+<p><strong>MOHJANG ORBITAL HQ</strong> — In a development that caused several senior officials at the Interplanetary Planning Directorate to quietly abandon their weekend plans, Mohjang Interplanetary Enterprises has revealed that its newest attraction — Venus Venture™ — is not merely an “immersive geological adventure”, but in fact a fully operational mining and terraforming facility. While guests enthusiastically smash glowing rocks, shoot mist‑creatures and solve “atmospheric puzzles”, they are unknowingly performing industrial labour of considerable strategic value. Mohjang insists this is “a delightful synergy between recreation and planetary stewardship”, though the precise nature of the delight remains unclear.</p>
+<p>Venus Venture™ is marketed as <em>“the hottest destination in the solar system”</em>, a slogan that is technically accurate and therefore difficult to challenge. The park is perched atop iridium‑rich plateaus, where visitors are encouraged to “mine” Glow‑Rocks™ using brightly coloured pickaxes. These tools, described in promotional materials as “fun, responsive and ergonomically delightful”, are in fact equipped with micro‑refinement units that sort and package valuable minerals for orbital transport. Guests appear unaware of this, largely because the devices emit cheerful jingles whenever a particularly lucrative vein is struck.</p>
+<p>The park itself is divided into several zones, each designed to disguise industrial processes as wholesome entertainment. LavaLand™ invites families to compete in “volcanic challenges”, which coincidentally correspond to Mohjang’s most profitable extraction sites. Cloud City Excavation™ suspends visitors in buoyant harnesses while they “clear the skies” of sulphuric mist, a task that significantly improves atmospheric stability. Terraformer’s Ridge™ presents itself as a puzzle‑based escape experience, though the solutions are immediately uploaded to Mohjang’s climate‑control systems, where they are used to optimise circulation algorithms.</p>
+<p>Observers have noted that Mohjang has effectively invented a new category of colonisation: recreational terraforming. By packaging planetary exploitation as a family outing, the company has managed to secure a steady stream of unpaid labourers who not only work enthusiastically, but also purchase commemorative merchandise. Mohjang denies any suggestion of manipulation, stating that “every participant contributes voluntarily to humanity’s future”. The fact that this future appears to be heavily branded is, according to the company, “pure coincidence”.</p>
+<p>Since Leon Sumk declared Mars his personal property — a claim still under review by several bewildered legal bodies — humanity has been forced to consider less fashionable planets. Venus, long dismissed as inhospitable, has become unexpectedly viable thanks to Mohjang’s efforts. The company asserts that the planet will be “comfortably habitable” within a few decades, provided visitors continue to arrive in sufficient numbers and maintain their enthusiasm for hitting things with pickaxes.</p>
+<p>Whether Venus Venture™ represents visionary innovation or a particularly flamboyant form of corporate opportunism remains a matter of debate. What is certain is that Mohjang has established a precedent: theme parks that quietly perform infrastructural megaprojects. It is only a matter of time before other companies follow suit, and humanity begins to wonder why its favourite attractions are suspiciously aligned with resource‑rich geological formations.</p>
+            </div>
+        </article>
+    </section>
     <section id="naarden-for-mars" class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl scroll-mt-28">
         <article>
             <time datetime="2026-07-18"
@@ -213,6 +280,15 @@
             <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
                 Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire
             </h2>
+            <a href="images/naarden-for-mars.webp"
+               data-pswp-width="1024" data-pswp-height="683"
+               target="_blank" rel="noopener"
+               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
+                <img src="images/naarden-for-mars.webp"
+                     alt="Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire"
+                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
+                     width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
+            </a>
             <div class="update-body mt-4">
                 <h3>NAARDEN EYES THE RED PLANET IN A GRAND QUEST TO RESTORE NAERDINCKLANT — BECAUSE EARTH HAS BECOME FAR TOO COMPLICATED</h3>
 <p><em>By Amthonie Vandenberg,<br />
@@ -242,6 +318,15 @@ European Geopolitical Correspondent</em></p>
             <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
                 &#x27;I Am Still Alive!&#x27; Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol
             </h2>
+            <a href="images/tech-visionary-still-alive.webp"
+               data-pswp-width="1024" data-pswp-height="683"
+               target="_blank" rel="noopener"
+               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
+                <img src="images/tech-visionary-still-alive.webp"
+                     alt="&#x27;I Am Still Alive!&#x27; Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol"
+                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
+                     width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
+            </a>
             <div class="update-body mt-4">
                 <h3>CRITICS LABEL THE COMPLETE DESTRUCTION OF HUMANITY'S HOME PLANET AN "OVERSIGHT," WHILE SHAREHOLDERS PRAISE UNMATCHED OPERATIONAL AGILITY AND A 90% WORKFORCE REDUCTION EFFICIENCY.</h3>
 <p><em>By Amthonie Vandenberg,
@@ -274,6 +359,15 @@ Senior Interplanetary Correspondent</em></p>
             <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
                 Flevoland Ceded to US in Global &#x27;Greenland Compromise&#x27; as President Celebrates &#x27;Beautiful New Island&#x27;
             </h2>
+            <a href="images/greenland-compromise.webp"
+               data-pswp-width="1024" data-pswp-height="683"
+               target="_blank" rel="noopener"
+               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
+                <img src="images/greenland-compromise.webp"
+                     alt="Flevoland Ceded to US in Global &#x27;Greenland Compromise&#x27; as President Celebrates &#x27;Beautiful New Island&#x27;"
+                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
+                     width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
+            </a>
             <div class="update-body mt-4">
                 <h3>DUTCH PRIME MINISTER LABOURS TO CONCEAL ABSOLUTE JUBILATION OVER RETAINING THE WADDENEILANDEN IN LAND-SWAP ACCORD.</h3>
 <p><em>By Amthonie Vandenberg,
@@ -300,6 +394,40 @@ European Geopolitical Correspondent</em></p>
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<!-- PhotoSwipe: click an article hero to open the full image in a lightbox. -->
+<script type="module">
+    import PhotoSwipeLightbox from '../gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: 'main',
+        children: 'a.pswp-hero',
+        // The main module loads on demand the first time an image is opened.
+        pswpModule: () => import('../gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+    });
+
+    // Caption = the hero image's alt text (the article headline).
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const img = pswp.currSlide.data.element?.querySelector('img');
+                    el.textContent = img ? img.getAttribute('alt') : '';
+                });
+            },
+        });
+    });
+
+    lightbox.init();
 </script>
 </body>
 </html>

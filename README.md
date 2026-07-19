@@ -54,6 +54,7 @@ needs — no larger, which is what keeps the pages loading instantly.
 | **Link cards** | `images/links/` | **640×360** (16:9) | Shown in a 16:9 card with `object-cover`. Crop the source to 16:9 and nothing needs aligning. If it isn't 16:9, keep it as-is and add an `object-*` class (e.g. `object-bottom`, `object-left`) so the auto-crop keeps the important part — otherwise it centre-crops. |
 | **Gallery photos** | `gallery/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
 | **Gallery thumbnails** | `gallery/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
+| **Chronicle heroes** | `chronicle/images/` | **~1024px on the longest edge** (any aspect), quality ≈80 | Per-article hero, referenced by the article's `image:` frontmatter (bare filename). Shown uncropped — floated beside the text on wide screens, full-width on mobile — and clickable to open full-size in the PhotoSwipe lightbox. The generator reads the pixel size from the file, so there's no `data-pswp-*` to set by hand. |
 
 640px-wide link images match the desktop 3-column layout at 2× (retina). If you
 ever want them sharper when a card is shown full-width on a high-DPI phone,
@@ -98,9 +99,12 @@ and commit its output when you want the committed copy to stay current.
 ### The Interplanetary Chronicle
 
 `/chronicle/` is a satirical, entirely fictional newspaper. Its articles live in
-`content/chronicle/*.md` (same frontmatter as jottings) and are turned by
-`scripts/build_chronicle.py` into `chronicle/index.html` and the `/chronicle/`
-entry in `sitemap.xml`. Unlike jottings, it deliberately does **not** touch the
+`content/chronicle/*.md` (same frontmatter as jottings, plus one extra) and are
+turned by `scripts/build_chronicle.py` into `chronicle/index.html` and the
+`/chronicle/` entry in `sitemap.xml`. The extra frontmatter key is an optional
+`image:` — a **bare filename** (no path) of a WebP in `chronicle/images/`, shown
+as a per-article hero (floated beside the text on wide screens, full-width on
+mobile); omit it for a text-only article. Unlike jottings, it deliberately does **not** touch the
 home page — the homepage links to it via a hand-written, static promo box, so
 the satirical content never bleeds onto the main site. Preview it the same way:
 `python3 scripts/build_chronicle.py`.
