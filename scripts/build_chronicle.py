@@ -21,6 +21,7 @@ with a small frontmatter block:
     title: A satirical headline
     summary: One-line teaser for the in-page index. Falls back to the first
              paragraph of the body when omitted.
+    image: optional-hero.webp   # bare filename in chronicle/images/; omit = no hero
     ---
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
@@ -100,6 +101,47 @@ MONTHS = [
     "July", "August", "September", "October", "November", "December",
 ]
 
+# PhotoSwipe init, injected only when at least one article has a hero image.
+# Reuses the copy self-hosted for the gallery (../gallery/vendor/), so no
+# third-party CDN and nothing to duplicate. The gallery is 'main' with the hero
+# anchors (a.pswp-hero) as its children, so the arrows step through every
+# article image on the page.
+LIGHTBOX_JS = """
+<!-- PhotoSwipe: click an article hero to open the full image in a lightbox. -->
+<script type="module">
+    import PhotoSwipeLightbox from '../gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: 'main',
+        children: 'a.pswp-hero',
+        // The main module loads on demand the first time an image is opened.
+        pswpModule: () => import('../gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+    });
+
+    // Caption = the hero image's alt text (the article headline).
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const img = pswp.currSlide.data.element?.querySelector('img');
+                    el.textContent = img ? img.getAttribute('alt') : '';
+                });
+            },
+        });
+    });
+
+    lightbox.init();
+</script>"""
+
 
 def human_date(d: datetime) -> str:
     """Render a date the same way the gallery captions do, e.g. '16 July 2026'."""
@@ -109,6 +151,31 @@ def human_date(d: datetime) -> str:
 def slugify(text: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
     return slug or "article"
+
+
+def webp_size(path: Path) -> tuple[int, int] | None:
+    """Return a WebP's (width, height) by parsing its header — no dependencies.
+
+    PhotoSwipe needs the image's true pixel size (data-pswp-width/height) or it
+    mis-sizes the slide, so read it from the file rather than assuming. Handles
+    the three WebP chunk types (lossy VP8, lossless VP8L, extended VP8X);
+    returns None if the file isn't a WebP we can read.
+    """
+    data = path.read_bytes()[:30]
+    if len(data) < 30 or data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        return None
+    fmt = data[12:16]
+    if fmt == b"VP8 ":  # lossy: 14-bit width/height little-endian at offset 26
+        w = int.from_bytes(data[26:28], "little") & 0x3FFF
+        h = int.from_bytes(data[28:30], "little") & 0x3FFF
+        return w, h
+    if fmt == b"VP8L":  # lossless: 14-bit (w-1),(h-1) packed after the 0x2F sig
+        bits = int.from_bytes(data[21:25], "little")
+        return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+    if fmt == b"VP8X":  # extended: 24-bit (w-1),(h-1) at offset 24
+        return (int.from_bytes(data[24:27], "little") + 1,
+                int.from_bytes(data[27:30], "little") + 1)
+    return None
 
 
 def parse_post(path: Path) -> dict:
@@ -149,12 +216,44 @@ def parse_post(path: Path) -> dict:
     stem = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
     slug = slugify(stem)
 
+    # Optional per-article hero image, declared in the frontmatter as a bare
+    # filename (no path): `image: greenland-compromise.webp`. It resolves to
+    # chronicle/images/<filename> and is shown uncropped alongside the story.
+    # No field → no hero. A named-but-missing file is skipped with a warning
+    # rather than breaking the build.
+    image = None
+    image_w = image_h = None
+    image_name = meta.get("image")
+    if image_name:
+        image_rel = f"images/{image_name}"
+        image_path = ROOT / "chronicle" / image_rel
+        if image_path.is_file():
+            image = image_rel
+            dims = webp_size(image_path)
+            if dims:
+                image_w, image_h = dims
+            else:
+                print(
+                    f"warning: {path.name}: could not read dimensions of "
+                    f"'{image_name}' — hero shown but not click-to-zoom",
+                    file=sys.stderr,
+                )
+        else:
+            print(
+                f"warning: {path.name}: image '{image_name}' not found in "
+                "chronicle/images/ — skipping hero",
+                file=sys.stderr,
+            )
+
     return {
         "date": date,
         "title": meta["title"],
         "summary": summary,
         "body_html": body_html,
         "slug": slug,
+        "image": image,
+        "image_w": image_w,
+        "image_h": image_h,
     }
 
 
@@ -216,6 +315,41 @@ def render_article_boxes(posts: list[dict]) -> str:
 
     boxes = []
     for post in posts:
+        # Hero image (optional): the full illustration, uncropped. On mobile it
+        # is a full-bleed block above the story; on wide screens (md+) it floats
+        # to the right at half width so the article text flows around it,
+        # magazine-style — which also keeps it from dominating a wide viewport.
+        # No object-cover: these are vintage-poster illustrations whose headline
+        # sits at the very top, so any crop would clip it. The parent <section>
+        # is a flex item, so it contains the float (it won't bleed into the next
+        # article). When dimensions are known it's wrapped in a PhotoSwipe anchor
+        # (class "pswp-hero") so a click opens the full image in the lightbox.
+        hero = ""
+        if post["image"]:
+            # These float/box utilities apply to whichever element is the
+            # block-level hero (the anchor when clickable, else the <img>).
+            box = ("mt-4 block w-full md:float-right md:mt-1 md:mb-3 "
+                   "md:ml-6 md:w-1/2 md:max-w-md")
+            w, h = post["image_w"] or 1024, post["image_h"] or 683
+            if post["image_w"]:  # dimensions known → clickable lightbox hero
+                hero = (
+                    f'\n            <a href="{post["image"]}"\n'
+                    f'               data-pswp-width="{w}" data-pswp-height="{h}"\n'
+                    '               target="_blank" rel="noopener"\n'
+                    f'               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 {box}">\n'
+                    f'                <img src="{post["image"]}"\n'
+                    f'                     alt="{html.escape(post["title"])}"\n'
+                    '                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"\n'
+                    f'                     width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>\n'
+                    '            </a>'
+                )
+            else:  # unreadable dimensions → plain, non-clickable hero
+                hero = (
+                    f'\n            <img src="{post["image"]}"\n'
+                    f'                 alt="{html.escape(post["title"])}"\n'
+                    f'                 class="rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10 {box}"\n'
+                    f'                 width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>'
+                )
         boxes.append(
             f"""    <section id="{post['slug']}" class="{SECTION_NEXT} scroll-mt-28">
         <article>
@@ -225,7 +359,7 @@ def render_article_boxes(posts: list[dict]) -> str:
             </time>
             <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
                 {html.escape(post['title'])}
-            </h2>
+            </h2>{hero}
             <div class="update-body mt-4">
                 {post['body_html']}
             </div>
@@ -297,6 +431,20 @@ def build_chronicle_page(posts: list[dict]) -> None:
     index_cards = render_index(posts)
     article_boxes = render_article_boxes(posts)
     jsonld = build_jsonld(posts)
+
+    # Only pull in PhotoSwipe when an article actually has a (clickable) hero.
+    has_lightbox = any(p["image_w"] for p in posts)
+    lightbox_css = (
+        '\n    <!-- PhotoSwipe styles for the click-to-zoom article heroes -->'
+        '\n    <link rel="stylesheet" href="../gallery/vendor/photoswipe/photoswipe.css"/>'
+        if has_lightbox else ""
+    )
+    lightbox_js = LIGHTBOX_JS if has_lightbox else ""
+
+    # The disclaimer is a short one-liner, so it keeps the compact small-screen
+    # padding at every breakpoint (drop the md: padding bump the other boxes use).
+    disclaimer_box = SECTION_NEXT.replace(" md:px-8 md:py-8", "")
+
     page = f"""<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -327,7 +475,7 @@ def build_chronicle_page(posts: list[dict]) -> None:
     {jsonld}
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
-    <link rel="stylesheet" href="../styles.css"/>
+    <link rel="stylesheet" href="../styles.css"/>{lightbox_css}
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
@@ -337,7 +485,7 @@ def build_chronicle_page(posts: list[dict]) -> None:
     <a
             href="../"
             aria-label="Back to home"
-            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
                 src="header.webp"
                 alt="Decorative abstract header background for The Interplanetary Chronicle"
@@ -347,24 +495,27 @@ def build_chronicle_page(posts: list[dict]) -> None:
         />
     </a>
 
-    <!-- Masthead -->
-    <section class="{SECTION_FIRST}">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">{TITLE}</h1>
-                <p class="mt-1 text-sm font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">{TAGLINE}</p>
-            </div>
-            <a href="../"
-               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M19 12H5"/>
-                    <path d="m12 19-7-7 7-7"/>
-                </svg>
-                Back home
-            </a>
-        </div>
-        <p class="mt-4 text-sm italic leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
+    <!-- Sub-masthead (boxless): the banner image already carries the title in
+         large type, so the tagline stands in as the page's visible <h1> (the
+         site name still lives in <title>, og:title and the JSON-LD). It and the
+         back button sit directly under the image, no box, flush with the outer
+         edges of the boxes below (no side padding). -->
+    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
+        <h1 class="text-xl md:text-2xl font-medium uppercase tracking-wide text-stone-900 dark:text-white">{TAGLINE}</h1>
+        <a href="../"
+           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            amthonie.nl
+        </a>
+    </div>
+
+    <!-- Disclaimer (kept in a box, compact padding at all sizes) -->
+    <section class="{disclaimer_box}">
+        <p class="text-sm italic leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
     </section>
 
     <!-- Index -->
@@ -387,7 +538,7 @@ def build_chronicle_page(posts: list[dict]) -> None:
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+</script>{lightbox_js}
 </body>
 </html>
 """

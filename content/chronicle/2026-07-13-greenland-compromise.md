@@ -2,6 +2,7 @@
 date: 2026-07-13
 title: Flevoland Ceded to US in Global 'Greenland Compromise' as President Celebrates 'Beautiful New Island'
 summary: A diplomatic masterstroke leaves the Netherlands “devastated” as Flevoland is ceded to the US — while ministers quietly celebrate keeping the Waddeneilanden out of American hands.
+image: greenland-compromise.webp
 ---
 
 ### DUTCH PRIME MINISTER LABOURS TO CONCEAL ABSOLUTE JUBILATION OVER RETAINING THE WADDENEILANDEN IN LAND-SWAP ACCORD.
