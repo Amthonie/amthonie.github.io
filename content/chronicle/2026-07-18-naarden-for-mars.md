@@ -2,7 +2,7 @@
 date: 2026-07-18
 title: Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire
 summary: A group of spectacularly self‑assured Naarders has stunned the region by announcing cosmically deranged plans to abandon Earth entirely and negotiate with space magnate Leon Sumk for their own hand‑picked Martian micro‑kingdom.
-image: naarden-for-mars.webp
+image: mars-the-naarden-way.webp
 ---
 
 ### NAARDEN EYES THE RED PLANET IN A GRAND QUEST TO RESTORE NAERDINCKLANT — BECAUSE EARTH HAS BECOME FAR TOO COMPLICATED
