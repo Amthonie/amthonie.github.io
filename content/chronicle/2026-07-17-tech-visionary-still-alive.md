@@ -1,7 +1,7 @@
 ---
 date: 2026-07-17
 title: 'I Am Still Alive!' Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol
-summary: Local tech billionaire successfully avoids Earth's regulatory frameworks by vaporizing the planet for fuel. Reports from Mars indicate a 90% workforce reduction due to local "hostilities," but the CEO remains highly bullish. "Hey, I am still alive!" 🚀💥
+summary: Local tech billionaire successfully avoids Earth's regulatory frameworks by vaporizing the planet for fuel. Reports from Mars indicate a 90% workforce reduction due to local "hostilities," but the CEO remains highly bullish. "Hey, I am still alive!"
 image: tech-visionary-still-alive.webp
 ---
 
