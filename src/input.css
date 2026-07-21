@@ -93,7 +93,7 @@
 
 @media (prefers-color-scheme: dark) {
   .update-body {
-    color: #d6d3d1; /* stone-300 */
+    color: #e7e5e4; /* stone-200 */
   }
   .update-body h2,
   .update-body h3 {
@@ -109,6 +109,6 @@
     background: rgba(255, 255, 255, 0.1);
   }
   .update-body blockquote {
-    color: #a8a29e; /* stone-400 */
+    color: #d6d3d1; /* stone-300 */
   }
 }
