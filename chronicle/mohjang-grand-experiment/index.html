@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mohjang’s Grand Experiment — The Interplanetary Chronicle</title>
+    <link rel="canonical" href="https://amthonie.nl/chronicle/mohjang-grand-experiment/">
+    <link rel="icon" href="../../favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="../../images/a.png"/>
+    <meta name="description"
+          content="Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves"/>
+    <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="https://amthonie.nl/chronicle/mohjang-grand-experiment/"/>
+    <meta property="og:title" content="Mohjang’s Grand Experiment"/>
+    <meta property="og:description"
+          content="Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves"/>
+    <meta property="og:image" content="https://amthonie.nl/chronicle/images/venus-venture.webp"/>
+    <meta property="og:image:alt" content="Mohjang’s Grand Experiment"/>
+    <meta property="og:site_name" content="The Interplanetary Chronicle"/>
+    <meta property="og:locale" content="en_GB"/>
+
+    <!-- schema.org structured data: NewsMediaOrganization publisher +
+         SatiricalArticle (the canonical "this is satire" signal). -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "NewsMediaOrganization",
+                    "@id": "https://amthonie.nl/chronicle/#publisher",
+                    "name": "The Interplanetary Chronicle",
+                    "url": "https://amthonie.nl/chronicle/",
+                    "slogan": "Because reality isn’t ridiculous enough",
+                    "description": "A fully satirical, entirely fictional interplanetary news outlet. All names, quotes, events and reporting are invented for comic effect and are not real.",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/images/a.png"
+                    }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Home",
+                            "item": "https://amthonie.nl/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "The Interplanetary Chronicle",
+                            "item": "https://amthonie.nl/chronicle/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "Mohjang’s Grand Experiment",
+                            "item": "https://amthonie.nl/chronicle/mohjang-grand-experiment/"
+                        }
+                    ]
+                },
+                {
+                    "@type": "SatiricalArticle",
+                    "@id": "https://amthonie.nl/chronicle/mohjang-grand-experiment/",
+                    "mainEntityOfPage": "https://amthonie.nl/chronicle/mohjang-grand-experiment/",
+                    "headline": "Mohjang’s Grand Experiment",
+                    "description": "Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves",
+                    "datePublished": "2026-07-19",
+                    "inLanguage": "en-GB",
+                    "isFamilyFriendly": true,
+                    "abstract": "Satire — a work of fiction. Nothing described here is real.",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Amthonie Vandenberg"
+                    },
+                    "publisher": {
+                        "@id": "https://amthonie.nl/chronicle/#publisher"
+                    },
+                    "image": "https://amthonie.nl/chronicle/images/venus-venture.webp"
+                }
+            ]
+        }
+    </script>
+
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="../../styles.css"/>
+    <!-- PhotoSwipe styles for the click-to-zoom article hero -->
+    <link rel="stylesheet" href="../../gallery/vendor/photoswipe/photoswipe.css"/>
+</head>
+
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-200">
+<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+
+    <!-- Article masthead banner — links back to the Chronicle index -->
+    <a
+            href="../"
+            aria-label="Back to The Interplanetary Chronicle"
+            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[1024/217] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+        <img
+                src="../header-articles.webp"
+                alt="The Interplanetary Chronicle"
+                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                draggable="false"
+        />
+    </a>
+    <!-- Sub-masthead: identity on the left, back-to-index button on the right;
+         the article headline below is the page's <h1>. -->
+    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
+        <p class="text-xl md:text-2xl font-medium italic uppercase tracking-wide text-stone-900 dark:text-white">Because reality isn’t ridiculous enough</p>
+        <a href="../"
+           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+            </svg>
+            The Interplanetary Chronicle
+        </a>
+    </div>
+
+    <!-- Article -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+        <article>
+            <time datetime="2026-07-19"
+                  class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                19 July 2026
+            </time>
+            <h1 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
+                Mohjang’s Grand Experiment
+            </h1>
+            <a href="../images/venus-venture.webp"
+               data-pswp-width="1024" data-pswp-height="683"
+               target="_blank" rel="noopener"
+               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
+                <img src="../images/venus-venture.webp"
+                     alt="Mohjang’s Grand Experiment"
+                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
+                     width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
+            </a>
+            <div class="update-body mt-4">
+                <h3>THE FIRST THEME PARK IN HUMAN HISTORY WHERE VISITORS ACCIDENTALLY TERRAFORM AN ENTIRE PLANET</h3>
+<p><em>By Amthonie Vandenberg,
+Senior Interplanetary Correspondent</em></p>
+<p><strong>MOHJANG ORBITAL HQ</strong> — In a development that caused several senior officials at the Interplanetary Planning Directorate to quietly abandon their weekend plans, Mohjang Interplanetary Enterprises has revealed that its newest attraction — Venus Venture™ — is not merely an “immersive geological adventure”, but in fact a fully operational mining and terraforming facility. While guests enthusiastically smash glowing rocks, shoot mist‑creatures and solve “atmospheric puzzles”, they are unknowingly performing industrial labour of considerable strategic value. Mohjang insists this is “a delightful synergy between recreation and planetary stewardship”, though the precise nature of the delight remains unclear.</p>
+<p>Venus Venture™ is marketed as <em>“the hottest destination in the solar system”</em>, a slogan that is technically accurate and therefore difficult to challenge. The park is perched atop iridium‑rich plateaus, where visitors are encouraged to “mine” Glow‑Rocks™ using brightly coloured pickaxes. These tools, described in promotional materials as “fun, responsive and ergonomically delightful”, are in fact equipped with micro‑refinement units that sort and package valuable minerals for orbital transport. Guests appear unaware of this, largely because the devices emit cheerful jingles whenever a particularly lucrative vein is struck.</p>
+<p>The park itself is divided into several zones, each designed to disguise industrial processes as wholesome entertainment. LavaLand™ invites families to compete in “volcanic challenges”, which coincidentally correspond to Mohjang’s most profitable extraction sites. Cloud City Excavation™ suspends visitors in buoyant harnesses while they “clear the skies” of sulphuric mist, a task that significantly improves atmospheric stability. Terraformer’s Ridge™ presents itself as a puzzle‑based escape experience, though the solutions are immediately uploaded to Mohjang’s climate‑control systems, where they are used to optimise circulation algorithms.</p>
+<p>Observers have noted that Mohjang has effectively invented a new category of colonisation: recreational terraforming. By packaging planetary exploitation as a family outing, the company has managed to secure a steady stream of unpaid labourers who not only work enthusiastically, but also purchase commemorative merchandise. Mohjang denies any suggestion of manipulation, stating that “every participant contributes voluntarily to humanity’s future”. The fact that this future appears to be heavily branded is, according to the company, “pure coincidence”.</p>
+<p>Since Leon Sumk declared Mars his personal property — a claim still under review by several bewildered legal bodies — humanity has been forced to consider less fashionable planets. Venus, long dismissed as inhospitable, has become unexpectedly viable thanks to Mohjang’s efforts. The company asserts that the planet will be “comfortably habitable” within a few decades, provided visitors continue to arrive in sufficient numbers and maintain their enthusiasm for hitting things with pickaxes.</p>
+<p>Whether Venus Venture™ represents visionary innovation or a particularly flamboyant form of corporate opportunism remains a matter of debate. What is certain is that Mohjang has established a precedent: theme parks that quietly perform infrastructural megaprojects. It is only a matter of time before other companies follow suit, and humanity begins to wonder why its favourite attractions are suspiciously aligned with resource‑rich geological formations.</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- Disclaimer (below the article, compact padding at all sizes) -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 shadow-xl">
+        <p class="text-sm italic font-medium text-center leading-relaxed text-stone-600 dark:text-stone-400">Everything here is entirely fictional. Any resemblance to real people, events or planets is purely unfortunate.</p>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
+    <p>A work of satire — entirely fictional.</p>
+    <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
+</footer>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<!-- PhotoSwipe: click the article hero to open the full image in a lightbox. -->
+<script type="module">
+    import PhotoSwipeLightbox from '../../gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: 'main',
+        children: 'a.pswp-hero',
+        // The main module loads on demand the first time an image is opened.
+        pswpModule: () => import('../../gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+    });
+
+    // Caption = the hero image's alt text (the article headline).
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const img = pswp.currSlide.data.element?.querySelector('img');
+                    el.textContent = img ? img.getAttribute('alt') : '';
+                });
+            },
+        });
+    });
+
+    lightbox.init();
+</script>
+</body>
+</html>

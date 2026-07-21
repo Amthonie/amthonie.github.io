@@ -6,6 +6,7 @@
 @source "../gallery/index.html";
 @source "../jottings/index.html";
 @source "../chronicle/index.html";
+@source "../chronicle/*/index.html";
 @source "../404.html";
 
 /* Dark mode follows the visitor's OS setting (prefers-color-scheme) */

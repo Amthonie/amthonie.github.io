@@ -1,17 +1,34 @@
 #!/usr/bin/env python3
 """
-Build the /chronicle/ page from markdown sources.
+Build the /chronicle/ section from markdown sources.
 
 The Interplanetary Chronicle is a fully satirical, entirely fictional "news"
 outlet. This generator is a sibling of scripts/build_jottings.py and shares its
-frontmatter format:
+frontmatter format, but — unlike jottings — the Chronicle is split into
+**separate pages per article**:
 
-  - It writes chronicle/index.html.
-  - It keeps the /chronicle/ entry in sitemap.xml in sync (lastmod = newest
-    article), inserting it if missing.
+  - chronicle/index.html          — the landing page: masthead, satire
+                                     disclaimer, and an index of teaser cards,
+                                     each linking to an article's own page.
+  - chronicle/<slug>/index.html   — one standalone page per article: a slim
+                                     text masthead + a "back to the Chronicle"
+                                     button, a compact satire disclaimer, and
+                                     the full story (headline as the page <h1>).
+
+  - It keeps sitemap.xml in sync: the /chronicle/ landing plus one entry per
+    article page, each with its own lastmod.
+
+There is deliberately no RSS feed: the articles are satire, and a feed would
+lift the full text into readers stripped of the masthead/disclaimer framing
+that marks it as fiction. The pages are shareable (each links back to its
+framed self), but the content is not syndicated bare.
   - It does NOT touch the homepage (index.html). The home page links to the
     Chronicle via a hand-written, deliberately static promo box — the
     satirical content must never be generated onto the main site.
+
+Because each article now has its own URL, the satire signal (the visible
+disclaimer *and* the SatiricalArticle JSON-LD) travels with every article page,
+not just the landing — so every indexable URL reads unambiguously as fiction.
 
 Source of truth: content/chronicle/*.md — one file per article, each starting
 with a small frontmatter block:
@@ -19,18 +36,12 @@ with a small frontmatter block:
     ---
     date: 2026-07-17
     title: A satirical headline
-    summary: One-line teaser for the in-page index. Falls back to the first
-             paragraph of the body when omitted.
+    summary: One-line teaser for the index. Falls back to the first paragraph
+             of the body when omitted.
     image: optional-hero.webp   # bare filename in chronicle/images/; omit = no hero
     ---
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
-
-Layout of the generated page:
-  - a masthead box (title + tagline + satire disclaimer + back-home button)
-  - an index box: teaser cards (same format as the homepage jotting cards) that
-    link down to each article's anchor on this same page
-  - one box per article, newest first
 
 Run from the repo root:  python3 scripts/build_chronicle.py
 Requires the `markdown` package (same venv step as build_jottings.py).
@@ -42,6 +53,7 @@ in the committed styles.css, so no CSS rebuild is needed.
 import html
 import json
 import re
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -50,25 +62,34 @@ import markdown
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT_DIR = ROOT / "content" / "chronicle"
-CHRONICLE_PAGE = ROOT / "chronicle" / "index.html"
+CHRONICLE_DIR = ROOT / "chronicle"
+LANDING_PAGE = CHRONICLE_DIR / "index.html"
 SITEMAP = ROOT / "sitemap.xml"
 
 SITE = "https://amthonie.nl"
 
 TITLE = "The Interplanetary Chronicle"
-TAGLINE = "Because reality isn’t ridiculous enough."
-# The <title> tag (SERP/tab). Kept short (≤60 chars) and keyword-clear; the
-# playful TAGLINE stays as the visible masthead sub-line, not in <title>.
+TAGLINE = "Because reality isn’t ridiculous enough"
+# The landing <title> tag (SERP/tab). Kept short (≤60 chars) and keyword-clear;
+# the playful TAGLINE stays as the visible masthead sub-line, not in <title>.
 META_TITLE = "The Interplanetary Chronicle: Reality Isn’t Ridiculous Enough"
-# <meta name="description"> — aim for ~120-155 chars.
+# <meta name="description"> for the landing — aim for ~120-155 chars.
 META_DESCRIPTION = (
     "A satirical, entirely fictional interplanetary news outlet delivering dry "
     "humour, fabricated reporting and absurd commentary. Nothing here is real."
 )
 DISCLAIMER = (
-    "Everything below is entirely fictional. Any resemblance to real people, "
+    "Everything here is entirely fictional. Any resemblance to real people, "
     "events or planets is purely unfortunate."
 )
+
+# A slim banner shown atop every article page — smaller than the landing banner
+# (chronicle/header.webp) so it doesn't push the story down, but enough to give
+# each standalone article the Chronicle's masthead identity. Lives in
+# chronicle/; article pages are one level deeper, so they reference it as
+# ../header-articles.webp. If the file is absent the article page falls back to
+# a plain text wordmark.
+ARTICLE_HEADER = "header-articles.webp"
 
 # The Chronicle's (fictional) house correspondent — used as the schema.org
 # author across articles.
@@ -85,59 +106,67 @@ PUBLISHER_DESCRIPTION = (
 
 # Shared section-box styling, lifted verbatim from the jottings page so the
 # Chronicle sits in the same visual language as the rest of the site.
-SECTION_FIRST = (
-    "mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl "
-    "border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 "
-    "px-4 py-4 md:px-8 md:py-8 shadow-xl"
-)
-SECTION_NEXT = (
+SECTION_BOX = (
     "mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl "
     "border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 "
     "px-4 py-4 md:px-8 md:py-8 shadow-xl"
 )
+# The disclaimer is a short one-liner, so it keeps the compact small-screen
+# padding at every breakpoint (drop the md: padding bump the other boxes use).
+DISCLAIMER_BOX = SECTION_BOX.replace(" md:px-8 md:py-8", "")
 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
 ]
 
-# PhotoSwipe init, injected only when at least one article has a hero image.
-# Reuses the copy self-hosted for the gallery (../gallery/vendor/), so no
-# third-party CDN and nothing to duplicate. The gallery is 'main' with the hero
-# anchors (a.pswp-hero) as its children, so the arrows step through every
-# article image on the page.
-LIGHTBOX_JS = """
-<!-- PhotoSwipe: click an article hero to open the full image in a lightbox. -->
-<script type="module">
-    import PhotoSwipeLightbox from '../gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
-    const lightbox = new PhotoSwipeLightbox({
+def lightbox_css(prefix: str) -> str:
+    return (
+        '\n    <!-- PhotoSwipe styles for the click-to-zoom article hero -->'
+        f'\n    <link rel="stylesheet" href="{prefix}gallery/vendor/photoswipe/photoswipe.css"/>'
+    )
+
+
+def lightbox_js(prefix: str) -> str:
+    """PhotoSwipe init for an article page's hero image.
+
+    Reuses the copy self-hosted for the gallery (<prefix>gallery/vendor/), so no
+    third-party CDN and nothing to duplicate. `prefix` is the relative path back
+    to the site root (../../ for an article page).
+    """
+    return f"""
+<!-- PhotoSwipe: click the article hero to open the full image in a lightbox. -->
+<script type="module">
+    import PhotoSwipeLightbox from '{prefix}gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({{
         gallery: 'main',
         children: 'a.pswp-hero',
         // The main module loads on demand the first time an image is opened.
-        pswpModule: () => import('../gallery/vendor/photoswipe/photoswipe.esm.min.js'),
-    });
+        pswpModule: () => import('{prefix}gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+    }});
 
     // Caption = the hero image's alt text (the article headline).
-    lightbox.on('uiRegister', () => {
-        lightbox.pswp.ui.registerElement({
+    lightbox.on('uiRegister', () => {{
+        lightbox.pswp.ui.registerElement({{
             name: 'caption',
             order: 9,
             isButton: false,
             appendTo: 'root',
             html: '',
-            onInit: (el, pswp) => {
+            onInit: (el, pswp) => {{
                 el.style.cssText =
                     'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
                     'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
                     'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
-                pswp.on('change', () => {
+                pswp.on('change', () => {{
                     const img = pswp.currSlide.data.element?.querySelector('img');
                     el.textContent = img ? img.getAttribute('alt') : '';
-                });
-            },
-        });
-    });
+                }});
+            }},
+        }});
+    }});
 
     lightbox.init();
 </script>"""
@@ -212,7 +241,7 @@ def parse_post(path: Path) -> dict:
         first_para = re.search(r"<p>(.*?)</p>", body_html, re.DOTALL)
         summary = re.sub(r"<[^>]+>", "", first_para.group(1)).strip() if first_para else ""
 
-    # A stable anchor: strip a leading date prefix from the filename if present.
+    # A stable anchor/slug: strip a leading date prefix from the filename.
     stem = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
     slug = slugify(stem)
 
@@ -220,13 +249,15 @@ def parse_post(path: Path) -> dict:
     # filename (no path): `image: greenland-compromise.webp`. It resolves to
     # chronicle/images/<filename> and is shown uncropped alongside the story.
     # No field → no hero. A named-but-missing file is skipped with a warning
-    # rather than breaking the build.
+    # rather than breaking the build. `image` is stored relative to chronicle/
+    # (e.g. "images/foo.webp"); article pages live one level deeper, so they
+    # reference it as "../images/foo.webp".
     image = None
     image_w = image_h = None
     image_name = meta.get("image")
     if image_name:
         image_rel = f"images/{image_name}"
-        image_path = ROOT / "chronicle" / image_rel
+        image_path = CHRONICLE_DIR / image_rel
         if image_path.is_file():
             image = image_rel
             dims = webp_size(image_path)
@@ -267,20 +298,101 @@ def load_posts() -> list[dict]:
     for post in posts:
         slug = post["slug"]
         n = 2
-        while slug in seen:  # guarantee unique anchors
+        while slug in seen:  # guarantee unique per-article directories
             slug = f"{post['slug']}-{n}"
             n += 1
         post["slug"] = slug
+        post["url"] = f"{SITE}/chronicle/{slug}/"
         seen.add(slug)
     return posts
 
 
-def render_index(posts: list[dict]) -> str:
-    """The in-page table of contents — teaser cards linking to each article.
+# --------------------------------------------------------------------------- #
+# Shared page shell
+# --------------------------------------------------------------------------- #
 
-    Same card markup as the homepage jotting teasers, but the href is an in-page
-    anchor (#slug) rather than a link to another page.
+def render_page(
+    *,
+    prefix: str,
+    title_tag: str,
+    canonical: str,
+    description: str,
+    og_type: str,
+    og_title: str,
+    og_description: str,
+    og_image: str,
+    jsonld: str,
+    body: str,
+    has_lightbox: bool = False,
+) -> str:
+    """Assemble a full HTML page from the shared shell.
+
+    `prefix` is the relative path from this page back to the site root
+    ('../' for the landing, '../../' for an article page). All root-level assets
+    (styles, favicon, gallery vendor, the home link) are addressed through it.
     """
+    css_extra = lightbox_css(prefix) if has_lightbox else ""
+    js_extra = lightbox_js(prefix) if has_lightbox else ""
+
+    return f"""<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{title_tag}</title>
+    <link rel="canonical" href="{canonical}">
+    <link rel="icon" href="{prefix}favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="{prefix}images/a.png"/>
+    <meta name="description"
+          content="{html.escape(description, quote=True)}"/>
+    <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
+    <meta name="robots" content="index,follow"/>
+
+    <meta property="og:type" content="{og_type}"/>
+    <meta property="og:url" content="{canonical}"/>
+    <meta property="og:title" content="{html.escape(og_title, quote=True)}"/>
+    <meta property="og:description"
+          content="{html.escape(og_description, quote=True)}"/>
+    <meta property="og:image" content="{og_image}"/>
+    <meta property="og:image:alt" content="{html.escape(og_title, quote=True)}"/>
+    <meta property="og:site_name" content="{TITLE}"/>
+    <meta property="og:locale" content="en_GB"/>
+
+    <!-- schema.org structured data: NewsMediaOrganization publisher +
+         SatiricalArticle (the canonical "this is satire" signal). -->
+    {jsonld}
+
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="{prefix}styles.css"/>{css_extra}
+</head>
+
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-200">
+<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+
+{body}
+</main>
+
+<!-- Footer -->
+<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
+    <p>A work of satire — entirely fictional.</p>
+    <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
+</footer>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>{js_extra}
+</body>
+</html>
+"""
+
+
+# --------------------------------------------------------------------------- #
+# Landing page
+# --------------------------------------------------------------------------- #
+
+def render_index_cards(posts: list[dict]) -> str:
+    """The article index — teaser cards, each linking to its own article page."""
     if not posts:
         return (
             '<p class="text-sm text-stone-600 dark:text-stone-400">'
@@ -289,9 +401,8 @@ def render_index(posts: list[dict]) -> str:
 
     cards = []
     for post in posts:
-        summary = html.escape(post["summary"])
         cards.append(
-            f"""<a href="#{post['slug']}"
+            f"""<a href="{post['slug']}/"
                class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
@@ -301,82 +412,16 @@ def render_index(posts: list[dict]) -> str:
                     {html.escape(post['title'])}
                 </h3>
                 <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                    {summary}
+                    {html.escape(post['summary'])}
                 </p>
             </a>"""
         )
     return "\n".join(cards)
 
 
-def render_article_boxes(posts: list[dict]) -> str:
-    """One section box per article, newest first."""
-    if not posts:
-        return ""
-
-    boxes = []
-    for post in posts:
-        # Hero image (optional): the full illustration, uncropped. On mobile it
-        # is a full-bleed block above the story; on wide screens (md+) it floats
-        # to the right at half width so the article text flows around it,
-        # magazine-style — which also keeps it from dominating a wide viewport.
-        # No object-cover: these are vintage-poster illustrations whose headline
-        # sits at the very top, so any crop would clip it. The parent <section>
-        # is a flex item, so it contains the float (it won't bleed into the next
-        # article). When dimensions are known it's wrapped in a PhotoSwipe anchor
-        # (class "pswp-hero") so a click opens the full image in the lightbox.
-        hero = ""
-        if post["image"]:
-            # These float/box utilities apply to whichever element is the
-            # block-level hero (the anchor when clickable, else the <img>).
-            box = ("mt-4 block w-full md:float-right md:mt-1 md:mb-3 "
-                   "md:ml-6 md:w-1/2 md:max-w-md")
-            w, h = post["image_w"] or 1024, post["image_h"] or 683
-            if post["image_w"]:  # dimensions known → clickable lightbox hero
-                hero = (
-                    f'\n            <a href="{post["image"]}"\n'
-                    f'               data-pswp-width="{w}" data-pswp-height="{h}"\n'
-                    '               target="_blank" rel="noopener"\n'
-                    f'               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 {box}">\n'
-                    f'                <img src="{post["image"]}"\n'
-                    f'                     alt="{html.escape(post["title"])}"\n'
-                    '                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"\n'
-                    f'                     width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>\n'
-                    '            </a>'
-                )
-            else:  # unreadable dimensions → plain, non-clickable hero
-                hero = (
-                    f'\n            <img src="{post["image"]}"\n'
-                    f'                 alt="{html.escape(post["title"])}"\n'
-                    f'                 class="rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10 {box}"\n'
-                    f'                 width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>'
-                )
-        boxes.append(
-            f"""    <section id="{post['slug']}" class="{SECTION_NEXT} scroll-mt-28">
-        <article>
-            <time datetime="{post['date']:%Y-%m-%d}"
-                  class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                {human_date(post['date'])}
-            </time>
-            <h2 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
-                {html.escape(post['title'])}
-            </h2>{hero}
-            <div class="update-body mt-4">
-                {post['body_html']}
-            </div>
-        </article>
-    </section>"""
-        )
-    return "\n".join(boxes)
-
-
-def build_jsonld(posts: list[dict]) -> str:
-    """schema.org structured data.
-
-    Emits a NewsMediaOrganization publisher plus one SatiricalArticle per post.
-    `SatiricalArticle` is schema.org's canonical signal that a piece is satire
-    rather than genuine reporting — the strongest machine-readable "this is not
-    real" marker for search engines.
-    """
+def build_landing_jsonld(posts: list[dict]) -> str:
+    """Landing structured data: the publisher, a breadcrumb, and an ItemList of
+    the articles (each SatiricalArticle's full markup lives on its own page)."""
     publisher = {
         "@type": "NewsMediaOrganization",
         "@id": PUBLISHER_ID,
@@ -384,12 +429,8 @@ def build_jsonld(posts: list[dict]) -> str:
         "url": f"{SITE}/chronicle/",
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
-        "logo": {
-            "@type": "ImageObject",
-            "url": f"{SITE}/images/a.png",
-        },
+        "logo": {"@type": "ImageObject", "url": f"{SITE}/images/a.png"},
     }
-
     breadcrumb = {
         "@type": "BreadcrumbList",
         "itemListElement": [
@@ -397,111 +438,40 @@ def build_jsonld(posts: list[dict]) -> str:
             {"@type": "ListItem", "position": 2, "name": TITLE, "item": f"{SITE}/chronicle/"},
         ],
     }
-
-    graph: list[dict] = [publisher, breadcrumb]
-    for post in posts:
-        url = f"{SITE}/chronicle/#{post['slug']}"
-        graph.append(
-            {
-                "@type": "SatiricalArticle",
-                "@id": url,
-                "mainEntityOfPage": url,
-                "headline": post["title"],
-                "description": post["summary"],
-                "datePublished": f"{post['date']:%Y-%m-%d}",
-                "inLanguage": "en-GB",
-                "isFamilyFriendly": True,
-                "abstract": "Satire — a work of fiction. Nothing described here is real.",
-                "author": {"@type": "Person", "name": AUTHOR},
-                "publisher": {"@id": PUBLISHER_ID},
-            }
-        )
-
-    data = {"@context": "https://schema.org", "@graph": graph}
-    # ensure_ascii=False keeps curly quotes/emoji readable; escaping '<' keeps
-    # the payload safe to embed inside a <script> element.
-    payload = json.dumps(data, indent=4, ensure_ascii=False).replace("<", "\\u003c")
-    # Indent the JSON under the <script> tag (8 spaces) so the block aligns with
-    # the hand-authored JSON-LD on the other pages.
-    payload = "\n".join(f"        {line}" for line in payload.splitlines())
-    return f'<script type="application/ld+json">\n{payload}\n    </script>'
+    item_list = {
+        "@type": "ItemList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": i, "url": post["url"], "name": post["title"]}
+            for i, post in enumerate(posts, start=1)
+        ],
+    }
+    data = {"@context": "https://schema.org", "@graph": [publisher, breadcrumb, item_list]}
+    return _jsonld_script(data)
 
 
-def build_chronicle_page(posts: list[dict]) -> None:
-    index_cards = render_index(posts)
-    article_boxes = render_article_boxes(posts)
-    jsonld = build_jsonld(posts)
+def build_landing_page(posts: list[dict]) -> None:
+    index_cards = render_index_cards(posts)
+    jsonld = build_landing_jsonld(posts)
 
-    # Only pull in PhotoSwipe when an article actually has a (clickable) hero.
-    has_lightbox = any(p["image_w"] for p in posts)
-    lightbox_css = (
-        '\n    <!-- PhotoSwipe styles for the click-to-zoom article heroes -->'
-        '\n    <link rel="stylesheet" href="../gallery/vendor/photoswipe/photoswipe.css"/>'
-        if has_lightbox else ""
-    )
-    lightbox_js = LIGHTBOX_JS if has_lightbox else ""
-
-    # The disclaimer is a short one-liner, so it keeps the compact small-screen
-    # padding at every breakpoint (drop the md: padding bump the other boxes use).
-    disclaimer_box = SECTION_NEXT.replace(" md:px-8 md:py-8", "")
-
-    page = f"""<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{META_TITLE}</title>
-    <link rel="canonical" href="{SITE}/chronicle/">
-    <link rel="icon" href="../favicon.ico" sizes="any"/>
-    <link rel="icon" type="image/png" href="../images/a.png"/>
-    <meta name="description"
-          content="{META_DESCRIPTION}"/>
-    <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
-    <meta name="robots" content="index,follow"/>
-
-    <meta property="og:type" content="article"/>
-    <meta property="og:url" content="{SITE}/chronicle/"/>
-    <meta property="og:title" content="{TITLE}"/>
-    <meta property="og:description"
-          content="A fully satirical, entirely fictional interplanetary news outlet. Nothing here is real."/>
-    <meta property="og:image" content="{SITE}/chronicle/header.webp"/>
-    <meta property="og:image:alt" content="The Interplanetary Chronicle"/>
-    <meta property="og:site_name" content="{TITLE}"/>
-    <meta property="og:locale" content="en_GB"/>
-
-    <!-- schema.org structured data: NewsMediaOrganization publisher +
-         SatiricalArticle per post (the canonical "this is satire" signal). -->
-    {jsonld}
-
-    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
-    <link rel="stylesheet" href="../styles.css"/>{lightbox_css}
-</head>
-
-<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-200">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
-
-    <!-- Header banner — links back to the home page -->
-    <a
-            href="../"
-            aria-label="Back to home"
-            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+    body = f"""    <!-- Header banner (decorative, non-linking): the only route back to
+         amthonie.nl is the button in the sub-masthead below. -->
+    <div class="relative block w-full md:w-4/5 max-w-[1024px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
         <img
                 src="header.webp"
                 alt="Decorative abstract header background for The Interplanetary Chronicle"
                 aria-hidden="true"
-                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                class="absolute inset-0 h-full w-full object-cover object-top"
                 draggable="false"
         />
-    </a>
+    </div>
 
     <!-- Sub-masthead (boxless): the banner image already carries the title in
          large type, so the tagline stands in as the page's visible <h1> (the
-         site name still lives in <title>, og:title and the JSON-LD). It and the
-         back button sit directly under the image, no box, flush with the outer
-         edges of the boxes below (no side padding). -->
+         site name still lives in <title>, og:title and the JSON-LD). The tagline
+         and the back button sit directly under the image, no box, flush with the
+         outer edges of the boxes below. -->
     <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
-        <h1 class="text-xl md:text-2xl font-medium uppercase tracking-wide text-stone-900 dark:text-white">{TAGLINE}</h1>
+        <h1 class="text-xl md:text-2xl font-medium italic uppercase tracking-wide text-stone-900 dark:text-white">{TAGLINE}</h1>
         <a href="../"
            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -513,81 +483,313 @@ def build_chronicle_page(posts: list[dict]) -> None:
         </a>
     </div>
 
-    <!-- Disclaimer (kept in a box, compact padding at all sizes) -->
-    <section class="{disclaimer_box}">
-        <p class="text-sm italic leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
-    </section>
-
     <!-- Index -->
-    <section class="{SECTION_NEXT}">
+    <section class="{SECTION_BOX}">
         <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">In this edition</h2>
         <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2">
             {index_cards}
         </div>
     </section>
 
-    <!-- Articles -->
-{article_boxes}
-</main>
+    <!-- Disclaimer (below the index, compact padding at all sizes) -->
+    <section class="{DISCLAIMER_BOX}">
+        <p class="text-sm italic font-medium text-center leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
+    </section>"""
 
-<!-- Footer -->
-<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
-    <p>A work of satire — entirely fictional.</p>
-    <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
-</footer>
+    page = render_page(
+        prefix="../",
+        title_tag=META_TITLE,
+        canonical=f"{SITE}/chronicle/",
+        description=META_DESCRIPTION,
+        og_type="website",
+        og_title=TITLE,
+        og_description=(
+            "A fully satirical, entirely fictional interplanetary news outlet. "
+            "Nothing here is real."
+        ),
+        og_image=f"{SITE}/chronicle/header.webp",
+        jsonld=jsonld,
+        body=body,
+        has_lightbox=False,
+    )
+    LANDING_PAGE.parent.mkdir(parents=True, exist_ok=True)
+    LANDING_PAGE.write_text(page, encoding="utf-8")
 
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>{lightbox_js}
-</body>
-</html>
-"""
-    CHRONICLE_PAGE.parent.mkdir(parents=True, exist_ok=True)
-    CHRONICLE_PAGE.write_text(page, encoding="utf-8")
-    print(f"wrote {CHRONICLE_PAGE.relative_to(ROOT)} ({len(posts)} article(s))")
 
+# --------------------------------------------------------------------------- #
+# Article pages
+# --------------------------------------------------------------------------- #
 
-def _set_lastmod(text: str, loc: str, lastmod: str) -> str:
-    """Update the <lastmod> of an existing <loc> in place (no-op if absent)."""
-    return re.sub(
-        rf"(<loc>{re.escape(loc)}</loc>\s*<lastmod>)[^<]*(</lastmod>)",
-        rf"\g<1>{lastmod}\g<2>",
-        text,
+def render_article_hero(post: dict) -> str:
+    """The optional hero illustration for an article page.
+
+    On mobile it is a full-bleed block above the story; on wide screens (md+) it
+    floats to the right at half width so the article text flows around it,
+    magazine-style. No object-cover: these are vintage-poster illustrations whose
+    headline sits at the very top, so any crop would clip it. When dimensions are
+    known it's wrapped in a PhotoSwipe anchor (class "pswp-hero") so a click opens
+    the full image in the lightbox. Article pages live in chronicle/<slug>/, so
+    the image (stored relative to chronicle/) is addressed one level up.
+    """
+    if not post["image"]:
+        return ""
+    src = f"../{post['image']}"
+    box = ("mt-4 block w-full md:float-right md:mt-1 md:mb-3 "
+           "md:ml-6 md:w-1/2 md:max-w-md")
+    w, h = post["image_w"] or 1024, post["image_h"] or 683
+    if post["image_w"]:  # dimensions known → clickable lightbox hero
+        return (
+            f'\n            <a href="{src}"\n'
+            f'               data-pswp-width="{w}" data-pswp-height="{h}"\n'
+            '               target="_blank" rel="noopener"\n'
+            f'               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 {box}">\n'
+            f'                <img src="{src}"\n'
+            f'                     alt="{html.escape(post["title"])}"\n'
+            '                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"\n'
+            f'                     width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>\n'
+            '            </a>'
+        )
+    return (  # unreadable dimensions → plain, non-clickable hero
+        f'\n            <img src="{src}"\n'
+        f'                 alt="{html.escape(post["title"])}"\n'
+        f'                 class="rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10 {box}"\n'
+        f'                 width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>'
     )
 
 
-def update_sitemap(posts: list[dict]) -> None:
-    """Keep the /chronicle/ sitemap entry in sync with the newest article.
+def render_article_banner() -> str:
+    """The slim masthead banner atop an article page, or '' if the file is
+    missing. Links back to the Chronicle index and uses the image's true aspect
+    ratio so it renders as the short, wide strip it is."""
+    path = CHRONICLE_DIR / ARTICLE_HEADER
+    if not path.is_file():
+        return ""
+    dims = webp_size(path)
+    aspect = f"{dims[0]}/{dims[1]}" if dims else "1024/217"
+    return f"""    <!-- Article masthead banner — links back to the Chronicle index -->
+    <a
+            href="../"
+            aria-label="Back to The Interplanetary Chronicle"
+            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[{aspect}] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+        <img
+                src="../{ARTICLE_HEADER}"
+                alt="{html.escape(TITLE)}"
+                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                draggable="false"
+        />
+    </a>
+"""
 
-    Only touches the /chronicle/ <loc> — inserts it if missing, otherwise bumps
-    its lastmod. The home page is left alone on purpose: its Chronicle promo box
-    is static, so new articles don't change it.
+
+def build_article_jsonld(post: dict) -> str:
+    """Per-article structured data: publisher + breadcrumb + SatiricalArticle.
+
+    `SatiricalArticle` is schema.org's canonical signal that a piece is satire
+    rather than genuine reporting — the strongest machine-readable "this is not
+    real" marker for search engines.
+    """
+    publisher = {
+        "@type": "NewsMediaOrganization",
+        "@id": PUBLISHER_ID,
+        "name": TITLE,
+        "url": f"{SITE}/chronicle/",
+        "slogan": TAGLINE,
+        "description": PUBLISHER_DESCRIPTION,
+        "logo": {"@type": "ImageObject", "url": f"{SITE}/images/a.png"},
+    }
+    breadcrumb = {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": TITLE, "item": f"{SITE}/chronicle/"},
+            {"@type": "ListItem", "position": 3, "name": post["title"], "item": post["url"]},
+        ],
+    }
+    article = {
+        "@type": "SatiricalArticle",
+        "@id": post["url"],
+        "mainEntityOfPage": post["url"],
+        "headline": post["title"],
+        "description": post["summary"],
+        "datePublished": f"{post['date']:%Y-%m-%d}",
+        "inLanguage": "en-GB",
+        "isFamilyFriendly": True,
+        "abstract": "Satire — a work of fiction. Nothing described here is real.",
+        "author": {"@type": "Person", "name": AUTHOR},
+        "publisher": {"@id": PUBLISHER_ID},
+    }
+    if post["image"]:
+        article["image"] = f"{SITE}/chronicle/{post['image']}"
+
+    data = {"@context": "https://schema.org", "@graph": [publisher, breadcrumb, article]}
+    return _jsonld_script(data)
+
+
+def build_article_page(post: dict) -> None:
+    hero = render_article_hero(post)
+    banner = render_article_banner()
+
+    if banner:
+        # The banner carries the title, so the sub-line mirrors the landing:
+        # the tagline on the left, the back button on the right. A top margin
+        # separates the row from the banner above it.
+        submast_left = (
+            '<p class="text-xl md:text-2xl font-medium italic uppercase tracking-wide '
+            f'text-stone-900 dark:text-white">{TAGLINE}</p>'
+        )
+        row_class = "mt-3 md:mt-6 lg:mt-10 flex"
+    else:
+        # No banner file — fall back to a text wordmark as the identity, and let
+        # the row sit flush at the top of <main> (no extra margin).
+        submast_left = (
+            '<a href="../" class="text-sm md:text-base font-semibold uppercase '
+            "tracking-wide text-stone-900 transition hover:text-brand-600 "
+            f'dark:text-white dark:hover:text-brand-400">{TITLE}</a>'
+        )
+        row_class = "flex"
+
+    body = f"""{banner}    <!-- Sub-masthead: identity on the left, back-to-index button on the right;
+         the article headline below is the page's <h1>. -->
+    <div class="{row_class} w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
+        {submast_left}
+        <a href="../"
+           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+            </svg>
+            {TITLE}
+        </a>
+    </div>
+
+    <!-- Article -->
+    <section class="{SECTION_BOX}">
+        <article>
+            <time datetime="{post['date']:%Y-%m-%d}"
+                  class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                {human_date(post['date'])}
+            </time>
+            <h1 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
+                {html.escape(post['title'])}
+            </h1>{hero}
+            <div class="update-body mt-4">
+                {post['body_html']}
+            </div>
+        </article>
+    </section>
+
+    <!-- Disclaimer (below the article, compact padding at all sizes) -->
+    <section class="{DISCLAIMER_BOX}">
+        <p class="text-sm italic font-medium text-center leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
+    </section>"""
+
+    og_image = (
+        f"{SITE}/chronicle/{post['image']}" if post["image"]
+        else f"{SITE}/chronicle/header.webp"
+    )
+    page = render_page(
+        prefix="../../",
+        title_tag=f"{post['title']} — {TITLE}",
+        canonical=post["url"],
+        description=post["summary"],
+        og_type="article",
+        og_title=post["title"],
+        og_description=post["summary"],
+        og_image=og_image,
+        jsonld=build_article_jsonld(post),
+        body=body,
+        has_lightbox=bool(post["image_w"]),
+    )
+    article_dir = CHRONICLE_DIR / post["slug"]
+    article_dir.mkdir(parents=True, exist_ok=True)
+    (article_dir / "index.html").write_text(page, encoding="utf-8")
+
+
+def clean_stale_article_dirs(slugs: set[str]) -> None:
+    """Remove generated article directories whose source .md is gone.
+
+    Only touches subdirectories of chronicle/ that look generated (contain an
+    index.html) and aren't in the current slug set. `images/` and the header
+    image files are left alone (images/ has no index.html).
+    """
+    if not CHRONICLE_DIR.is_dir():
+        return
+    for child in CHRONICLE_DIR.iterdir():
+        if (
+            child.is_dir()
+            and child.name not in slugs
+            and (child / "index.html").is_file()
+        ):
+            shutil.rmtree(child)
+            print(f"removed stale article dir chronicle/{child.name}/")
+
+
+# --------------------------------------------------------------------------- #
+# JSON-LD helper
+# --------------------------------------------------------------------------- #
+
+def _jsonld_script(data: dict) -> str:
+    # ensure_ascii=False keeps curly quotes/emoji readable; escaping '<' keeps
+    # the payload safe to embed inside a <script> element.
+    payload = json.dumps(data, indent=4, ensure_ascii=False).replace("<", "\\u003c")
+    # Indent the JSON under the <script> tag (8 spaces) so the block aligns with
+    # the hand-authored JSON-LD on the other pages.
+    payload = "\n".join(f"        {line}" for line in payload.splitlines())
+    return f'<script type="application/ld+json">\n{payload}\n    </script>'
+
+
+# --------------------------------------------------------------------------- #
+# Sitemap
+# --------------------------------------------------------------------------- #
+
+def update_sitemap(posts: list[dict]) -> None:
+    """Keep every /chronicle/ sitemap entry in sync.
+
+    Strips all existing <url> blocks under /chronicle (landing + article pages),
+    then re-adds the landing (lastmod = newest article) and one entry per article
+    page (lastmod = that article's date). Entries for the rest of the site are
+    left untouched. The home page is left alone on purpose: its Chronicle promo
+    box is static, so new articles don't change it.
     """
     if not posts:
         return
-    lastmod = f"{posts[0]['date']:%Y-%m-%d}"
-    chronicle_loc = f"{SITE}/chronicle/"
     text = SITEMAP.read_text(encoding="utf-8")
 
-    if chronicle_loc in text:
-        text = _set_lastmod(text, chronicle_loc, lastmod)
-    else:
-        entry = (
+    # Drop any existing chronicle blocks (landing or article) so re-runs don't
+    # duplicate and removed articles don't linger.
+    text = re.sub(
+        r"[ \t]*<url>\s*<loc>" + re.escape(f"{SITE}/chronicle")
+        + r"[^<]*</loc>.*?</url>\n?",
+        "",
+        text,
+        flags=re.DOTALL,
+    )
+
+    def block(loc: str, lastmod: str) -> str:
+        return (
             "    <url>\n"
-            f"        <loc>{chronicle_loc}</loc>\n"
+            f"        <loc>{loc}</loc>\n"
             f"        <lastmod>{lastmod}</lastmod>\n"
             "    </url>\n"
         )
-        text = text.replace("</urlset>", entry + "</urlset>")
 
+    entries = block(f"{SITE}/chronicle/", f"{posts[0]['date']:%Y-%m-%d}")
+    for post in posts:
+        entries += block(post["url"], f"{post['date']:%Y-%m-%d}")
+
+    text = text.replace("</urlset>", entries + "</urlset>")
     SITEMAP.write_text(text, encoding="utf-8")
-    print(f"sitemap.xml: /chronicle/ lastmod {lastmod}")
+    print(f"sitemap.xml: {len(posts)} chronicle article page(s) + landing")
 
 
 def main() -> int:
     posts = load_posts()
-    build_chronicle_page(posts)
+    clean_stale_article_dirs({post["slug"] for post in posts})
+    build_landing_page(posts)
+    for post in posts:
+        build_article_page(post)
     update_sitemap(posts)
+    print(f"wrote chronicle/ landing + {len(posts)} article page(s)")
     return 0
 
 
