@@ -456,8 +456,8 @@ def build_chronicle_page(posts: list[dict]) -> None:
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
           content="{META_DESCRIPTION}"/>
-    <meta name="theme-color" content="#C77B5E" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)"/>
+    <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="article"/>
@@ -478,7 +478,7 @@ def build_chronicle_page(posts: list[dict]) -> None:
     <link rel="stylesheet" href="../styles.css"/>{lightbox_css}
 </head>
 
-<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-black dark:text-stone-200">
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-200">
 <main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
 
     <!-- Header banner — links back to the home page -->

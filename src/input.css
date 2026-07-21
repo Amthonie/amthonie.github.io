@@ -11,14 +11,14 @@
 /* Dark mode follows the visitor's OS setting (prefers-color-scheme) */
 
 @theme {
-  /* Antique-paper background for light mode */
-  --color-paper: #f6f2e8;
+  /* Antique-paper background for light mode - was #f6f2e8 */
+  --color-paper: #f7efe1;
 
   /* Terracotta / sepia accent, pulled from the map art */
-  --color-brand-400: #c77b5e;
-  --color-brand-500: #b5533c;
-  --color-brand-600: #9a4430;
-  --color-brand-700: #7e3626;
+  --color-brand-400: #bf6c3a;
+  --color-brand-500: #a65b30;
+  --color-brand-600: #8c4a26;
+  --color-brand-700: #72391d;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
@@ -53,12 +53,12 @@
   font-size: 1.1rem;
 }
 .update-body a {
-  color: #9a4430; /* brand-600 */
+  color: #8c4a26; /* brand-600 */
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .update-body a:hover {
-  color: #7e3626; /* brand-700 */
+  color: #72391d; /* brand-700 */
 }
 .update-body ul,
 .update-body ol {
@@ -84,7 +84,7 @@
   border-radius: 0.35rem;
 }
 .update-body blockquote {
-  border-left: 3px solid #b5533c; /* brand-500 */
+  border-left: 3px solid #a65b30; /* brand-500 */
   padding-left: 1rem;
   font-style: italic;
   color: #57534e; /* stone-600 */
@@ -99,10 +99,10 @@
     color: #ffffff;
   }
   .update-body a {
-    color: #c77b5e; /* brand-400 */
+    color: #bf6c3a; /* brand-400 */
   }
   .update-body a:hover {
-    color: #d89a80; /* lighter brand */
+    color: #d18e61; /* lighter brand */
   }
   .update-body code {
     background: rgba(255, 255, 255, 0.1);
