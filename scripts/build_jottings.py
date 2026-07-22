@@ -50,8 +50,8 @@ DESCRIPTION = (
     "A small set of jottings: passing thoughts, brief notes and whatever else "
     "seemed worth writing down."
 )
-TEASERS_ON_HOME = 2  # how many of the newest jottings to show on the homepage
-                     # (paired with the 2-column grid in index.html)
+TEASERS_ON_HOME = 4  # how many of the newest jottings to show on the homepage
+                     # (fills the 2-column grid in index.html as two rows of two)
 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
