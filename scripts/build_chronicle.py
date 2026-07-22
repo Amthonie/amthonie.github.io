@@ -380,6 +380,21 @@ def render_page(
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="{prefix}styles.css"/>{css_extra}
+
+    <!-- Google tag (gtag.js) -->
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {{
+            dataLayer.push(arguments);
+        }}
+
+        window.addEventListener('DOMContentLoaded', function () {{
+            gtag('js', new Date());
+            gtag('config', 'G-EX67104T6F');
+        }});
+    </script>
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
