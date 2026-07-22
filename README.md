@@ -29,14 +29,19 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── jottings/
 │   └── index.html      # jottings page (served at /jottings/) — GENERATED
 ├── chronicle/
-│   ├── index.html      # The Interplanetary Chronicle (served at /chronicle/) — GENERATED
-│   └── header.webp     # masthead image
+│   ├── index.html      # Chronicle front page (served at /chronicle/) — GENERATED
+│   ├── <slug>/         # one generated page per article (/chronicle/<slug>/) — GENERATED
+│   ├── header.webp         # landing masthead image
+│   ├── header-articles.webp  # slim per-article masthead banner
+│   ├── icon.png            # the Chronicle's own favicon (navy TIC monogram)
+│   ├── favicon.ico         # multi-resolution favicon (16/32/48)
+│   └── images/         # per-article heroes (+ thumbs/ for the index cards)
 ├── content/
 │   ├── jottings/       # markdown sources for jottings (one file per jotting)
 │   └── chronicle/      # markdown sources for chronicle articles
 ├── scripts/
 │   ├── build_jottings.py   # generates the jottings page + homepage teasers
-│   └── build_chronicle.py  # generates the chronicle page
+│   └── build_chronicle.py  # generates the chronicle front page + per-article pages
 ├── src/input.css       # Tailwind entry point (source)
 ├── styles.css          # compiled stylesheet (committed)
 ├── images/             # shared static assets
@@ -55,6 +60,8 @@ needs — no larger, which is what keeps the pages loading instantly.
 | **Gallery photos** | `gallery/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
 | **Gallery thumbnails** | `gallery/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
 | **Chronicle heroes** | `chronicle/images/` | **~1024px on the longest edge** (any aspect), quality ≈80 | Per-article hero, referenced by the article's `image:` frontmatter (bare filename). Shown uncropped — floated beside the text on wide screens, full-width on mobile — and clickable to open full-size in the PhotoSwipe lightbox. The generator reads the pixel size from the file, so there's no `data-pswp-*` to set by hand. |
+| **Chronicle index thumbnails** | `chronicle/images/thumbs/` | **480px wide**, quality ≈72 | Small teaser image leading each front-page index card. Use the **same base filename** as the hero; generate with e.g. `convert hero.webp -resize 480x -quality 72 thumbs/hero.webp`. The card falls back to the full hero if a thumbnail is missing. |
+| **Chronicle favicon** | `chronicle/` | `icon.png` 512×512 + `favicon.ico` (16/32/48) | The Chronicle's own tab icon (a navy TIC monogram, rounded), distinct from the main site. `favicon.ico` is regenerated from `icon.png`: `convert icon.png -define icon:auto-resize=48,32,16 favicon.ico`. |
 
 640px-wide link images match the desktop 3-column layout at 2× (retina). If you
 ever want them sharper when a card is shown full-width on a high-DPI phone,
@@ -65,7 +72,7 @@ export at ~1280×720 — still only tens of KB as WebP.
 Two sections are generated from markdown at build time by sibling scripts in
 `scripts/`, sharing the same frontmatter format: **Jottings** (`/jottings/`) and
 **The Interplanetary Chronicle** (`/chronicle/`, a satirical, entirely fictional
-"news" section).
+outlet).
 
 ### Jottings
 
@@ -98,16 +105,31 @@ and commit its output when you want the committed copy to stay current.
 
 ### The Interplanetary Chronicle
 
-`/chronicle/` is a satirical, entirely fictional newspaper. Its articles live in
-`content/chronicle/*.md` (same frontmatter as jottings, plus one extra) and are
-turned by `scripts/build_chronicle.py` into `chronicle/index.html` and the
-`/chronicle/` entry in `sitemap.xml`. The extra frontmatter key is an optional
-`image:` — a **bare filename** (no path) of a WebP in `chronicle/images/`, shown
-as a per-article hero (floated beside the text on wide screens, full-width on
-mobile); omit it for a text-only article. Unlike jottings, it deliberately does **not** touch the
-home page — the homepage links to it via a hand-written, static promo box, so
-the satirical content never bleeds onto the main site. Preview it the same way:
-`python3 scripts/build_chronicle.py`.
+`/chronicle/` is a satirical, entirely fictional outlet. Its articles live in
+`content/chronicle/*.md` (same frontmatter as jottings, plus one extra) and
+`scripts/build_chronicle.py` turns them into:
+
+- `chronicle/index.html` — the front page: a masthead plus an index of teaser
+  cards (each leading with the article's thumbnail) linking to the articles;
+- `chronicle/<slug>/index.html` — one standalone page per article, with its own
+  `<title>`, canonical link, Open Graph tags and `SatiricalArticle` JSON-LD;
+- the `/chronicle/` entry in `sitemap.xml`.
+
+**Only the landing is indexed.** The article pages are marked `noindex,follow`
+and kept out of the sitemap, so the front page is the single search entry point
+and article slugs stay disposable — renaming or deleting one leaves no indexed
+URL behind. Articles stay fully readable and shareable (noindex only affects
+search listing, not access or link-preview cards). There is deliberately **no
+RSS feed**: syndicating the satire as bare text would strip the framing that
+marks it as fiction.
+
+The one extra frontmatter key is an optional `image:` — a **bare filename** (no
+path) of a WebP in `chronicle/images/`, shown as the per-article hero and, via a
+matching thumbnail in `chronicle/images/thumbs/`, on the front-page card; omit it
+for a text-only card. Unlike jottings, the Chronicle deliberately does **not**
+touch the home page — the homepage links to it via a hand-written, static promo
+box, so the satirical content never bleeds onto the main site. Preview it the
+same way: `python3 scripts/build_chronicle.py`.
 
 `content/` and `scripts/` are build inputs and are excluded from the published
 site. The markdown content itself is never served raw.
@@ -135,9 +157,9 @@ Tailwind CLI against the input file and output to `styles.css`.
 
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
-`gallery/index.html`, `jottings/index.html`, `chronicle/index.html` and
-`404.html` are listed) — otherwise its utility classes are dropped from the
-build.
+`gallery/index.html`, `jottings/index.html`, `chronicle/index.html`, the
+`chronicle/*/index.html` article pages and `404.html` are listed) — otherwise
+its utility classes are dropped from the build.
 
 ### Production-parity preview
 
