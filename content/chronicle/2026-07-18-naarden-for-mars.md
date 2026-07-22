@@ -16,7 +16,7 @@ Negotiations with space magnate Leon Sumk are said to be progressing “surprisi
 
 In an effort to justify the endeavour, the delegation has published a brief pseudo‑scientific paper titled *A Preliminary Inquiry into the Feasibility of Trans‑Planetary Naardification*. The document argues — with diagrams of questionable origin — that Naarden possesses a “unique socio‑gravitational field” which causes local decision‑making to drift steadily toward the improbable. According to the paper, this field intensifies whenever committees meet within 200 metres of the Vesting, explaining why the Martian proposal escalated from “a thought experiment” to “a fully fledged interplanetary relocation strategy” in under forty‑five minutes.
 
-The authors further claim that Mars is “ideally suited” for Naardense civilisation due to its “refreshingly empty zoning laws”, “low pedestrian traffic”, and “complete absence of Bussum”. Critics have pointed out that Mars also lacks oxygen, water, infrastructure, and any known appreciation for cardigan‑based cultural identity, but these objections were dismissed as “unhelpfully literal”.
+The authors further claim that Mars is “ideally suited” for Naardens civilisation due to its “refreshingly empty zoning laws”, “low pedestrian traffic”, and “complete absence of Bussum”. Critics have pointed out that Mars also lacks oxygen, water, infrastructure, and any known appreciation for cardigan‑based cultural identity, but these objections were dismissed as “unhelpfully literal”.
 
 To assist with the planning, the delegation consulted an experimental advisory system known as the **Municipal Autonomous Reasoning Vector for Interplanetary Navigation**, or *MARVIN* for short — a name chosen before anyone realised the implications.
 
