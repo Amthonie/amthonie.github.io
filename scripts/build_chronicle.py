@@ -77,7 +77,12 @@ TITLE = "The Interplanetary Chronicle"
 # satirical, so the full name would push the <title> well past a readable
 # length; "TIC" keeps the tab/label tidy.
 TITLE_SHORT = "TIC"
-TAGLINE = "Because reality isn’t ridiculous enough"
+TAGLINE = "The worst tabloid in this galaxy and beyond"
+# Visible masthead sub-line. The leading ellipsis reads as a continuation of the
+# banner title above it — "The Interplanetary Chronicle …the worst tabloid in
+# this galaxy and beyond" — so it feels anchored rather than floating mid-row.
+# Kept lowercase; the JSON-LD slogan uses the plain proper-case TAGLINE above.
+TAGLINE_DISPLAY = "…the worst tabloid in this galaxy and beyond"
 # The landing <title> tag (SERP/tab). Kept short and introduces the "TIC"
 # acronym that the article <title> tags use as their suffix. The playful
 # TAGLINE isn't lost — it stays as the visible masthead sub-line and in
@@ -85,12 +90,13 @@ TAGLINE = "Because reality isn’t ridiculous enough"
 META_TITLE = "The Interplanetary Chronicle (TIC)"
 # <meta name="description"> for the landing — aim for ~120-155 chars.
 META_DESCRIPTION = (
-    "A satirical, entirely fictional interplanetary news outlet delivering dry "
+    "A satirical, entirely fictional interplanetary outlet delivering dry "
     "humour, fabricated reporting and absurd commentary. Nothing here is real."
 )
 DISCLAIMER = (
-    "Everything here is entirely fictional. Any resemblance to real people, "
-    "events or planets is purely unfortunate."
+    "The Interplanetary Chronicle is a fully satirical and entirely fictional "
+    "outlet. Any resemblance to real people, events or planets is purely "
+    "unfortunate."
 )
 
 # A slim banner shown atop every article page — smaller than the landing banner
@@ -109,7 +115,7 @@ AUTHOR = "Amthonie Vandenberg"
 # signal, paired with the SatiricalArticle type on each article.
 PUBLISHER_ID = f"{SITE}/chronicle/#publisher"
 PUBLISHER_DESCRIPTION = (
-    "A fully satirical, entirely fictional interplanetary news outlet. All "
+    "A fully satirical, entirely fictional interplanetary outlet. All "
     "names, quotes, events and reporting are invented for comic effect and are "
     "not real."
 )
@@ -121,9 +127,6 @@ SECTION_BOX = (
     "border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 "
     "px-4 py-4 md:px-8 md:py-8 shadow-xl"
 )
-# The disclaimer is a short one-liner, so it keeps the compact small-screen
-# padding at every breakpoint (drop the md: padding bump the other boxes use).
-DISCLAIMER_BOX = SECTION_BOX.replace(" md:px-8 md:py-8", "")
 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
@@ -385,10 +388,11 @@ def render_page(
 {body}
 </main>
 
-<!-- Footer -->
-<footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
-    <p>A work of satire — entirely fictional.</p>
-    <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
+<!-- Footer: the satire disclaimer lives here as a quiet about-note, on every
+     page (this is the shared shell). -->
+<footer class="w-full mt-auto py-6 text-center text-xs text-stone-500 dark:text-stone-400">
+    <p class="mx-auto max-w-xl px-4 leading-relaxed">{DISCLAIMER}</p>
+    <p class="mt-2">&copy; <span id="year"></span> Amthonie</p>
 </footer>
 
 <script>
@@ -404,7 +408,14 @@ def render_page(
 # --------------------------------------------------------------------------- #
 
 def render_index_cards(posts: list[dict]) -> str:
-    """The article index — teaser cards, each linking to its own article page."""
+    """The article index — teaser cards, each linking to its own article page.
+
+    When an article has a hero image the card leads with a small thumbnail so
+    the index reads like a front page. The heroes are all 3:2, so a 3:2 slot
+    shows the whole poster uncropped. A 480px thumbnail in images/thumbs/ is
+    preferred when present; otherwise the full hero is used. Articles without an
+    image fall back to a text-only card.
+    """
     if not posts:
         return (
             '<p class="text-sm text-stone-600 dark:text-stone-400">'
@@ -413,19 +424,32 @@ def render_index_cards(posts: list[dict]) -> str:
 
     cards = []
     for post in posts:
+        card_img = ""
+        if post["image"]:
+            name = post["image"].split("/")[-1]
+            thumb = f"images/thumbs/{name}"
+            src = thumb if (CHRONICLE_DIR / thumb).is_file() else post["image"]
+            card_img = (
+                f'<img src="{src}" alt="{html.escape(post["title"])}"\n'
+                '                     width="480" height="320" loading="lazy" decoding="async" draggable="false"\n'
+                '                     class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>'
+            )
         cards.append(
             f"""<a href="{post['slug']}/"
-               class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
-                <time datetime="{post['date']:%Y-%m-%d}"
-                      class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                    {human_date(post['date'])}
-                </time>
-                <h3 class="mt-1 font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
-                    {html.escape(post['title'])}
-                </h3>
-                <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                    {html.escape(post['summary'])}
-                </p>
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+                {card_img}
+                <div class="p-2.5 md:p-5">
+                    <time datetime="{post['date']:%Y-%m-%d}"
+                          class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                        {human_date(post['date'])}
+                    </time>
+                    <h3 class="mt-1 font-semibold uppercase leading-tight tracking-tight text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                        {html.escape(post['title'])}
+                    </h3>
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                        {html.escape(post['summary'])}
+                    </p>
+                </div>
             </a>"""
         )
     return "\n".join(cards)
@@ -484,7 +508,7 @@ def build_landing_page(posts: list[dict]) -> None:
          and the back button sit directly under the image, no box, flush with the
          outer edges of the boxes below. -->
     <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
-        <h1 class="text-xl md:text-2xl font-medium italic uppercase tracking-wide text-stone-900 dark:text-white">{TAGLINE}</h1>
+        <h1 class="text-xl md:text-2xl font-medium italic text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</h1>
         <a href="../"
            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -502,11 +526,6 @@ def build_landing_page(posts: list[dict]) -> None:
         <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2">
             {index_cards}
         </div>
-    </section>
-
-    <!-- Disclaimer (below the index, compact padding at all sizes) -->
-    <section class="{DISCLAIMER_BOX}">
-        <p class="text-sm italic font-medium text-center leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
     </section>"""
 
     page = render_page(
@@ -517,7 +536,7 @@ def build_landing_page(posts: list[dict]) -> None:
         og_type="website",
         og_title=TITLE,
         og_description=(
-            "A fully satirical, entirely fictional interplanetary news outlet. "
+            "A fully satirical, entirely fictional interplanetary outlet. "
             "Nothing here is real."
         ),
         og_image=f"{SITE}/chronicle/header.webp",
@@ -648,8 +667,8 @@ def build_article_page(post: dict) -> None:
         # the tagline on the left, the back button on the right. A top margin
         # separates the row from the banner above it.
         submast_left = (
-            '<p class="text-xl md:text-2xl font-medium italic uppercase tracking-wide '
-            f'text-stone-900 dark:text-white">{TAGLINE}</p>'
+            '<p class="text-xl md:text-2xl font-medium italic '
+            f'text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</p>'
         )
         row_class = "mt-3 md:mt-6 lg:mt-10 flex"
     else:
@@ -672,7 +691,7 @@ def build_article_page(post: dict) -> None:
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
             </svg>
-            {TITLE}
+            Front page
         </a>
     </div>
 
@@ -690,11 +709,6 @@ def build_article_page(post: dict) -> None:
                 {post['body_html']}
             </div>
         </article>
-    </section>
-
-    <!-- Disclaimer (below the article, compact padding at all sizes) -->
-    <section class="{DISCLAIMER_BOX}">
-        <p class="text-sm italic font-medium text-center leading-relaxed text-stone-600 dark:text-stone-400">{DISCLAIMER}</p>
     </section>"""
 
     og_image = (
