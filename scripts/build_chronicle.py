@@ -15,8 +15,12 @@ frontmatter format, but — unlike jottings — the Chronicle is split into
                                      button, a compact satire disclaimer, and
                                      the full story (headline as the page <h1>).
 
-  - It keeps sitemap.xml in sync: the /chronicle/ landing plus one entry per
-    article page, each with its own lastmod.
+  - It keeps sitemap.xml in sync: only the /chronicle/ landing is listed. The
+    landing is the single search entry point; individual article pages are
+    marked noindex (still fully readable and shareable — noindex only affects
+    search listing, not access or OG cards) and so are kept out of the sitemap.
+    This also makes slugs disposable: renaming or deleting an article leaves no
+    indexed URL to rot into a 404.
 
 There is deliberately no RSS feed: the articles are satire, and a feed would
 lift the full text into readers stripped of the masthead/disclaimer framing
@@ -69,10 +73,16 @@ SITEMAP = ROOT / "sitemap.xml"
 SITE = "https://amthonie.nl"
 
 TITLE = "The Interplanetary Chronicle"
+# Short suffix for article <title> tags. Article headlines are long and
+# satirical, so the full name would push the <title> well past a readable
+# length; "TIC" keeps the tab/label tidy.
+TITLE_SHORT = "TIC"
 TAGLINE = "Because reality isn’t ridiculous enough"
-# The landing <title> tag (SERP/tab). Kept short (≤60 chars) and keyword-clear;
-# the playful TAGLINE stays as the visible masthead sub-line, not in <title>.
-META_TITLE = "The Interplanetary Chronicle: Reality Isn’t Ridiculous Enough"
+# The landing <title> tag (SERP/tab). Kept short and introduces the "TIC"
+# acronym that the article <title> tags use as their suffix. The playful
+# TAGLINE isn't lost — it stays as the visible masthead sub-line and in
+# og:description — so it's dropped from <title> here to keep it tab-length.
+META_TITLE = "The Interplanetary Chronicle (TIC)"
 # <meta name="description"> for the landing — aim for ~120-155 chars.
 META_DESCRIPTION = (
     "A satirical, entirely fictional interplanetary news outlet delivering dry "
@@ -323,6 +333,7 @@ def render_page(
     og_image: str,
     jsonld: str,
     body: str,
+    robots: str = "index,follow",
     has_lightbox: bool = False,
 ) -> str:
     """Assemble a full HTML page from the shared shell.
@@ -347,7 +358,7 @@ def render_page(
           content="{html.escape(description, quote=True)}"/>
     <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
-    <meta name="robots" content="index,follow"/>
+    <meta name="robots" content="{robots}"/>
 
     <meta property="og:type" content="{og_type}"/>
     <meta property="og:url" content="{canonical}"/>
@@ -426,6 +437,7 @@ def build_landing_jsonld(posts: list[dict]) -> str:
         "@type": "NewsMediaOrganization",
         "@id": PUBLISHER_ID,
         "name": TITLE,
+        "alternateName": TITLE_SHORT,
         "url": f"{SITE}/chronicle/",
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
@@ -592,6 +604,7 @@ def build_article_jsonld(post: dict) -> str:
         "@type": "NewsMediaOrganization",
         "@id": PUBLISHER_ID,
         "name": TITLE,
+        "alternateName": TITLE_SHORT,
         "url": f"{SITE}/chronicle/",
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
@@ -689,7 +702,7 @@ def build_article_page(post: dict) -> None:
     )
     page = render_page(
         prefix="../../",
-        title_tag=f"{post['title']} — {TITLE}",
+        title_tag=f"{post['title']} | {TITLE_SHORT}",
         canonical=post["url"],
         description=post["summary"],
         og_type="article",
@@ -698,6 +711,12 @@ def build_article_page(post: dict) -> None:
         og_image=og_image,
         jsonld=build_article_jsonld(post),
         body=body,
+        # The Chronicle landing is the single search entry point; individual
+        # articles are deliberately kept out of search indexes (still fully
+        # readable and shareable — noindex only affects search listing, not
+        # access or OG cards). This also makes slugs disposable: renaming or
+        # deleting an article leaves no indexed URL to rot into a 404.
+        robots="noindex,follow",
         has_lightbox=bool(post["image_w"]),
     )
     article_dir = CHRONICLE_DIR / post["slug"]
@@ -743,20 +762,20 @@ def _jsonld_script(data: dict) -> str:
 # --------------------------------------------------------------------------- #
 
 def update_sitemap(posts: list[dict]) -> None:
-    """Keep every /chronicle/ sitemap entry in sync.
+    """Keep the /chronicle/ sitemap entry in sync.
 
-    Strips all existing <url> blocks under /chronicle (landing + article pages),
-    then re-adds the landing (lastmod = newest article) and one entry per article
-    page (lastmod = that article's date). Entries for the rest of the site are
-    left untouched. The home page is left alone on purpose: its Chronicle promo
-    box is static, so new articles don't change it.
+    Only the landing is listed (lastmod = newest article): it is the single
+    search entry point. The individual article pages are deliberately kept out
+    of the sitemap because they are noindex — a sitemap must never list a
+    noindex URL. Entries for the rest of the site are left untouched, and the
+    home page is left alone on purpose (its Chronicle promo box is static).
     """
     if not posts:
         return
     text = SITEMAP.read_text(encoding="utf-8")
 
-    # Drop any existing chronicle blocks (landing or article) so re-runs don't
-    # duplicate and removed articles don't linger.
+    # Drop any existing chronicle blocks (landing or older per-article entries)
+    # so re-runs don't duplicate and previously-listed articles don't linger.
     text = re.sub(
         r"[ \t]*<url>\s*<loc>" + re.escape(f"{SITE}/chronicle")
         + r"[^<]*</loc>.*?</url>\n?",
@@ -765,21 +784,15 @@ def update_sitemap(posts: list[dict]) -> None:
         flags=re.DOTALL,
     )
 
-    def block(loc: str, lastmod: str) -> str:
-        return (
-            "    <url>\n"
-            f"        <loc>{loc}</loc>\n"
-            f"        <lastmod>{lastmod}</lastmod>\n"
-            "    </url>\n"
-        )
-
-    entries = block(f"{SITE}/chronicle/", f"{posts[0]['date']:%Y-%m-%d}")
-    for post in posts:
-        entries += block(post["url"], f"{post['date']:%Y-%m-%d}")
-
-    text = text.replace("</urlset>", entries + "</urlset>")
+    entry = (
+        "    <url>\n"
+        f"        <loc>{SITE}/chronicle/</loc>\n"
+        f"        <lastmod>{posts[0]['date']:%Y-%m-%d}</lastmod>\n"
+        "    </url>\n"
+    )
+    text = text.replace("</urlset>", entry + "</urlset>")
     SITEMAP.write_text(text, encoding="utf-8")
-    print(f"sitemap.xml: {len(posts)} chronicle article page(s) + landing")
+    print("sitemap.xml: /chronicle/ landing only (articles are noindex)")
 
 
 def main() -> int:
