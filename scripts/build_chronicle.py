@@ -352,8 +352,9 @@ def render_page(
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{title_tag}</title>
     <link rel="canonical" href="{canonical}">
-    <link rel="icon" href="{prefix}favicon.ico" sizes="any"/>
-    <link rel="icon" type="image/png" href="{prefix}images/a.png"/>
+    <link rel="icon" href="{prefix}chronicle/favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="{prefix}chronicle/icon.png"/>
+    <link rel="apple-touch-icon" href="{prefix}chronicle/icon.png"/>
     <meta name="description"
           content="{html.escape(description, quote=True)}"/>
     <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
@@ -441,7 +442,7 @@ def build_landing_jsonld(posts: list[dict]) -> str:
         "url": f"{SITE}/chronicle/",
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
-        "logo": {"@type": "ImageObject", "url": f"{SITE}/images/a.png"},
+        "logo": {"@type": "ImageObject", "url": f"{SITE}/chronicle/icon.png"},
     }
     breadcrumb = {
         "@type": "BreadcrumbList",
@@ -608,7 +609,7 @@ def build_article_jsonld(post: dict) -> str:
         "url": f"{SITE}/chronicle/",
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
-        "logo": {"@type": "ImageObject", "url": f"{SITE}/images/a.png"},
+        "logo": {"@type": "ImageObject", "url": f"{SITE}/chronicle/icon.png"},
     }
     breadcrumb = {
         "@type": "BreadcrumbList",
