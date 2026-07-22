@@ -137,27 +137,27 @@ MONTHS = [
 def lightbox_css(prefix: str) -> str:
     return (
         '\n    <!-- PhotoSwipe styles for the click-to-zoom article hero -->'
-        f'\n    <link rel="stylesheet" href="{prefix}gallery/vendor/photoswipe/photoswipe.css"/>'
+        f'\n    <link rel="stylesheet" href="{prefix}naarden/vendor/photoswipe/photoswipe.css"/>'
     )
 
 
 def lightbox_js(prefix: str) -> str:
     """PhotoSwipe init for an article page's hero image.
 
-    Reuses the copy self-hosted for the gallery (<prefix>gallery/vendor/), so no
+    Reuses the copy self-hosted for the Naarden gallery (<prefix>naarden/vendor/), so no
     third-party CDN and nothing to duplicate. `prefix` is the relative path back
     to the site root (../../ for an article page).
     """
     return f"""
 <!-- PhotoSwipe: click the article hero to open the full image in a lightbox. -->
 <script type="module">
-    import PhotoSwipeLightbox from '{prefix}gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+    import PhotoSwipeLightbox from '{prefix}naarden/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
     const lightbox = new PhotoSwipeLightbox({{
         gallery: 'main',
         children: 'a.pswp-hero',
         // The main module loads on demand the first time an image is opened.
-        pswpModule: () => import('{prefix}gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+        pswpModule: () => import('{prefix}naarden/vendor/photoswipe/photoswipe.esm.min.js'),
     }});
 
     // Caption = the hero image's alt text (the article headline).
@@ -343,7 +343,7 @@ def render_page(
 
     `prefix` is the relative path from this page back to the site root
     ('../' for the landing, '../../' for an article page). All root-level assets
-    (styles, favicon, gallery vendor, the home link) are addressed through it.
+    (styles, favicon, Naarden gallery vendor, the home link) are addressed through it.
     """
     css_extra = lightbox_css(prefix) if has_lightbox else ""
     js_extra = lightbox_js(prefix) if has_lightbox else ""

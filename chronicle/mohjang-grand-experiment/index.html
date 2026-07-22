@@ -92,7 +92,7 @@
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../../styles.css"/>
     <!-- PhotoSwipe styles for the click-to-zoom article hero -->
-    <link rel="stylesheet" href="../../gallery/vendor/photoswipe/photoswipe.css"/>
+    <link rel="stylesheet" href="../../naarden/vendor/photoswipe/photoswipe.css"/>
 
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
@@ -185,13 +185,13 @@ Senior Interplanetary Correspondent</em></p>
 </script>
 <!-- PhotoSwipe: click the article hero to open the full image in a lightbox. -->
 <script type="module">
-    import PhotoSwipeLightbox from '../../gallery/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+    import PhotoSwipeLightbox from '../../naarden/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
     const lightbox = new PhotoSwipeLightbox({
         gallery: 'main',
         children: 'a.pswp-hero',
         // The main module loads on demand the first time an image is opened.
-        pswpModule: () => import('../../gallery/vendor/photoswipe/photoswipe.esm.min.js'),
+        pswpModule: () => import('../../naarden/vendor/photoswipe/photoswipe.esm.min.js'),
     });
 
     // Caption = the hero image's alt text (the article headline).

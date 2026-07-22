@@ -6,9 +6,10 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 
 - Static HTML — no framework, no client-side build step to run the site.
 - [Tailwind CSS v4](https://tailwindcss.com/) for styling, compiled to a single stylesheet.
-- Photo gallery at `/gallery/` using [PhotoSwipe](https://photoswipe.com/), self-hosted
-  under `gallery/vendor/photoswipe/` (no third-party CDN — see the note in
-  `gallery/index.html` for how to update it).
+- Photo gallery at `/naarden/` using [PhotoSwipe](https://photoswipe.com/), self-hosted
+  under `naarden/vendor/photoswipe/` (no third-party CDN — see the note in
+  `naarden/index.html` for how to update it). The old `/gallery/` URL is a permanent
+  redirect stub to `/naarden/`.
 - `/jottings/` and `/chronicle/` are generated from markdown sources at build time
   (see [Generated pages](#generated-pages)).
 - A custom `404.html` and `sitemap.xml`, plus JSON-LD structured data and Open Graph
@@ -22,7 +23,9 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── index.html          # home page (Jottings teasers are generated — see below)
 ├── 404.html            # custom not-found page (root-absolute asset paths)
 ├── gallery/
-│   ├── index.html      # gallery page (served at /gallery/)
+│   └── index.html      # permanent redirect stub → /naarden/
+├── naarden/
+│   ├── index.html      # Naarden page + photo gallery (served at /naarden/)
 │   ├── images/         # full-size photos (~2048px long edge)
 │   ├── thumbnails/     # grid thumbnails (~640px wide)
 │   └── vendor/photoswipe/  # self-hosted PhotoSwipe (lightbox)
@@ -57,8 +60,8 @@ needs — no larger, which is what keeps the pages loading instantly.
 | Image | Location | Target size | Notes |
 |---|---|---|---|
 | **Link cards** | `images/links/` | **640×360** (16:9) | Shown in a 16:9 card with `object-cover`. Crop the source to 16:9 and nothing needs aligning. If it isn't 16:9, keep it as-is and add an `object-*` class (e.g. `object-bottom`, `object-left`) so the auto-crop keeps the important part — otherwise it centre-crops. |
-| **Gallery photos** | `gallery/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
-| **Gallery thumbnails** | `gallery/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
+| **Gallery photos** | `naarden/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
+| **Gallery thumbnails** | `naarden/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
 | **Chronicle heroes** | `chronicle/images/` | **~1024px on the longest edge** (any aspect), quality ≈80 | Per-article hero, referenced by the article's `image:` frontmatter (bare filename). Shown uncropped — floated beside the text on wide screens, full-width on mobile — and clickable to open full-size in the PhotoSwipe lightbox. The generator reads the pixel size from the file, so there's no `data-pswp-*` to set by hand. |
 | **Chronicle index thumbnails** | `chronicle/images/thumbs/` | **480px wide**, quality ≈72 | Small teaser image leading each front-page index card. Use the **same base filename** as the hero; generate with e.g. `convert hero.webp -resize 480x -quality 72 thumbs/hero.webp`. The card falls back to the full hero if a thumbnail is missing. |
 | **Chronicle favicon** | `chronicle/` | `icon.png` 512×512 + `favicon.ico` (16/32/48) | The Chronicle's own tab icon (a navy TIC monogram, rounded), distinct from the main site. `favicon.ico` is regenerated from `icon.png`: `convert icon.png -define icon:auto-resize=48,32,16 favicon.ico`. |
@@ -157,7 +160,7 @@ Tailwind CLI against the input file and output to `styles.css`.
 
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
-`gallery/index.html`, `jottings/index.html`, `chronicle/index.html`, the
+`naarden/index.html`, `jottings/index.html`, `chronicle/index.html`, the
 `chronicle/*/index.html` article pages and `404.html` are listed) — otherwise
 its utility classes are dropped from the build.
 
