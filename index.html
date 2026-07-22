@@ -36,7 +36,12 @@
                     "alternateName": "Ralph van Zetten",
                     "jobTitle": "Software Developer",
                     "description": "PHP developer in travel technology, focused on privacy, local autonomy, sustainability and practical home automation.",
-                    "image": "https://amthonie.nl/images/header.webp",
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/images/avatar.webp",
+                        "width": 640,
+                        "height": 640
+                    },
                     "address": {
                         "@type": "PostalAddress",
                         "addressLocality": "Naarden",
@@ -72,6 +77,12 @@
                 {
                     "@type": "WebPage",
                     "@id": "https://amthonie.nl/#webpage",
+                    "primaryImageOfPage": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/images/og-image.jpg",
+                        "width": 1200,
+                        "height": 630
+                    },
                     "url": "https://amthonie.nl/",
                     "name": "Amthonie",
                     "description": "PHP developer in Naarden focused on travel tech, privacy, sustainability and thoughtful home automation.",
@@ -508,7 +519,7 @@
 
 <!-- Footer -->
 <footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
-    <p>Built to be light — a static site with a minimal footprint.</p>
+    <p class="font-semibold">Built to be light — a static site with a minimal footprint.</p>
     <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
 </footer>
 

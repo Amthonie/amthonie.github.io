@@ -467,6 +467,26 @@ def build_landing_jsonld(posts: list[dict]) -> str:
         "slogan": TAGLINE,
         "description": PUBLISHER_DESCRIPTION,
         "logo": {"@type": "ImageObject", "url": f"{SITE}/chronicle/icon.png"},
+        "image": {
+            "@type": "ImageObject",
+            "url": f"{SITE}/chronicle/header_small.webp",
+            "width": 640,
+            "height": 331,
+        },
+    }
+    collection_page = {
+        "@type": "CollectionPage",
+        "@id": f"{SITE}/chronicle/#webpage",
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": f"{SITE}/chronicle/header_small.webp",
+            "width": 640,
+            "height": 331,
+        },
+        "url": f"{SITE}/chronicle/",
+        "name": TITLE,
+        "description": PUBLISHER_DESCRIPTION,
+        "isPartOf": {"@id": f"{SITE}/#website"},
     }
     breadcrumb = {
         "@type": "BreadcrumbList",
@@ -482,7 +502,7 @@ def build_landing_jsonld(posts: list[dict]) -> str:
             for i, post in enumerate(posts, start=1)
         ],
     }
-    data = {"@context": "https://schema.org", "@graph": [publisher, breadcrumb, item_list]}
+    data = {"@context": "https://schema.org", "@graph": [collection_page, publisher, breadcrumb, item_list]}
     return _jsonld_script(data)
 
 

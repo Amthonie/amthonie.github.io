@@ -31,6 +31,22 @@
             "@context": "https://schema.org",
             "@graph": [
                 {
+                    "@type": "CollectionPage",
+                    "@id": "https://amthonie.nl/chronicle/#webpage",
+                    "primaryImageOfPage": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/chronicle/header_small.webp",
+                        "width": 640,
+                        "height": 331
+                    },
+                    "url": "https://amthonie.nl/chronicle/",
+                    "name": "The Interplanetary Chronicle",
+                    "description": "A fully satirical, entirely fictional interplanetary outlet. All names, quotes, events and reporting are invented for comic effect and are not real.",
+                    "isPartOf": {
+                        "@id": "https://amthonie.nl/#website"
+                    }
+                },
+                {
                     "@type": "NewsMediaOrganization",
                     "@id": "https://amthonie.nl/chronicle/#publisher",
                     "name": "The Interplanetary Chronicle",
@@ -41,6 +57,12 @@
                     "logo": {
                         "@type": "ImageObject",
                         "url": "https://amthonie.nl/chronicle/icon.png"
+                    },
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/chronicle/header_small.webp",
+                        "width": 640,
+                        "height": 331
                     }
                 },
                 {

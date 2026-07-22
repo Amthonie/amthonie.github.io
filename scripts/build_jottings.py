@@ -245,6 +245,12 @@ def build_jsonld() -> str:
             {
                 "@type": "CollectionPage",
                 "@id": f"{SITE}/jottings/#webpage",
+                "primaryImageOfPage": {
+                    "@type": "ImageObject",
+                    "url": f"{SITE}/images/og-image.jpg",
+                    "width": 1200,
+                    "height": 630,
+                },
                 "url": f"{SITE}/jottings/",
                 "name": "Jottings",
                 "description": DESCRIPTION,
@@ -367,7 +373,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 
 <!-- Footer -->
 <footer class="w-full mt-auto py-4 text-center text-xs text-stone-500 dark:text-stone-400">
-    <p>Built to be light — a static site with a minimal footprint.</p>
+    <p class="font-semibold">Built to be light — a static site with a minimal footprint.</p>
     <p class="mt-1">&copy; <span id="year"></span> Amthonie</p>
 </footer>
 
