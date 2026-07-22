@@ -391,7 +391,7 @@ def render_page(
 <!-- Footer: the satire disclaimer lives here as a quiet about-note, on every
      page (this is the shared shell). -->
 <footer class="w-full mt-auto py-6 text-center text-xs text-stone-500 dark:text-stone-400">
-    <p class="mx-auto max-w-xl px-4 leading-relaxed">{DISCLAIMER}</p>
+    <p class="mx-auto max-w-xl px-4 leading-relaxed font-semibold">{DISCLAIMER}</p>
     <p class="mt-2">&copy; <span id="year"></span> Amthonie</p>
 </footer>
 
