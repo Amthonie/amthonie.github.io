@@ -103,7 +103,7 @@ To add a jotting: drop a new `.md` file in `content/jottings/` and push. The
 deploy workflow runs the generator automatically, so you don't have to build
 anything by hand. To preview locally, run it yourself (needs the `markdown`
 package): `python3 scripts/build_jottings.py`. The generated `jottings/index.html`
-is committed as a build artifact (like `styles.css`), so re-run the generator
+is committed as a build artefact (like `styles.css`), so re-run the generator
 and commit its output when you want the committed copy to stay current.
 
 ### The Interplanetary Chronicle
