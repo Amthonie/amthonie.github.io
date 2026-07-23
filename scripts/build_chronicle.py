@@ -137,27 +137,28 @@ MONTHS = [
 def lightbox_css(prefix: str) -> str:
     return (
         '\n    <!-- PhotoSwipe styles for the click-to-zoom article hero -->'
-        f'\n    <link rel="stylesheet" href="{prefix}naarden/vendor/photoswipe/photoswipe.css"/>'
+        f'\n    <link rel="stylesheet" href="{prefix}vendor/photoswipe/photoswipe.css"/>'
     )
 
 
 def lightbox_js(prefix: str) -> str:
     """PhotoSwipe init for an article page's hero image.
 
-    Reuses the copy self-hosted for the Naarden gallery (<prefix>naarden/vendor/), so no
-    third-party CDN and nothing to duplicate. `prefix` is the relative path back
-    to the site root (../../ for an article page).
+    Reuses the shared self-hosted copy at <prefix>vendor/ (used by both the
+    Naarden gallery and these article heroes), so no third-party CDN and nothing
+    to duplicate. `prefix` is the relative path back to the site root (../../ for
+    an article page).
     """
     return f"""
 <!-- PhotoSwipe: click the article hero to open the full image in a lightbox. -->
 <script type="module">
-    import PhotoSwipeLightbox from '{prefix}naarden/vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+    import PhotoSwipeLightbox from '{prefix}vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
     const lightbox = new PhotoSwipeLightbox({{
         gallery: 'main',
         children: 'a.pswp-hero',
         // The main module loads on demand the first time an image is opened.
-        pswpModule: () => import('{prefix}naarden/vendor/photoswipe/photoswipe.esm.min.js'),
+        pswpModule: () => import('{prefix}vendor/photoswipe/photoswipe.esm.min.js'),
     }});
 
     // Caption = the hero image's alt text (the article headline).

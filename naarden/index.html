@@ -72,11 +72,11 @@
     <link rel="stylesheet" href="../styles.css"/>
 
     <!--
-      PhotoSwipe (v5.4.4), self-hosted under vendor/photoswipe/ to avoid a
+      PhotoSwipe (v5.4.4), self-hosted under /vendor/photoswipe/ (repo root) to avoid a
       third-party CDN dependency. To update: download photoswipe.css and the
       two *.esm.min.js files from the matching npm release into that folder.
     -->
-    <link rel="stylesheet" href="vendor/photoswipe/photoswipe.css"/>
+    <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>
 
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
@@ -286,14 +286,14 @@
 
 <!-- PhotoSwipe: initialise the lightbox on the gallery -->
 <script type="module">
-    import PhotoSwipeLightbox from './vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+    import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
     const lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',
         children: 'a',
         // The main PhotoSwipe module is loaded on demand the first time you
         // open an image, so nothing heavy runs on page load.
-        pswpModule: () => import('./vendor/photoswipe/photoswipe.esm.min.js'),
+        pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
     });
 
     // Show the image's alt text as a caption inside the lightbox.

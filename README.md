@@ -7,8 +7,9 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 - Static HTML — no framework, no client-side build step to run the site.
 - [Tailwind CSS v4](https://tailwindcss.com/) for styling, compiled to a single stylesheet.
 - Photo gallery at `/naarden/` using [PhotoSwipe](https://photoswipe.com/), self-hosted
-  under `naarden/vendor/photoswipe/` (no third-party CDN — see the note in
-  `naarden/index.html` for how to update it). The old `/gallery/` URL is a permanent
+  under `vendor/photoswipe/` at the repo root (no third-party CDN — see the note in
+  `naarden/index.html` for how to update it). The lightbox is shared: the Chronicle
+  article heroes reuse the same vendored copy. The old `/gallery/` URL is a permanent
   redirect stub to `/naarden/`.
 - `/jottings/` and `/chronicle/` are generated from markdown sources at build time
   (see [Generated pages](#generated-pages)).
@@ -27,8 +28,8 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── naarden/
 │   ├── index.html      # Naarden page + photo gallery (served at /naarden/)
 │   ├── images/         # full-size photos (~2048px long edge)
-│   ├── thumbnails/     # grid thumbnails (~640px wide)
-│   └── vendor/photoswipe/  # self-hosted PhotoSwipe (lightbox)
+│   └── thumbnails/     # grid thumbnails (~640px wide)
+├── vendor/photoswipe/  # self-hosted PhotoSwipe lightbox (shared: naarden + chronicle)
 ├── jottings/
 │   └── index.html      # jottings page (served at /jottings/) — GENERATED
 ├── chronicle/
@@ -171,8 +172,8 @@ generators run, `_site/` assembled with the same exclusions, Tailwind rebuilt �
 use the helper script instead of serving the repo root:
 
 ```bash
-scripts/build-site.sh             # build _site/ and serve http://localhost:4599
-scripts/build-site.sh --no-serve  # build only
+scripts/build-site.sh             # build _site/ only
+scripts/build-site.sh --serve     # build, then serve http://localhost:4599
 ```
 
 It mirrors the steps in `.github/workflows/deploy.yml`, so what you see is what

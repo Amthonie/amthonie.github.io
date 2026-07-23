@@ -20,17 +20,17 @@
 #   - _site/ and the downloaded ./tailwindcss binary are gitignored.
 #
 # Usage:
-#   scripts/build-site.sh             build, then serve on http://localhost:4599
-#   scripts/build-site.sh --no-serve  build only (no server)
-#   PORT=8080 scripts/build-site.sh   serve on a different port
+#   scripts/build-site.sh                   build only (no server)
+#   scripts/build-site.sh --serve           build, then serve on http://localhost:4599
+#   PORT=8080 scripts/build-site.sh --serve serve on a different port
 
 set -euo pipefail
 
 # Keep this in sync with the version pinned in .github/workflows/deploy.yml.
 TAILWIND_VERSION="v4.3.2"
 PORT="${PORT:-4599}"
-SERVE=1
-[ "${1:-}" = "--no-serve" ] && SERVE=0
+SERVE=0
+[ "${1:-}" = "--serve" ] && SERVE=1
 
 # Always run from the repo root, regardless of where this is invoked from.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
