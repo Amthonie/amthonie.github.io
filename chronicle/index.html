@@ -155,13 +155,17 @@
         />
     </div>
 
-    <!-- Sub-masthead (boxless): the banner image already carries the title in
-         large type, so the tagline stands in as the page's visible <h1> (the
-         site name still lives in <title>, og:title and the JSON-LD). The tagline
-         and the back button sit directly under the image, no box, flush with the
-         outer edges of the boxes below. -->
+    <!-- Real site title as the page's <h1>, kept sr-only: the banner image above
+         carries it visually (and it lives in <title>, og:title and the JSON-LD),
+         so this gives crawlers and screen readers a genuine text <h1> without
+         painting a duplicate on screen. -->
+    <h1 class="sr-only">The Interplanetary Chronicle</h1>
+
+    <!-- Sub-masthead (boxless): the tagline (an <h2>) and the back button sit
+         directly under the image, no box, flush with the outer edges of the
+         boxes below. -->
     <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
-        <h1 class="text-xl md:text-2xl font-medium italic text-stone-900 dark:text-white">…the worst tabloid in this galaxy and beyond</h1>
+        <h2 class="text-xl font-medium italic text-stone-900 dark:text-white">…the worst tabloid in this galaxy and beyond</h2>
         <a href="../"
            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
