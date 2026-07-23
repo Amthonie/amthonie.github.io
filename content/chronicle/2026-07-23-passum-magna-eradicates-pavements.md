@@ -7,8 +7,8 @@ image: passum-magna-eradicates-pavements.webp
 
 ### AN ABSOLUTE OUTRAGE ON FOUR WHEELS AS LOCAL AUTHORITIES RECLAIM THE TARMAC FROM RECKLESS FOOT-TRAVELLERS!
 
-*By Amthonie Vandenberg,  
-European Geopolitical Correspondent*
+*By Amthonie Vandenberg,
+Senior Interplanetary Correspondent*
 
 **PASSUM MAGNA, AMBULAX** — In what has been described by local officials as a “triumph of rational urban streamlining,” the Municipal Council of Passum Magna has successfully abolished the last remaining zebra crossings and pedestrian subways across the city, citing an urgent requirement to maximise the uninterrupted momentum of two‑tonne steel saloons.
 

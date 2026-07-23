@@ -7,8 +7,8 @@ image: tectonics-turn-sour-on-virgo-iv.webp
 
 ### GEOLOGICAL DIPLOMACY REACHES BOILING POINT AFTER NORTHERN CORKING EXPERIMENT CAUSES DISASTROUS MAGMATIC DISPLACEMENT.
 
-*By Amthonie Vandenberg,  
-European Geopolitical Correspondent*
+*By Amthonie Vandenberg,
+Senior Interplanetary Correspondent*
 
 **VIRGA IV** -- A mild diplomatic disagreement between the planetary neighbours of Virga IV has escalated into a full-scale magmatic inconvenience following an ambitious geo-engineering initiative that experts are already calling "regrettably hasty."
 
