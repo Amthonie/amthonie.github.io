@@ -328,7 +328,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <a
             href="../"
             aria-label="Back to home"
-            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+            class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
                 src="../images/header.webp"
                 alt="Decorative abstract header background"
@@ -346,7 +346,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 
     <!-- Jottings -->
     <section
-            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1024px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
 
         <div class="flex items-center justify-between gap-4">
             <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
