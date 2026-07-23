@@ -123,7 +123,7 @@ PUBLISHER_DESCRIPTION = (
 # Shared section-box styling, lifted verbatim from the jottings page so the
 # Chronicle sits in the same visual language as the rest of the site.
 SECTION_BOX = (
-    "mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1024px] rounded-2xl "
+    "mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl "
     "border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 "
     "px-4 py-4 md:px-8 md:py-8 shadow-xl"
 )
@@ -527,7 +527,7 @@ def build_landing_page(posts: list[dict]) -> None:
 
     body = f"""    <!-- Header banner (decorative, non-linking): the only route back to
          amthonie.nl is the button in the sub-masthead below. -->
-    <div class="relative block w-full md:w-4/5 max-w-[1024px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
+    <div class="relative block w-full md:w-4/5 max-w-[1280px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
         <img
                 src="header.webp"
                 alt="Decorative abstract header background for The Interplanetary Chronicle"
@@ -537,13 +537,17 @@ def build_landing_page(posts: list[dict]) -> None:
         />
     </div>
 
-    <!-- Sub-masthead (boxless): the banner image already carries the title in
-         large type, so the tagline stands in as the page's visible <h1> (the
-         site name still lives in <title>, og:title and the JSON-LD). The tagline
-         and the back button sit directly under the image, no box, flush with the
-         outer edges of the boxes below. -->
-    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
-        <h1 class="text-xl md:text-2xl font-medium italic text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</h1>
+    <!-- Real site title as the page's <h1>, kept sr-only: the banner image above
+         carries it visually (and it lives in <title>, og:title and the JSON-LD),
+         so this gives crawlers and screen readers a genuine text <h1> without
+         painting a duplicate on screen. -->
+    <h1 class="sr-only">{TITLE}</h1>
+
+    <!-- Sub-masthead (boxless): the tagline (an <h2>) and the back button sit
+         directly under the image, no box, flush with the outer edges of the
+         boxes below. -->
+    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
+        <h2 class="text-xl font-medium italic text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</h2>
         <a href="../"
            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -558,7 +562,7 @@ def build_landing_page(posts: list[dict]) -> None:
     <!-- Index -->
     <section class="{SECTION_BOX}">
         <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">In this edition</h2>
-        <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2">
+        <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {index_cards}
         </div>
     </section>"""
@@ -637,7 +641,7 @@ def render_article_banner() -> str:
     <a
             href="../"
             aria-label="Back to The Interplanetary Chronicle"
-            class="group relative block w-full md:w-4/5 max-w-[1024px] aspect-[{aspect}] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
+            class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[{aspect}] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
                 src="../{ARTICLE_HEADER}"
                 alt="{html.escape(TITLE)}"
@@ -718,7 +722,7 @@ def build_article_page(post: dict) -> None:
 
     body = f"""{banner}    <!-- Sub-masthead: identity on the left, back-to-index button on the right;
          the article headline below is the page's <h1>. -->
-    <div class="{row_class} w-full md:w-4/5 max-w-[1024px] items-center justify-between gap-4">
+    <div class="{row_class} w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
         {submast_left}
         <a href="../"
            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
