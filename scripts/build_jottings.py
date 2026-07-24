@@ -247,7 +247,7 @@ def build_jsonld() -> str:
                 "@id": f"{SITE}/jottings/#webpage",
                 "primaryImageOfPage": {
                     "@type": "ImageObject",
-                    "url": f"{SITE}/images/og-image.jpg",
+                    "url": f"{SITE}/images/theme/nouveau/og-image.jpg",
                     "width": 1200,
                     "height": 630,
                 },
@@ -296,7 +296,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <meta property="og:title" content="Amthonie | Jottings"/>
     <meta property="og:description"
           content="{DESCRIPTION}"/>
-    <meta property="og:image" content="{SITE}/images/og-image.jpg"/>
+    <meta property="og:image" content="{SITE}/images/theme/nouveau/og-image.jpg"/>
     <meta property="og:site_name" content="Amthonie"/>
     <meta property="og:locale" content="en_GB"/>
 
@@ -330,14 +330,14 @@ def build_jottings_page(posts: list[dict]) -> None:
             aria-label="Back to home"
             class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
         <img
-                src="../images/header.webp"
+                src="../images/theme/nouveau/header.webp"
                 alt="Decorative abstract header background"
                 aria-hidden="true"
                 class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
                 draggable="false"
         />
         <img
-                src="../images/avatar.webp"
+                src="../images/theme/nouveau/avatar.webp"
                 alt="Profile picture of Amthonie"
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
                 draggable="false"
