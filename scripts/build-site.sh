@@ -18,11 +18,31 @@
 #   - Serving from _site/ (not the repo root) means root-absolute paths and the
 #     custom 404 behave just like they do on GitHub Pages.
 #   - _site/ and the downloaded ./tailwindcss binary are gitignored.
+#   - This script is a LOCAL convenience only — the deploy workflow inlines its
+#     own equivalent steps and never calls it, so it's safe to change.
 #
 # Usage:
-#   scripts/build-site.sh                   build only (no server)
-#   scripts/build-site.sh --serve           build, then serve on http://localhost:4599
+#   scripts/build-site.sh                   full build into _site/ (no server)
+#   scripts/build-site.sh --serve           full build, then serve _site/ on http://localhost:4599
+#   scripts/build-site.sh --css             quick: recompile the repo-root styles.css only (see below)
 #   PORT=8080 scripts/build-site.sh --serve serve on a different port
+#
+# About --css:
+#   The always-on preview (systemd service `amthonie.service`,
+#   http://localhost:4599) serves the REPO-ROOT working tree, and therefore the
+#   committed repo-root styles.css. Tailwind v4 only emits CSS for the utility
+#   classes it finds when it scans the HTML, so after you add or change a class
+#   in the HTML — especially a new arbitrary value such as a bracketed height
+#   percentage — that class has NO rule in the stale committed styles.css and
+#   appears to do nothing.
+#   (Deliberately no literal example class here: Tailwind's auto content
+#   detection scans this .sh file too, and any real class literal written in a
+#   comment would get emitted as an unused rule — even into the production CSS.)
+#   `--css` recompiles src/input.css -> ./styles.css (repo root) so the running
+#   4599 preview picks the change up on reload. It skips the _site assembly and
+#   the page generators, so it's near-instant.
+#   (For a live loop, the standalone CLI also supports --watch:
+#    ./tailwindcss -i src/input.css -o styles.css --watch)
 
 set -euo pipefail
 
@@ -30,11 +50,49 @@ set -euo pipefail
 TAILWIND_VERSION="v4.3.2"
 PORT="${PORT:-4599}"
 SERVE=0
-[ "${1:-}" = "--serve" ] && SERVE=1
+CSS_ONLY=0
+for arg in "$@"; do
+    case "$arg" in
+        --serve) SERVE=1 ;;
+        --css)   CSS_ONLY=1 ;;
+        *) echo "Unknown option: $arg (see the usage comment at the top of this script)" >&2; exit 2 ;;
+    esac
+done
 
 # Always run from the repo root, regardless of where this is invoked from.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+
+# Download the standalone CLI once, then reuse it (it's gitignored). Self-
+# contained (bundles the tailwindcss package) so it needs no Node/node_modules.
+ensure_tailwind() {
+    if [ ! -x ./tailwindcss ]; then
+        case "$(uname -s)" in
+            Linux)  os=linux ;;
+            Darwin) os=macos ;;
+            *) echo "Unsupported OS $(uname -s); download the tailwindcss CLI manually." >&2; exit 1 ;;
+        esac
+        case "$(uname -m)" in
+            x86_64|amd64)  arch=x64 ;;
+            aarch64|arm64) arch=arm64 ;;
+            *) echo "Unsupported arch $(uname -m); download the tailwindcss CLI manually." >&2; exit 1 ;;
+        esac
+        url="https://github.com/tailwindlabs/tailwindcss/releases/download/${TAILWIND_VERSION}/tailwindcss-${os}-${arch}"
+        echo "    downloading ${url}"
+        curl -fsSL -o tailwindcss "$url"
+        chmod +x tailwindcss
+    fi
+}
+
+# --css: quick path for the always-on 4599 preview. Recompile ONLY the repo-root
+# styles.css that the systemd service serves, then exit. No generators, no _site.
+if [ "$CSS_ONLY" = "1" ]; then
+    echo "==> Build Tailwind CSS -> styles.css (repo root, for the http://localhost:${PORT}/ preview)"
+    ensure_tailwind
+    ./tailwindcss -i src/input.css -o styles.css --minify
+    echo "==> Done. Reload http://localhost:${PORT}/ to see the change."
+    exit 0
+fi
 
 echo "==> 1/3  Python venv + page generators"
 if [ ! -x .venv/bin/python ]; then
@@ -59,23 +117,7 @@ rsync -a \
     ./ _site/
 
 echo "==> 3/3  Build Tailwind CSS -> _site/styles.css"
-# Download the standalone CLI once, then reuse it (it's gitignored).
-if [ ! -x ./tailwindcss ]; then
-    case "$(uname -s)" in
-        Linux)  os=linux ;;
-        Darwin) os=macos ;;
-        *) echo "Unsupported OS $(uname -s); download the tailwindcss CLI manually." >&2; exit 1 ;;
-    esac
-    case "$(uname -m)" in
-        x86_64|amd64)  arch=x64 ;;
-        aarch64|arm64) arch=arm64 ;;
-        *) echo "Unsupported arch $(uname -m); download the tailwindcss CLI manually." >&2; exit 1 ;;
-    esac
-    url="https://github.com/tailwindlabs/tailwindcss/releases/download/${TAILWIND_VERSION}/tailwindcss-${os}-${arch}"
-    echo "    downloading ${url}"
-    curl -fsSL -o tailwindcss "$url"
-    chmod +x tailwindcss
-fi
+ensure_tailwind
 ./tailwindcss -i src/input.css -o _site/styles.css --minify
 
 echo "==> Done. _site/ is ready."

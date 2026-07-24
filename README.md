@@ -188,3 +188,31 @@ Pushing to `main` triggers the GitHub Actions workflow, which assembles the
 static files, (re)builds the Tailwind stylesheet when needed, and publishes the
 result to GitHub Pages. Deployments can also be triggered manually from the
 Actions tab.
+
+## Cleaning up local build artefacts
+
+A few things are generated **locally** by `scripts/build-site.sh` and kept out
+of git (all gitignored). None are needed to run or deploy the site — CI builds
+its own copies on the runner — so you can delete any of them at any time and the
+next local build recreates them:
+
+| Path | What it is |
+|---|---|
+| `tailwindcss` | The pinned standalone Tailwind CLI (~107 MB), downloaded on first build and reused thereafter. |
+| `_site/` | A full, production-parity copy of the assembled site (exactly what GitHub Pages serves) from the last local build — pages, `styles.css`, images, `vendor/`, etc., minus the build inputs (`src/`, `content/`, `scripts/`, `.github/`). |
+| `.venv/` | Python virtualenv holding the `markdown` package the page generators need. |
+
+```bash
+rm -rf tailwindcss _site .venv    # all safe — regenerated on the next build
+```
+
+**Upgrading Tailwind — you must delete the binary.** The build downloads
+`tailwindcss` only when it's missing (`if [ ! -x ./tailwindcss ]`), so bumping
+`TAILWIND_VERSION` in `scripts/build-site.sh` (keep it in sync with
+`.github/workflows/deploy.yml`) does **not** re-fetch on its own — the build
+keeps reusing the stale binary. Remove it so the next build pulls the new
+version:
+
+```bash
+rm -f tailwindcss    # then the next build fetches the pinned version
+```
