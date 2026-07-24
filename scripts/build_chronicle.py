@@ -361,7 +361,7 @@ def render_page(
     <link rel="apple-touch-icon" href="{prefix}chronicle/icon.png"/>
     <meta name="description"
           content="{html.escape(description, quote=True)}"/>
-    <meta name="theme-color" content="#8C4A26" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#1F6699" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="{robots}"/>
 

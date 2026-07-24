@@ -15,11 +15,13 @@
   /* Antique-paper background for light mode */
   --color-paper: #faf4ea;
 
-  /* Terracotta / sepia accent, pulled from the map art */
-  --color-brand-400: #bf6c3a;
-  --color-brand-500: #a65b30;
-  --color-brand-600: #8c4a26;
-  --color-brand-700: #72391d;
+  /* Ocean-blue accent — tuned for legibility on both the light paper and the
+     dark scheme. Lighter shades (400) read as link text on dark; darker shades
+     (600/700) as link text and button fills on light. */
+  --color-brand-400: #66b8ec;
+  --color-brand-500: #2a72b5;
+  --color-brand-600: #1f6699;
+  --color-brand-700: #17527d;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
@@ -54,12 +56,12 @@
   font-size: 1.1rem;
 }
 .update-body a {
-  color: #8c4a26; /* brand-600 */
+  color: #1f6699; /* brand-600 */
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .update-body a:hover {
-  color: #72391d; /* brand-700 */
+  color: #17527d; /* brand-700 */
 }
 .update-body ul,
 .update-body ol {
@@ -85,7 +87,7 @@
   border-radius: 0.35rem;
 }
 .update-body blockquote {
-  border-left: 3px solid #a65b30; /* brand-500 */
+  border-left: 3px solid #2a72b5; /* brand-500 */
   padding-left: 1rem;
   font-style: italic;
   color: #57534e; /* stone-600 */
@@ -100,10 +102,10 @@
     color: #ffffff;
   }
   .update-body a {
-    color: #bf6c3a; /* brand-400 */
+    color: #66b8ec; /* brand-400 */
   }
   .update-body a:hover {
-    color: #d18e61; /* lighter brand */
+    color: #93cbf0; /* lighter brand */
   }
   .update-body code {
     background: rgba(255, 255, 255, 0.1);
