@@ -10,6 +10,6 @@ As of today she has raised €764 — a wonderful start, and I’m genuinely mov
 
 If you have a little to spare, please consider supporting this incredibly kind and courageous initiative. Every contribution, however small, goes directly towards helping people living with rare blood disorders — and it would mean a great deal to Eva as she takes on each of those 450 kilometres.
 
-👉 **[Support Eva’s walk at evastraube.com](https://www.evastraube.com/)**
+👉 **[Support Eva’s walk at evawalks.com](https://www.evawalks.com/)**
 
 Thank you.
