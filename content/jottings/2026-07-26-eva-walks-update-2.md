@@ -8,7 +8,7 @@ My friend Eva is now three weeks away from setting off on her 450 km walk acro
 
 It’s a tremendous milestone, though naturally it would be lovely if we could nudge the total a little further before her boots actually touch Swedish soil.
 
-If you have a spare pound or euro rattling around, you can support the endeavour directly at [evawalks.com](https://www.evawalks.com/). The virtual collection plate will remain open well after she has departed, of course.
+If you have a spare pound or euro rattling around, you can support the endeavour directly at [evawalks.com](https://www.evawalks.com/). The [virtual collection plate](https://www.geef.nl/nl/actie/450-km-lopen-door-zweeds-lapland-voor-zeldzame-bloedziekten/donateurs) will remain open well after she has departed, of course.
 
 On a related note: if times are lean and donating cash isn’t on the cards, there is another rather brilliant way to help. Donating blood plasma is remarkably effective in supporting people living with rare blood conditions. It costs nothing beyond an hour of your time, a small prick of a needle, and the slight indignity of drinking a cup of lukewarm tea in a recovery chair afterwards.
 
