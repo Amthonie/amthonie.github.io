@@ -69,6 +69,26 @@ def slugify(text: str) -> str:
     return slug or "jotting"
 
 
+def open_external_links_in_new_tab(html: str) -> str:
+    """Make off-site links in rendered markdown open in a new tab.
+
+    Body links that point off-site (an ``http(s)://`` URL) get
+    ``target="_blank" rel="noopener"``, mirroring the curated links on the home
+    page. Relative links and in-page ``#anchors`` are left untouched, so
+    same-site navigation stays in the current tab.
+    """
+    def add_target(match: re.Match) -> str:
+        attrs = match.group(1)
+        href = re.search(r'href="([^"]*)"', attrs)
+        if not href or not href.group(1).startswith(("http://", "https://")):
+            return match.group(0)
+        if "target=" in attrs:  # respect an explicit target if one is ever set
+            return match.group(0)
+        return f'<a {attrs} target="_blank" rel="noopener">'
+
+    return re.sub(r"<a ([^>]*?)>", add_target, html)
+
+
 def parse_post(path: Path) -> dict:
     """Parse one markdown file with a leading '--- ... ---' frontmatter block."""
     text = path.read_text(encoding="utf-8")
@@ -95,7 +115,9 @@ def parse_post(path: Path) -> dict:
         raise SystemExit(f"{path.name}: date '{meta['date']}' must be YYYY-MM-DD")
 
     body = body.strip()
-    body_html = markdown.markdown(body, extensions=["extra", "sane_lists"])
+    body_html = open_external_links_in_new_tab(
+        markdown.markdown(body, extensions=["extra", "sane_lists"])
+    )
 
     # Teaser summary: explicit frontmatter wins, else the first paragraph's text.
     summary = meta.get("summary")
@@ -103,9 +125,11 @@ def parse_post(path: Path) -> dict:
         first_para = re.search(r"<p>(.*?)</p>", body_html, re.DOTALL)
         summary = re.sub(r"<[^>]+>", "", first_para.group(1)).strip() if first_para else ""
 
-    # A stable anchor: strip a leading date prefix from the filename if present.
-    stem = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
-    slug = slugify(stem)
+    # A stable anchor: an explicit frontmatter `slug` wins; otherwise fall back
+    # to the filename with any leading date prefix stripped. Either way it is
+    # run through slugify() so the result is always URL/anchor-safe.
+    slug = meta.get("slug") or re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
+    slug = slugify(slug)
 
     return {
         "date": date,

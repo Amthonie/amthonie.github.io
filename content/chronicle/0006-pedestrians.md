@@ -1,5 +1,6 @@
 ---
 date: 2026-07-23
+slug: passum-magna-eradicates-pavements
 title: Passum Magna Eradicates Pavements to Bolster Bulk Car-Polish Sales
 summary: Pedestrians on Planet Ambulax face exile to distant retail parks after city council deems walking an unreasonable impediment to vehicular commerce.
 image: passum-magna-eradicates-pavements.webp

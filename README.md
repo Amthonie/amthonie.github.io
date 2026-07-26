@@ -86,12 +86,30 @@ starting with a small frontmatter block:
 ```markdown
 ---
 date: 2026-07-16
+slug: a-short-headline
 title: A short headline
 summary: Optional one-line teaser for the homepage (defaults to the first paragraph).
 ---
 
 The body is regular **markdown** — links, lists, etc.
 ```
+
+**Frontmatter keys:** `date` (required, `YYYY-MM-DD`) and `title` (required);
+`slug` and `summary` are optional. The `slug` sets the item's URL — the
+on-page anchor for jottings (`/jottings/#<slug>`) and the directory for a
+Chronicle article (`/chronicle/<slug>/`). It's slugified either way, so it's
+always URL-safe. **If `slug` is omitted it falls back to the filename** (with a
+leading `YYYY-MM-DD-` date prefix stripped, if present) — the original
+behaviour. Setting it explicitly decouples the URL from the filename, so you can
+rename or renumber the source file (e.g. to a plain `0003-eva-walks.md` index)
+without changing the published URL, and change a URL by editing one line rather
+than renaming the file. The list is still ordered by `date`, not by filename.
+
+**Body links:** links in the markdown body that point off-site (an
+`http(s)://` URL) are rewritten to open in a new tab (`target="_blank"
+rel="noopener"`), matching the curated links on the home page; relative links
+and in-page `#anchors` stay in the current tab. This applies to both jottings
+and Chronicle article bodies — nothing to set per link.
 
 `scripts/build_jottings.py` turns those into:
 

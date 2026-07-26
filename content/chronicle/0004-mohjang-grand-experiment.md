@@ -1,5 +1,6 @@
 ---
 date: 2026-07-19
+slug: mohjang-grand-experiment
 title: Mohjang’s Grand Experiment
 summary: Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves
 image: venus-venture.webp

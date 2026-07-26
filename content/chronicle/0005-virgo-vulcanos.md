@@ -1,5 +1,6 @@
 ---
 date: 2026-07-20
+slug: tectonics-turn-sour-on-virgo-iv
 title: Plagued by Plugs, Virga IV's Tectonics Turn Sour
 summary: A diplomatic effort to cork active volcanoes backfires catastrophically, leaving the South Federation somewhat unexpectedly on fire.
 image: tectonics-turn-sour-on-virgo-iv.webp
