@@ -1,5 +1,5 @@
 ---
-date: 2026-07-25
+date: 2026-07-27
 slug: azimov-and-ai
 title: Asimov, Automations, and Unintended Audits
 summary: On OpenAI accidentally auditing another tech firm, and why we might need a fresh set of Asimov's Laws.
