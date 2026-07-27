@@ -311,8 +311,8 @@ def build_jottings_page(posts: list[dict]) -> None:
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
           content="{DESCRIPTION}"/>
-    <meta name="theme-color" content="#2A72B5" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#17527D" media="(prefers-color-scheme: dark)"/>
+    <meta name="theme-color" content="#5F9E3A" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="website"/>

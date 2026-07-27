@@ -60,10 +60,10 @@
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
     --color-paper: #faf4ea;
-    --color-brand-400: #66b8ec;
-    --color-brand-500: #2a72b5;
-    --color-brand-600: #1f6699;
-    --color-brand-700: #17527d;
+    --color-brand-400: #9ccc66;
+    --color-brand-500: #5f9e3a;
+    --color-brand-600: #4a7a2c;
+    --color-brand-700: #3a5f22;
   }
 }
 @layer base {
@@ -1491,12 +1491,12 @@
   font-size: 1.1rem;
 }
 .update-body a {
-  color: #1f6699;
+  color: #4a7a2c;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .update-body a:hover {
-  color: #17527d;
+  color: #3a5f22;
 }
 .update-body ul, .update-body ol {
   padding-left: 1.5rem;
@@ -1521,7 +1521,7 @@
   border-radius: 0.35rem;
 }
 .update-body blockquote {
-  border-left: 3px solid #2a72b5;
+  border-left: 3px solid #5f9e3a;
   padding-left: 1rem;
   font-style: italic;
   color: #57534e;
@@ -1534,10 +1534,10 @@
     color: #ffffff;
   }
   .update-body a {
-    color: #66b8ec;
+    color: #9ccc66;
   }
   .update-body a:hover {
-    color: #93cbf0;
+    color: #bcdd90;
   }
   .update-body code {
     background: rgba(255, 255, 255, 0.1);
