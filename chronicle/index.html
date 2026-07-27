@@ -149,46 +149,42 @@
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
 <main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
 
-    <!-- Header banner (decorative, non-linking): the only route back to
-         amthonie.nl is the button in the sub-masthead below. -->
-    <div class="relative block w-full md:w-4/5 max-w-[1280px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
-        <img
-                src="header.webp"
-                alt="Decorative abstract header background for The Interplanetary Chronicle"
-                aria-hidden="true"
-                class="absolute inset-0 h-full w-full object-cover object-top"
-                draggable="false"
-        />
-    </div>
-
-    <!-- Real site title as the page's <h1>, kept sr-only: the banner image above
+    <!-- Real site title as the page's <h1>, kept sr-only: the banner image below
          carries it visually (and it lives in <title>, og:title and the JSON-LD),
-         so this gives crawlers and screen readers a genuine text <h1> without
-         painting a duplicate on screen. -->
+         so this gives crawlers and screen readers a genuine text <h1>. -->
     <h1 class="sr-only">The Interplanetary Chronicle</h1>
 
-    <!-- Sub-masthead (boxless): the tagline (an <h2>) and the back button sit
-         directly under the image, no box, flush with the outer edges of the
-         boxes below. -->
-    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
-        <h2 class="text-xl font-medium italic text-stone-900 dark:text-white">…the worst tabloid in this galaxy and beyond</h2>
-        <a href="../"
-           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            amthonie.nl
-        </a>
+    <!-- Header: banner image + branded slogan band merged into one box (matches the site).
+         The Chronicle tagline sits in the band with the back-to-amthonie.nl button. -->
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+        <div class="relative aspect-[2/1] overflow-hidden">
+            <img
+                    src="header.webp"
+                    alt="Decorative abstract header background for The Interplanetary Chronicle"
+                    aria-hidden="true"
+                    class="absolute inset-0 h-full w-full object-cover object-top"
+                    draggable="false"
+            />
+        </div>
+        <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
+            <h2 class="text-xl font-medium italic text-white">…the worst tabloid in this galaxy and beyond</h2>
+            <a href="../"
+               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                amthonie.nl
+            </a>
+        </div>
     </div>
 
-    <!-- Index -->
-    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">In this edition</h2>
-        <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <!-- Index — unboxed: no master panel; each article card is its own first-level card in the grid -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px]">
+        <div class="grid gap-2 md:gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <a href="passum-magna-eradicates-pavements/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/passum-magna-eradicates-pavements.webp" alt="Passum Magna Eradicates Pavements to Bolster Bulk Car-Polish Sales"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>
@@ -206,7 +202,7 @@
                 </div>
             </a>
 <a href="tectonics-turn-sour-on-virgo-iv/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/tectonics-turn-sour-on-virgo-iv.webp" alt="Plagued by Plugs, Virga IV&#x27;s Tectonics Turn Sour"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>
@@ -224,7 +220,7 @@
                 </div>
             </a>
 <a href="mohjang-grand-experiment/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/venus-venture.webp" alt="Mohjang’s Grand Experiment"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>
@@ -242,7 +238,7 @@
                 </div>
             </a>
 <a href="naarden-for-mars/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/mars-the-naarden-way.webp" alt="Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>
@@ -260,7 +256,7 @@
                 </div>
             </a>
 <a href="tech-visionary-still-alive/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/tech-visionary-still-alive.webp" alt="&#x27;I Am Still Alive!&#x27; Announces Tech Visionary From Scorched Martian Outpost After Earth Unlocking Protocol"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>
@@ -278,7 +274,7 @@
                 </div>
             </a>
 <a href="greenland-compromise/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <img src="images/thumbs/greenland-compromise.webp" alt="Flevoland Ceded to US in Global &#x27;Greenland Compromise&#x27; as President Celebrates &#x27;Beautiful New Island&#x27;"
                      width="480" height="320" loading="lazy" decoding="async" draggable="false"
                      class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>

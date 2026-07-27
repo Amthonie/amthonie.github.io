@@ -221,7 +221,7 @@ def render_index(posts: list[dict]) -> str:
 
     items = "\n".join(rows)
     return f"""<nav aria-label="All jottings"
-         class="mt-5 md:mt-8 rounded-xl border border-black/10 bg-black/5 dark:border-white/10 dark:bg-white/5 p-4 md:p-6">
+         class="mt-5 md:mt-8 rounded-xl border border-black/5 bg-black/5 dark:border-white/5 dark:bg-white/5 p-4 md:p-6">
         <ul class="-my-1 flex flex-col">
             {items}
         </ul>
@@ -240,7 +240,7 @@ def render_teasers(posts: list[dict]) -> str:
         summary = html.escape(post["summary"])
         cards.append(
             f"""<a href="jottings/#{post['slug']}"
-               class="group flex flex-col rounded-xl border border-black/10 bg-black/5 p-2.5 md:p-5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
@@ -348,34 +348,29 @@ def build_jottings_page(posts: list[dict]) -> None:
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
 <main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
 
-    <!-- Header banner (same as index) — links back to the home page -->
-    <a
-            href="../"
-            aria-label="Back to home"
-            class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[4/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
-        <img
-                src="../images/theme/nouveau/header.webp"
-                alt="Decorative abstract header background"
-                aria-hidden="true"
-                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
-                draggable="false"
-        />
-        <img
-                src="../images/theme/nouveau/avatar.webp"
-                alt="Profile picture of Amthonie"
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
-                draggable="false"
-        />
-    </a>
-
-    <!-- Jottings -->
-    <section
-            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-
-        <div class="flex items-center justify-between gap-4">
-            <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
+    <!-- Header: banner image + branded band merged into one box (matches the home page).
+         The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+        <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
+            <img
+                    src="../images/theme/nouveau/header.webp"
+                    alt="Decorative abstract header background"
+                    aria-hidden="true"
+                    class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                    draggable="false"
+            />
+            <img
+                    src="../images/theme/nouveau/avatar.webp"
+                    alt="Profile picture of Amthonie"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    draggable="false"
+            />
+        </a>
+        <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
+            <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
             <a href="../"
-               class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+               aria-label="Back to home"
+               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M19 12H5"/>
@@ -384,8 +379,15 @@ def build_jottings_page(posts: list[dict]) -> None:
                 Back home
             </a>
         </div>
+    </div>
 
-        <p class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
+    <!-- Jottings -->
+    <section
+            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+
+        <h1 class="text-3xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
+
+        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
 
         {index}
 

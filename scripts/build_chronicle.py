@@ -124,7 +124,7 @@ PUBLISHER_DESCRIPTION = (
 # Chronicle sits in the same visual language as the rest of the site.
 SECTION_BOX = (
     "mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl "
-    "border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 "
+    "border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 "
     "px-4 py-4 md:px-8 md:py-8 shadow-xl"
 )
 
@@ -476,7 +476,7 @@ def render_index_cards(posts: list[dict]) -> str:
             )
         cards.append(
             f"""<a href="{post['slug']}/"
-               class="group flex flex-col overflow-hidden rounded-xl border border-black/10 bg-black/5 text-left transition hover:border-black/20 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/25 dark:hover:bg-white/10">
+               class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 shadow-md text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 {card_img}
                 <div class="p-2.5 md:p-5">
                     <time datetime="{post['date']:%Y-%m-%d}"
@@ -550,44 +550,40 @@ def build_landing_page(posts: list[dict]) -> None:
     index_cards = render_index_cards(posts)
     jsonld = build_landing_jsonld(posts)
 
-    body = f"""    <!-- Header banner (decorative, non-linking): the only route back to
-         amthonie.nl is the button in the sub-masthead below. -->
-    <div class="relative block w-full md:w-4/5 max-w-[1280px] aspect-[2/1] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
-        <img
-                src="header.webp"
-                alt="Decorative abstract header background for The Interplanetary Chronicle"
-                aria-hidden="true"
-                class="absolute inset-0 h-full w-full object-cover object-top"
-                draggable="false"
-        />
-    </div>
-
-    <!-- Real site title as the page's <h1>, kept sr-only: the banner image above
+    body = f"""    <!-- Real site title as the page's <h1>, kept sr-only: the banner image below
          carries it visually (and it lives in <title>, og:title and the JSON-LD),
-         so this gives crawlers and screen readers a genuine text <h1> without
-         painting a duplicate on screen. -->
+         so this gives crawlers and screen readers a genuine text <h1>. -->
     <h1 class="sr-only">{TITLE}</h1>
 
-    <!-- Sub-masthead (boxless): the tagline (an <h2>) and the back button sit
-         directly under the image, no box, flush with the outer edges of the
-         boxes below. -->
-    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
-        <h2 class="text-xl font-medium italic text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</h2>
-        <a href="../"
-           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            amthonie.nl
-        </a>
+    <!-- Header: banner image + branded slogan band merged into one box (matches the site).
+         The Chronicle tagline sits in the band with the back-to-amthonie.nl button. -->
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+        <div class="relative aspect-[2/1] overflow-hidden">
+            <img
+                    src="header.webp"
+                    alt="Decorative abstract header background for The Interplanetary Chronicle"
+                    aria-hidden="true"
+                    class="absolute inset-0 h-full w-full object-cover object-top"
+                    draggable="false"
+            />
+        </div>
+        <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
+            <h2 class="text-xl font-medium italic text-white">{TAGLINE_DISPLAY}</h2>
+            <a href="../"
+               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                amthonie.nl
+            </a>
+        </div>
     </div>
 
-    <!-- Index -->
-    <section class="{SECTION_BOX}">
-        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">In this edition</h2>
-        <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <!-- Index — unboxed: no master panel; each article card is its own first-level card in the grid -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px]">
+        <div class="grid gap-2 md:gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {index_cards}
         </div>
     </section>"""
@@ -654,26 +650,22 @@ def render_article_hero(post: dict) -> str:
 
 
 def render_article_banner() -> str:
-    """The slim masthead banner atop an article page, or '' if the file is
-    missing. Links back to the Chronicle index and uses the image's true aspect
-    ratio so it renders as the short, wide strip it is."""
+    """The banner image for the merged article header box (inner wrapper), or ''
+    if the header file is missing. Uses the image's true aspect ratio so it
+    renders as the short, wide strip it is."""
     path = CHRONICLE_DIR / ARTICLE_HEADER
     if not path.is_file():
         return ""
     dims = webp_size(path)
     aspect = f"{dims[0]}/{dims[1]}" if dims else "1024/217"
-    return f"""    <!-- Article masthead banner — links back to the Chronicle index -->
-    <a
-            href="../"
-            aria-label="Back to The Interplanetary Chronicle"
-            class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[{aspect}] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
-        <img
-                src="../{ARTICLE_HEADER}"
-                alt="{html.escape(TITLE)}"
-                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
-                draggable="false"
-        />
-    </a>
+    return f"""        <a href="../" aria-label="Back to The Interplanetary Chronicle" class="group relative block aspect-[{aspect}] overflow-hidden">
+            <img
+                    src="../{ARTICLE_HEADER}"
+                    alt="{html.escape(TITLE)}"
+                    class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                    draggable="false"
+            />
+        </a>
 """
 
 
@@ -726,39 +718,42 @@ def build_article_page(post: dict) -> None:
     hero = render_article_hero(post)
     banner = render_article_banner()
 
+    # Front page (back-to-index) button — white-translucent pill for the brand band.
+    back_button = (
+        '<a href="../"\n'
+        '               class="shrink-0 inline-flex items-center gap-1.5 rounded-full '
+        'border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white '
+        'transition hover:bg-white/25">\n'
+        '                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"\n'
+        '                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">\n'
+        '                    <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>\n'
+        '                </svg>\n'
+        '                Front page\n'
+        '            </a>'
+    )
+
     if banner:
-        # The banner carries the title, so the sub-line mirrors the landing:
-        # the tagline on the left, the back button on the right. A top margin
-        # separates the row from the banner above it.
-        submast_left = (
-            '<p class="text-xl md:text-2xl font-medium italic '
-            f'text-stone-900 dark:text-white">{TAGLINE_DISPLAY}</p>'
-        )
-        row_class = "mt-3 md:mt-6 lg:mt-10 flex"
-    else:
-        # No banner file — fall back to a text wordmark as the identity, and let
-        # the row sit flush at the top of <main> (no extra margin).
-        submast_left = (
-            '<a href="../" class="text-sm md:text-base font-semibold uppercase '
-            "tracking-wide text-stone-900 transition hover:text-brand-600 "
-            f'dark:text-white dark:hover:text-brand-400">{TITLE}</a>'
-        )
-        row_class = "flex"
-
-    body = f"""{banner}    <!-- Sub-masthead: identity on the left, back-to-index button on the right;
-         the article headline below is the page's <h1>. -->
-    <div class="{row_class} w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
-        {submast_left}
-        <a href="../"
-           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
-            </svg>
-            Front page
-        </a>
+        # Banner image + branded slogan band merged into one box (matches the site).
+        header = f"""    <!-- Header: banner image + branded slogan band merged into one box.
+         The tagline sits in the band with the Front page button; the article
+         headline below is the page's <h1>. -->
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+{banner}        <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
+            <p class="text-xl md:text-2xl font-medium italic text-white">{TAGLINE_DISPLAY}</p>
+            {back_button}
+        </div>
     </div>
+"""
+    else:
+        # No banner file — a standalone branded band with a wordmark identity.
+        header = f"""    <!-- Header band (no banner image on file): wordmark + Front page button. -->
+    <div class="flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-6 rounded-2xl bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6 shadow-xl">
+            <a href="../" class="text-base md:text-lg font-semibold uppercase tracking-wide text-white transition hover:text-white/80">{TITLE_SHORT}</a>
+            {back_button}
+    </div>
+"""
 
+    body = f"""{header}
     <!-- Article -->
     <section class="{SECTION_BOX}">
         <article>

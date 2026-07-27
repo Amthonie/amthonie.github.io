@@ -113,34 +113,33 @@
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
 <main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
 
-    <!-- Article masthead banner — links back to the Chronicle index -->
-    <a
-            href="../"
-            aria-label="Back to The Interplanetary Chronicle"
-            class="group relative block w-full md:w-4/5 max-w-[1280px] aspect-[1024/217] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition hover:ring-brand-500/60 dark:ring-white/10 dark:hover:ring-brand-400/60">
-        <img
-                src="../header-articles.webp"
-                alt="The Interplanetary Chronicle"
-                class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
-                draggable="false"
-        />
-    </a>
-    <!-- Sub-masthead: identity on the left, back-to-index button on the right;
-         the article headline below is the page's <h1>. -->
-    <div class="mt-3 md:mt-6 lg:mt-10 flex w-full md:w-4/5 max-w-[1280px] items-center justify-between gap-4">
-        <p class="text-xl md:text-2xl font-medium italic text-stone-900 dark:text-white">…the worst tabloid in this galaxy and beyond</p>
-        <a href="../"
-           class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
-            </svg>
-            Front page
+    <!-- Header: banner image + branded slogan band merged into one box.
+         The tagline sits in the band with the Front page button; the article
+         headline below is the page's <h1>. -->
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+        <a href="../" aria-label="Back to The Interplanetary Chronicle" class="group relative block aspect-[1024/217] overflow-hidden">
+            <img
+                    src="../header-articles.webp"
+                    alt="The Interplanetary Chronicle"
+                    class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                    draggable="false"
+            />
         </a>
+        <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
+            <p class="text-xl md:text-2xl font-medium italic text-white">…the worst tabloid in this galaxy and beyond</p>
+            <a href="../"
+               class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+                </svg>
+                Front page
+            </a>
+        </div>
     </div>
 
     <!-- Article -->
-    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <article>
             <time datetime="2026-07-23"
                   class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
