@@ -7,7 +7,7 @@ summary: Moving away from heavy frameworks to appreciate how much the web has ch
 
 For longer than I’d care to confess, amthonie.nl led visitors straight to a Gravatar page — perfectly functional, but about as personal as a waiting room leaflet. As a developer, it felt faintly embarrassing not to have a small digital home of my own.
 
-So I finally built one. This first version is now alive and quietly humming: a modest, hand‑crafted static site that I own entirely.
+So I finally built one. This first version is now alive and quietly humming: a modest, hand‑crafted static site that I own entirely — and, quite unintentionally, bears a suspicious resemblance to the sort of pages we proudly assembled in the late nineties.
 
 Returning to the basics has been unexpectedly pleasant. After years of grappling with heavyweight frameworks and labyrinthine tools, writing plain HTML again felt like rediscovering a small, forgotten joy. Building something without a lumbering backend or a sulking WordPress instance was wonderfully liberating.
 
