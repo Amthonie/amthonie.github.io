@@ -312,7 +312,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <meta name="description"
           content="{DESCRIPTION}"/>
     <meta name="theme-color" content="#1F6699" media="(prefers-color-scheme: light)"/>
-    <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)"/>
+    <meta name="theme-color" content="#17527D" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:type" content="website"/>
