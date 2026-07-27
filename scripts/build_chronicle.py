@@ -582,7 +582,7 @@ def build_landing_page(posts: list[dict]) -> None:
     <!-- Masthead strip: a short promo blurb in the Chronicle's dark-grey promo colour, separating the header box from the index below. -->
     <div class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-stone-700 bg-stone-700 dark:border-stone-600 dark:bg-stone-600 px-4 py-4 md:px-8 md:py-6 shadow-xl">
         <p class="leading-relaxed text-stone-300 dark:text-stone-200">
-            Because reality isn’t ridiculous enough: a satirical outlet reporting boldly, inaccurately and with great enthusiasm on the state of the cosmos. Its mission is to document interplanetary and local affairs with maximum drama, minimal fact‑checking and a level of confidence wholly disproportionate to its sources.
+            Because reality isn’t ridiculous enough: a satirical outlet reporting boldly, inaccurately and with great enthusiasm on the state of the cosmos.<span class="hidden lg:inline"> Its mission is to document interplanetary and local affairs with maximum drama, minimal fact‑checking and a level of confidence wholly disproportionate to its sources.</span>
         </p>
     </div>
 

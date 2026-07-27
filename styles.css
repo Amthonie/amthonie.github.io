@@ -1210,6 +1210,11 @@
       display: none;
     }
   }
+  .lg\:inline {
+    @media (width >= 64rem) {
+      display: inline;
+    }
+  }
   .lg\:w-2\/5 {
     @media (width >= 64rem) {
       width: calc(2 / 5 * 100%);
