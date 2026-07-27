@@ -370,6 +370,9 @@
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
   .h-\[55\%\] {
     height: 55%;
   }
@@ -387,6 +390,9 @@
   }
   .w-4 {
     width: calc(var(--spacing) * 4);
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
   }
   .w-auto {
     width: auto;
@@ -665,10 +671,6 @@
   .text-2xl {
     font-size: var(--text-2xl);
     line-height: var(--tw-leading, var(--text-2xl--line-height));
-  }
-  .text-3xl {
-    font-size: var(--text-3xl);
-    line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
   .text-4xl {
     font-size: var(--text-4xl);
@@ -1256,6 +1258,11 @@
       border-color: var(--color-brand-700);
     }
   }
+  .dark\:border-stone-600 {
+    @media (prefers-color-scheme: dark) {
+      border-color: var(--color-stone-600);
+    }
+  }
   .dark\:border-white\/5 {
     @media (prefers-color-scheme: dark) {
       border-color: color-mix(in srgb, #fff 5%, transparent);
@@ -1288,6 +1295,11 @@
   .dark\:bg-brand-700 {
     @media (prefers-color-scheme: dark) {
       background-color: var(--color-brand-700);
+    }
+  }
+  .dark\:bg-stone-600 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-stone-600);
     }
   }
   .dark\:bg-stone-900 {
@@ -1363,6 +1375,15 @@
       }
     }
   }
+  .dark\:hover\:border-stone-500 {
+    @media (prefers-color-scheme: dark) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-stone-500);
+        }
+      }
+    }
+  }
   .dark\:hover\:border-white\/10 {
     @media (prefers-color-scheme: dark) {
       &:hover {
@@ -1392,6 +1413,15 @@
       &:hover {
         @media (hover: hover) {
           background-color: var(--color-brand-600);
+        }
+      }
+    }
+  }
+  .dark\:hover\:bg-stone-500 {
+    @media (prefers-color-scheme: dark) {
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-stone-500);
         }
       }
     }
