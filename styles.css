@@ -218,9 +218,6 @@
   .collapse {
     visibility: collapse;
   }
-  .invisible {
-    visibility: hidden;
-  }
   .visible {
     visibility: visible;
   }
@@ -423,9 +420,6 @@
   }
   .shrink-0 {
     flex-shrink: 0;
-  }
-  .grow {
-    flex-grow: 1;
   }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);
@@ -1479,6 +1473,9 @@
   line-height: 1.7;
 }
 .update-body > * + * {
+  margin-top: 1rem;
+}
+.update-body p + p {
   margin-top: 1rem;
 }
 .update-body h2, .update-body h3 {

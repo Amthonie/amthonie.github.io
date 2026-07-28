@@ -43,6 +43,12 @@
 .update-body > * + * {
   margin-top: 1rem;
 }
+/* Space consecutive paragraphs even when wrapped (e.g. two <p> inside a
+   .flow-root next to a floated figure), since > * + * only reaches direct
+   children. Avoids empty &nbsp; spacer nodes. */
+.update-body p + p {
+  margin-top: 1rem;
+}
 .update-body h2,
 .update-body h3 {
   font-weight: 700;
