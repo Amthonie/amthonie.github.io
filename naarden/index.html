@@ -97,6 +97,51 @@
     -->
     <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>
 
+    <!-- Live weather tile styling (scoped .wx-*). Palette hard-coded from
+         src/input.css so it never depends on a particular Tailwind build,
+         mirroring the .update-body approach. Dark mode via prefers-color-scheme. -->
+    <style>
+        #weather .wx-row { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 2.25rem; }
+        #weather .wx-group { display:flex; align-items:center; gap:.7rem; }
+        #weather .wx-icon, #weather .wx-compass { width:56px; height:56px; flex:none; }
+        /* One shared value/label pair so all three stats align on the same two baselines. */
+        #weather .wx-val { font-size:1.375rem; font-weight:700; line-height:1.15; color:#1c1917; white-space:nowrap; }
+        #weather .wx-val .u { font-size:.9rem; font-weight:700; vertical-align:top; margin-left:1px; }
+        #weather .wx-lbl { font-size:.75rem; line-height:1.2; color:#57534e; margin-top:.15rem; white-space:nowrap; }
+        #weather .wx-ring { fill:none; stroke:rgba(0,0,0,.15); stroke-width:3; }
+        #weather .wx-marker { fill:#4a7a2c; }
+        #weather .wx-dir { fill:#1c1917; font-size:24px; font-weight:800; }
+        #weather .wx-foot { margin-top:.85rem; padding-top:.55rem; border-top:1px solid rgba(0,0,0,.08); text-align:right; font-size:.72rem; color:#a8a29e; }
+        /* One first-level card; two borderless panels inside (current 2 : forecast 1),
+           side by side on wide screens, stacked on narrow. Footer spans full width below. */
+        #weather .wx-cols { display:flex; flex-direction:column; gap:1rem 2.25rem; }
+        /* Side by side only once the card is wide enough for the forecast grid not to
+           overflow (below ~1240px the 4/5-width card makes the 1/3 column too narrow). */
+        @media (min-width:1240px) {
+            #weather .wx-cols { flex-direction:row; align-items:stretch; }
+            #weather .wx-panel-current { flex:2 1 0; min-width:0; }
+            #weather .wx-panel-fc { flex:1 1 0; min-width:0; }
+        }
+        /* Two-day forecast: one CSS grid so the columns line up across both rows. */
+        #weather .wx-fc { display:grid; grid-template-columns:max-content 28px max-content max-content max-content; align-items:center; gap:.5rem .9rem; font-size:.8rem; }
+        #weather .wx-fc-day { font-weight:700; color:#1c1917; }
+        #weather .wx-fc-icon { width:28px; height:28px; }
+        #weather .wx-fc-hi { font-weight:700; color:#1c1917; }
+        #weather .wx-fc-lo { color:#57534e; }
+        #weather .wx-fc-sub { color:#57534e; }
+        @media (prefers-color-scheme: dark) {
+            #weather .wx-val { color:#fff; }
+            #weather .wx-dir { fill:#fff; }
+            #weather .wx-lbl { color:#d6d3d1; }
+            #weather .wx-foot { color:#78716c; border-top-color:rgba(255,255,255,.1); }
+            #weather .wx-fc-day, #weather .wx-fc-hi { color:#fff; }
+            #weather .wx-fc-lo { color:#d6d3d1; }
+            #weather .wx-fc-sub { color:#d6d3d1; }
+            #weather .wx-ring { stroke:rgba(255,255,255,.2); }
+            #weather .wx-marker { fill:#9ccc66; }
+        }
+    </style>
+
     <!-- Google tag (gtag.js) -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
     <script>
@@ -147,6 +192,49 @@
                 Back home
             </a>
         </div>
+    </div>
+
+    <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
+         gist and fetched client-side; see the <script> near </body>. Meteocons
+         icons (MIT) self-hosted in /vendor/meteocons. Two cards (current + forecast)
+         sit side by side on wide screens, stacked on narrow. Hidden until data loads. -->
+    <div id="weather" hidden aria-label="Current weather and forecast for Naarden"
+         class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
+        <div class="wx-cols">
+            <div class="wx-panel-current">
+                <div class="wx-row">
+                    <div class="wx-group">
+                        <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
+                        <div>
+                            <div id="wx-condition" class="wx-val">—</div>
+                            <div class="wx-lbl">Humidity <span id="wx-humidity">—</span>%</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
+                        <div class="wx-lbl">Feels like <span id="wx-feels">—</span>°</div>
+                    </div>
+
+                    <div class="wx-group">
+                        <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
+                            <circle class="wx-ring" cx="50" cy="50" r="44"/>
+                            <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
+                            <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
+                        </svg>
+                        <div>
+                            <div class="wx-val"><span id="wx-bft">—</span> <span class="u">Bft</span></div>
+                            <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="weather-fc" class="wx-panel-fc" hidden>
+                <div id="wx-forecast" class="wx-fc"></div>
+            </div>
+        </div>
+        <div class="wx-foot"><span id="wx-rain"></span><span id="wx-updated">updated —</span></div>
     </div>
 
     <!-- About Naarden — intro block (text content to be added later) -->
@@ -286,6 +374,89 @@
     });
 
     lightbox.init();
+</script>
+
+<!-- Live weather tile: fetch the Home-Assistant-pushed gist and populate #weather.
+     Day/night icon swap keys off the gist's `is_dark` flag (HA-corrected, since the
+     forecast service can report 'day' after sunset). Fails silently → tile stays hidden. -->
+<script>
+    (function () {
+        var GIST = "https://gist.githubusercontent.com/Amthonie/6e1d57a913650f780d441db67d8d0ca6/raw/weather-naarden.json";
+        var ICONS = "../vendor/meteocons/";
+        var ICON = { "clear-night":"clear-night","cloudy":"overcast","fog":"fog","hail":"hail","lightning":"thunderstorms","lightning-rainy":"thunderstorms-rain","partlycloudy":"partly-cloudy-day","pouring":"rain","rainy":"rain","snowy":"snow","snowy-rainy":"sleet","sunny":"clear-day","windy":"wind","windy-variant":"wind","exceptional":"not-available" };
+        var LABEL = { "clear-night":"Clear","cloudy":"Cloudy","fog":"Fog","hail":"Hail","lightning":"Thunder","lightning-rainy":"Thunderstorms","partlycloudy":"Partly cloudy","pouring":"Pouring","rainy":"Rainy","snowy":"Snowy","snowy-rainy":"Sleet","sunny":"Sunny","windy":"Windy","windy-variant":"Windy","exceptional":"Exceptional" };
+        var DIRS = ["N","NE","E","SE","S","SW","W","NW"];
+        var BFT = ["Calm","Light air","Light breeze","Gentle breeze","Moderate breeze","Fresh breeze","Strong breeze","Near gale","Gale","Strong gale","Storm","Violent storm","Hurricane"];
+
+        function iconFor(c, dark) {
+            var n = ICON[c] || "not-available";
+            if (dark && c === "sunny") n = "clear-night";
+            if (dark && c === "partlycloudy") n = "partly-cloudy-night";
+            return n;
+        }
+        function dir8(b) { b = ((b % 360) + 360) % 360; return DIRS[Math.round(b / 45) % 8]; }
+        function ago(iso) {
+            var t = Date.parse(iso); if (isNaN(t)) return "";
+            var s = Math.max(0, (Date.now() - t) / 1000);
+            if (s < 90) return "just now";
+            var m = Math.round(s / 60); if (m < 60) return m + " min ago";
+            var h = Math.round(m / 60); if (h < 24) return h + (h === 1 ? " hour ago" : " hours ago");
+            var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago");
+        }
+        function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+        function fcell(cls, txt) { var s = document.createElement("span"); if (cls) s.className = cls; s.textContent = txt; return s; }
+        function addForecast(box, label, str) {
+            var p = String(str).split("|");           // day | condition | Tmin | Tmax | precip mm | wind bearing | beaufort
+            if (p.length < 7) return;
+            box.appendChild(fcell("wx-fc-day", label));
+            var im = document.createElement("img");
+            im.className = "wx-fc-icon"; im.width = 28; im.height = 28;
+            im.src = ICONS + iconFor(p[1], false) + ".svg"; im.alt = LABEL[p[1]] || p[1] || "";
+            box.appendChild(im);
+            var t = document.createElement("span");
+            t.appendChild(fcell("wx-fc-hi", Math.round(parseFloat(p[3])) + "°"));
+            t.appendChild(document.createTextNode(" / "));
+            t.appendChild(fcell("wx-fc-lo", Math.round(parseFloat(p[2])) + "°"));
+            box.appendChild(t);
+            box.appendChild(fcell("wx-fc-sub", (Math.round(parseFloat(p[4]) * 10) / 10) + " mm"));
+            box.appendChild(fcell("wx-fc-sub", dir8(parseFloat(p[5])) + " " + p[6] + " Bft"));
+        }
+
+        fetch(GIST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // 5-min bucket: fresh within 5 min, still CDN-shareable inside each window
+            .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (d) {
+                if (d == null || d.temperature == null) throw 0;
+                var dark = !!d.is_dark;
+                var img = document.getElementById("wx-icon");
+                img.src = ICONS + iconFor(d.condition, dark) + ".svg";
+                img.alt = LABEL[d.condition] || d.condition || "Weather";
+                set("wx-condition", LABEL[d.condition] || d.condition || "—");
+                set("wx-temp", Math.round(d.temperature));
+                set("wx-feels", d.apparent != null ? Math.round(d.apparent) : Math.round(d.temperature));
+                set("wx-humidity", d.humidity != null ? Math.round(d.humidity) : "—");
+                var rain = d.precipitation_today;
+                set("wx-rain", rain != null ? (Math.round(rain * 10) / 10) + " mm rain today · " : "");
+                if (d.wind_bearing != null) {
+                    set("wx-winddir", dir8(d.wind_bearing));
+                    var mk = document.getElementById("wx-windmarker");
+                    if (mk) mk.setAttribute("transform", "rotate(" + d.wind_bearing + " 50 50)");
+                }
+                var bft = d.wind_speed != null ? Math.round(d.wind_speed) : null;
+                set("wx-bft", bft != null ? bft : "—");
+                set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] : "");
+                var fc = document.getElementById("wx-forecast");
+                if (fc) {
+                    fc.innerHTML = "";
+                    if (d.forecast_today) addForecast(fc, "Today", d.forecast_today);
+                    if (d.forecast_tomorrow) addForecast(fc, "Tomorrow", d.forecast_tomorrow);
+                    var fcCard = document.getElementById("weather-fc");
+                    if (fcCard) fcCard.hidden = fc.childElementCount === 0;
+                }
+                set("wx-updated", "updated " + ago(d.updated));
+                document.getElementById("weather").hidden = false;
+            })
+            .catch(function () { /* leave the tile hidden on any error */ });
+    })();
 </script>
 </body>
 </html>
