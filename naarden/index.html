@@ -107,11 +107,11 @@
         /* One shared value/label pair so all three stats align on the same two baselines. */
         #weather .wx-val { font-size:1.375rem; font-weight:700; line-height:1.15; color:#1c1917; white-space:nowrap; }
         #weather .wx-val .u { font-size:.9rem; font-weight:700; vertical-align:top; margin-left:1px; }
-        #weather .wx-lbl { font-size:.75rem; line-height:1.2; color:#57534e; margin-top:.15rem; white-space:nowrap; }
+        #weather .wx-lbl { font-size:.75rem; line-height:1.2; color:#44403c; margin-top:.15rem; white-space:nowrap; }
         #weather .wx-ring { fill:none; stroke:rgba(0,0,0,.15); stroke-width:3; }
         #weather .wx-marker { fill:#4a7a2c; }
         #weather .wx-dir { fill:#1c1917; font-size:24px; font-weight:800; }
-        #weather .wx-foot { margin-top:.85rem; padding-top:.55rem; border-top:1px solid rgba(0,0,0,.08); text-align:right; font-size:.72rem; color:#a8a29e; }
+        #weather .wx-foot { margin-top:.85rem; padding-top:.55rem; border-top:1px solid rgba(0,0,0,.05); text-align:center; font-size:.72rem; color:#57534e; }
         /* One first-level card; two borderless panels inside (current 2 : forecast 1),
            side by side on wide screens, stacked on narrow. Footer spans full width below. */
         #weather .wx-cols { display:flex; flex-direction:column; gap:1rem 2.25rem; }
@@ -127,13 +127,13 @@
         #weather .wx-fc-day { font-weight:700; color:#1c1917; }
         #weather .wx-fc-icon { width:28px; height:28px; }
         #weather .wx-fc-hi { font-weight:700; color:#1c1917; }
-        #weather .wx-fc-lo { color:#57534e; }
-        #weather .wx-fc-sub { color:#57534e; }
+        #weather .wx-fc-lo { color:#44403c; }
+        #weather .wx-fc-sub { color:#44403c; }
         @media (prefers-color-scheme: dark) {
             #weather .wx-val { color:#fff; }
             #weather .wx-dir { fill:#fff; }
             #weather .wx-lbl { color:#d6d3d1; }
-            #weather .wx-foot { color:#78716c; border-top-color:rgba(255,255,255,.1); }
+            #weather .wx-foot { color:#d6d3d1; border-top-color:rgba(255,255,255,.1); }
             #weather .wx-fc-day, #weather .wx-fc-hi { color:#fff; }
             #weather .wx-fc-lo { color:#d6d3d1; }
             #weather .wx-fc-sub { color:#d6d3d1; }
@@ -207,13 +207,13 @@
                         <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
                         <div>
                             <div id="wx-condition" class="wx-val">—</div>
-                            <div class="wx-lbl">Humidity <span id="wx-humidity">—</span>%</div>
+                            <div class="wx-lbl"><span id="wx-humidity"></span></div>
                         </div>
                     </div>
 
                     <div>
                         <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
-                        <div class="wx-lbl">Feels like <span id="wx-feels">—</span>°</div>
+                        <div class="wx-lbl"><span id="wx-feels"></span></div>
                     </div>
 
                     <div class="wx-group">
@@ -234,7 +234,7 @@
                 <div id="wx-forecast" class="wx-fc"></div>
             </div>
         </div>
-        <div class="wx-foot"><span id="wx-rain"></span><span id="wx-updated">updated —</span></div>
+        <div class="wx-foot">Naarden · <span id="wx-rain"></span><span id="wx-updated">Updated —</span></div>
     </div>
 
     <!-- About Naarden — intro block (text content to be added later) -->
@@ -432,10 +432,10 @@
                 img.alt = LABEL[d.condition] || d.condition || "Weather";
                 set("wx-condition", LABEL[d.condition] || d.condition || "—");
                 set("wx-temp", Math.round(d.temperature));
-                set("wx-feels", d.apparent != null ? Math.round(d.apparent) : Math.round(d.temperature));
-                set("wx-humidity", d.humidity != null ? Math.round(d.humidity) : "—");
+                set("wx-feels", d.apparent != null ? ("Feels like " + Math.round(d.apparent) + "°") : "");
+                set("wx-humidity", d.humidity != null ? ("Humidity " + Math.round(d.humidity) + "%") : "");
                 var rain = d.precipitation_today;
-                set("wx-rain", rain != null ? (Math.round(rain * 10) / 10) + " mm rain today · " : "");
+                set("wx-rain", rain != null ? (Math.round(rain * 10) / 10) + " mm rain today so far · " : "");
                 if (d.wind_bearing != null) {
                     set("wx-winddir", dir8(d.wind_bearing));
                     var mk = document.getElementById("wx-windmarker");
@@ -452,7 +452,7 @@
                     var fcCard = document.getElementById("weather-fc");
                     if (fcCard) fcCard.hidden = fc.childElementCount === 0;
                 }
-                set("wx-updated", "updated " + ago(d.updated));
+                set("wx-updated", "Updated " + ago(d.updated));
                 document.getElementById("weather").hidden = false;
             })
             .catch(function () { /* leave the tile hidden on any error */ });
