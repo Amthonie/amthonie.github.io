@@ -101,7 +101,17 @@
          src/input.css so it never depends on a particular Tailwind build,
          mirroring the .update-body approach. Dark mode via prefers-color-scheme. -->
     <style>
-        #weather .wx-row { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 2.25rem; }
+        /* Card 1 internals: two rows (conditions; astro). Each row splits into two
+           50% sub-cards side by side at >=526px (custom stop; nearest Tailwind is
+           sm=640), stacked below. Independent of the outer 1240px current|forecast split. */
+        #weather .wx-r1, #weather .wx-astro { display:flex; flex-direction:column; gap:1rem; }
+        #weather .wx-tempwind { display:flex; align-items:center; flex-wrap:wrap; gap:1rem 2.25rem; }
+        #weather .wx-sun { display:flex; align-items:center; flex-wrap:wrap; gap:.35rem 1.5rem; }
+        #weather .wx-sun, #weather .wx-moon { font-size:.8rem; color:#44403c; }
+        @media (min-width:526px) {
+            #weather .wx-r1, #weather .wx-astro { flex-direction:row; align-items:center; gap:2.25rem; }
+            #weather .wx-r1 > .wx-sub, #weather .wx-astro > .wx-sub { flex:1 1 0; min-width:0; }
+        }
         #weather .wx-group { display:flex; align-items:center; gap:.7rem; }
         #weather .wx-icon, #weather .wx-compass { width:56px; height:56px; flex:none; }
         /* One shared value/label pair so all three stats align on the same two baselines. */
@@ -115,12 +125,15 @@
         /* One first-level card; two borderless panels inside (current 2 : forecast 1),
            side by side on wide screens, stacked on narrow. Footer spans full width below. */
         #weather .wx-cols { display:flex; flex-direction:column; gap:1rem 2.25rem; }
+        /* Stacked (narrow) view: a divider between the current+astro block and the
+           forecast, matching the footer's rule. Removed when side by side (>=1240). */
+        #weather .wx-panel-fc { border-top:1px solid rgba(0,0,0,.05); padding-top:1rem; }
         /* Side by side only once the card is wide enough for the forecast grid not to
            overflow (below ~1240px the 4/5-width card makes the 1/3 column too narrow). */
         @media (min-width:1240px) {
             #weather .wx-cols { flex-direction:row; align-items:stretch; }
             #weather .wx-panel-current { flex:2 1 0; min-width:0; }
-            #weather .wx-panel-fc { flex:1 1 0; min-width:0; }
+            #weather .wx-panel-fc { flex:1 1 0; min-width:0; border-top:0; padding-top:0; }
         }
         /* Two-day forecast: one CSS grid so the columns line up across both rows. */
         #weather .wx-fc { display:grid; grid-template-columns:max-content 28px max-content max-content max-content; align-items:center; gap:.5rem .9rem; font-size:.8rem; }
@@ -129,6 +142,12 @@
         #weather .wx-fc-hi { font-weight:700; color:#1c1917; }
         #weather .wx-fc-lo { color:#44403c; }
         #weather .wx-fc-sub { color:#44403c; }
+        /* Astro row: two sub-cards (sun / moon) below the current conditions. */
+        #weather .wx-astro[hidden] { display:none; }
+        #weather .wx-astro { margin-top:1rem; }
+        #weather .wx-astro-item { display:inline-flex; align-items:center; gap:.3rem; }
+        #weather .wx-astro-icon { width:36px; height:36px; flex:none; }
+        #weather #wx-sunrise, #weather #wx-sunset { color:#1c1917; } /* sun times are real values → primary text colour */
         @media (prefers-color-scheme: dark) {
             #weather .wx-val { color:#fff; }
             #weather .wx-dir { fill:#fff; }
@@ -137,6 +156,9 @@
             #weather .wx-fc-day, #weather .wx-fc-hi { color:#fff; }
             #weather .wx-fc-lo { color:#d6d3d1; }
             #weather .wx-fc-sub { color:#d6d3d1; }
+            #weather .wx-sun, #weather .wx-moon { color:#d6d3d1; }
+            #weather #wx-sunrise, #weather #wx-sunset { color:#fff; }
+            #weather .wx-panel-fc { border-top-color:rgba(255,255,255,.1); }
             #weather .wx-ring { stroke:rgba(255,255,255,.2); }
             #weather .wx-marker { fill:#9ccc66; }
         }
@@ -202,30 +224,41 @@
          class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
         <div class="wx-cols">
             <div class="wx-panel-current">
-                <div class="wx-row">
-                    <div class="wx-group">
-                        <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
-                        <div>
-                            <div id="wx-condition" class="wx-val">—</div>
-                            <div class="wx-lbl"><span id="wx-humidity"></span></div>
+                <div class="wx-r1">
+                    <div class="wx-sub">
+                        <div class="wx-group">
+                            <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
+                            <div>
+                                <div id="wx-condition" class="wx-val">—</div>
+                                <div class="wx-lbl"><span id="wx-humidity"></span></div>
+                            </div>
                         </div>
                     </div>
-
-                    <div>
-                        <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
-                        <div class="wx-lbl"><span id="wx-feels"></span></div>
-                    </div>
-
-                    <div class="wx-group">
-                        <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
-                            <circle class="wx-ring" cx="50" cy="50" r="44"/>
-                            <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
-                            <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
-                        </svg>
+                    <div class="wx-sub wx-tempwind">
                         <div>
-                            <div class="wx-val"><span id="wx-bft">—</span> <span class="u">Bft</span></div>
-                            <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
+                            <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
+                            <div class="wx-lbl"><span id="wx-feels"></span></div>
                         </div>
+                        <div class="wx-group">
+                            <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
+                                <circle class="wx-ring" cx="50" cy="50" r="44"/>
+                                <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
+                                <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
+                            </svg>
+                            <div>
+                                <div class="wx-val"><span id="wx-bft">—</span> <span class="u">Bft</span></div>
+                                <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="wx-astro" class="wx-astro" hidden>
+                    <div class="wx-sub wx-sun">
+                        <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
+                        <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
+                    </div>
+                    <div class="wx-sub wx-moon">
+                        <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
                     </div>
                 </div>
             </div>
@@ -408,6 +441,7 @@
         var LABEL = { "clear-night":"Clear","cloudy":"Cloudy","fog":"Fog","hail":"Hail","lightning":"Thunder","lightning-rainy":"Thunderstorms","partlycloudy":"Partly cloudy","pouring":"Pouring","rainy":"Rainy","snowy":"Snowy","snowy-rainy":"Sleet","sunny":"Sunny","windy":"Windy","windy-variant":"Windy","exceptional":"Exceptional" };
         var DIRS = ["N","NE","E","SE","S","SW","W","NW"];
         var BFT = ["Calm","Light air","Light breeze","Gentle breeze","Moderate breeze","Fresh breeze","Strong breeze","Near gale","Gale","Strong gale","Storm","Violent storm","Hurricane"];
+        var MOON = { new_moon:["moon-new","New moon"], waxing_crescent:["moon-waxing-crescent","Waxing crescent"], first_quarter:["moon-first-quarter","First quarter"], waxing_gibbous:["moon-waxing-gibbous","Waxing gibbous"], full_moon:["moon-full","Full moon"], waning_gibbous:["moon-waning-gibbous","Waning gibbous"], last_quarter:["moon-last-quarter","Last quarter"], waning_crescent:["moon-waning-crescent","Waning crescent"] };
 
         function iconFor(c, dark) {
             var n = ICON[c] || "not-available";
@@ -472,6 +506,20 @@
                     if (d.forecast_tomorrow) addForecast(fc, "Tomorrow", d.forecast_tomorrow);
                     var fcCard = document.getElementById("weather-fc");
                     if (fcCard) fcCard.hidden = fc.childElementCount === 0;
+                }
+                var astro = document.getElementById("wx-astro");
+                if (astro) {
+                    var showItem = function (id, ok) { var el = document.getElementById(id); if (el) el.style.display = ok ? "" : "none"; };
+                    showItem("wx-astro-sunrise", !!d.sunrise); if (d.sunrise) set("wx-sunrise", d.sunrise);
+                    showItem("wx-astro-sunset", !!d.sunset); if (d.sunset) set("wx-sunset", d.sunset);
+                    var moon = d.moon_fase && MOON[d.moon_fase];
+                    showItem("wx-astro-moon", !!moon);
+                    if (moon) {
+                        var mi = document.getElementById("wx-moon-icon");
+                        if (mi) { mi.src = ICONS + moon[0] + ".svg"; mi.alt = moon[1]; }
+                        set("wx-moon", moon[1]);
+                    }
+                    astro.hidden = !(d.sunrise || d.sunset || moon);
                 }
                 set("wx-updated", "Updated " + ago(d.updated));
                 document.getElementById("weather").hidden = false;
