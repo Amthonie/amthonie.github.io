@@ -1509,6 +1509,9 @@
 .update-body li + li {
   margin-top: 0.25rem;
 }
+.update-body .facts-list li + li {
+  margin-top: 0.6rem;
+}
 .update-body img {
   border-radius: 0.75rem;
 }
