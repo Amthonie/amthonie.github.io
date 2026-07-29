@@ -507,8 +507,8 @@
                 var fc = document.getElementById("wx-forecast");
                 if (fc) {
                     fc.innerHTML = "";
-                    if (d.forecast_today) addForecast(fc, "Today", d.forecast_today);
-                    if (d.forecast_tomorrow) addForecast(fc, "Tomorrow", d.forecast_tomorrow);
+                    if (d.forecast_day_1) addForecast(fc, "Today", d.forecast_day_1);
+                    if (d.forecast_day_2) addForecast(fc, "Tomorrow", d.forecast_day_2);
                     var fcCard = document.getElementById("weather-fc");
                     if (fcCard) fcCard.hidden = fc.childElementCount === 0;
                 }
