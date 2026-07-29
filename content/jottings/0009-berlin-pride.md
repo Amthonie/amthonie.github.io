@@ -1,5 +1,5 @@
 ---
-date: 2026-07-16
+date: 2026-07-29
 title: On Hair Types, Zealots, and the Nineties
 summary: Reflections on the news from Berlin Pride, the nature of fanatical hatred, and the misplaced optimism of our youth.
 ---
