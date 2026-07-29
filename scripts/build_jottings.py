@@ -254,8 +254,8 @@ def render_index(posts: list[dict]) -> str:
     # margin classes aren't in the committed styles.css, so a class-based gap
     # renders as zero on the preview and on mobile.
     separator = (
-        ' <span aria-hidden="true" class="text-stone-300 '
-        'dark:text-stone-600">&bull;</span> '
+        ' <span aria-hidden="true" class="text-brand-600 '
+        'dark:text-brand-400">&bull;</span> '
     )
 
     blocks = []
