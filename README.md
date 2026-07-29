@@ -11,6 +11,11 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
   `naarden/index.html` for how to update it). The lightbox is shared: the Chronicle
   article heroes reuse the same vendored copy. The old `/gallery/` URL is a permanent
   redirect stub to `/naarden/`.
+- A live weather card on the Naarden page — current conditions, sunrise/sunset,
+  moon phase and a short forecast. Data is pushed to a GitHub gist by a
+  home-automation server on a schedule and fetched client-side; icons are
+  [Meteocons](https://bas.dev/work/meteocons) (MIT), self-hosted under
+  `vendor/meteocons/`. See [Weather card](#weather-card).
 - `/jottings/` and `/chronicle/` are generated from markdown sources at build time
   (see [Generated pages](#generated-pages)).
 - A custom `404.html` and `sitemap.xml`, plus JSON-LD structured data and Open Graph
@@ -26,10 +31,14 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── gallery/
 │   └── index.html      # permanent redirect stub → /naarden/
 ├── naarden/
-│   ├── index.html      # Naarden page + photo gallery (served at /naarden/)
+│   ├── index.html      # Naarden page + photo gallery + live weather card (served at /naarden/)
+│   ├── weather.css     # weather-card styles (scoped #weather .wx-*)
+│   ├── weather.js      # weather-card behaviour (fetches the gist, renders the card)
 │   ├── images/         # full-size photos (~2048px long edge)
 │   └── thumbnails/     # grid thumbnails (~640px wide)
-├── vendor/photoswipe/  # self-hosted PhotoSwipe lightbox (shared: naarden + chronicle)
+├── vendor/
+│   ├── photoswipe/     # self-hosted PhotoSwipe lightbox (shared: naarden + chronicle)
+│   └── meteocons/      # self-hosted Meteocons weather icons (MIT)
 ├── jottings/
 │   └── index.html      # jottings page (served at /jottings/) — GENERATED
 ├── chronicle/
@@ -155,6 +164,26 @@ same way: `python3 scripts/build_chronicle.py`.
 
 `content/` and `scripts/` are build inputs and are excluded from the published
 site. The markdown content itself is never served raw.
+
+## Weather card
+
+The Naarden page shows a live weather card — current conditions, sunrise/sunset,
+moon phase and a short multi-day forecast. It's a pull-based design that keeps
+the site fully static:
+
+- A home-automation server (Home Assistant) pushes a small JSON snapshot to a
+  **GitHub gist** on a schedule — nothing runs server-side here.
+- `naarden/weather.js` fetches that gist client-side and populates the
+  `#weather` markup in `naarden/index.html`; `naarden/weather.css` styles it
+  (scoped to `#weather`, light/dark via `prefers-color-scheme`).
+- Weather icons are [Meteocons](https://bas.dev/work/meteocons) (MIT),
+  self-hosted under `vendor/meteocons/` — no third-party CDN.
+
+The behaviour is deliberately forgiving: missing fields are skipped, and if the
+fetch fails the card simply stays hidden rather than rendering a broken tile.
+Icon paths are root-absolute (`/vendor/meteocons/…`), so the card can be reused
+on another page at any depth by copying the `#weather` markup and referencing
+`weather.css` and `weather.js`.
 
 ## Local development
 
