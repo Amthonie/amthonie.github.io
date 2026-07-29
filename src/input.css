@@ -125,3 +125,35 @@
     color: #d6d3d1; /* stone-300 */
   }
 }
+
+/* Footer site-nav (Home / About / Naarden / Jottings), shared across pages. */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.1rem;
+  font-size: 0.9rem;
+}
+.site-nav.center {
+  justify-content: center;
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.site-nav a {
+  color: #4a7a2c; /* brand-600 */
+  text-decoration: none;
+}
+.site-nav a:hover {
+  text-decoration: underline;
+}
+.site-nav .sep {
+  color: #a8a29e; /* stone-400 */
+}
+@media (prefers-color-scheme: dark) {
+  .site-nav a {
+    color: #9ccc66; /* brand-400 */
+  }
+  .site-nav .sep {
+    color: #57534e; /* stone-600 */
+  }
+}

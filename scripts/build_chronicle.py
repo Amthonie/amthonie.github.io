@@ -430,7 +430,7 @@ def render_page(
      page (this is the shared shell). -->
 <footer class="w-full mt-auto py-6 text-center text-xs text-stone-500 dark:text-stone-400">
     <p class="mx-auto max-w-xl px-4 leading-relaxed font-semibold">{DISCLAIMER}</p>
-    <p class="mt-2">&copy; <span id="year"></span> Amthonie</p>
+    <p class="mt-2">&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
 </footer>
 
 <script>
