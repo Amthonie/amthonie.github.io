@@ -1,6 +1,6 @@
 ---
 date: 2026-07-16
-slug: eva-walks-update-1
+slug: 3-eva-walks-update-1
 title: Eva’s 450 km charity walk — €764 raised so far
 summary: My friend Eva is walking 450 km across Swedish Lapland for people living with rare blood disorders. She’s just past halfway to her €1500 goal — please chip in if you can.
 ---

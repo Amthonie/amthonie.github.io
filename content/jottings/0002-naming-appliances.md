@@ -1,6 +1,6 @@
 ---
 date: 2026-07-10
-slug: naming-appliances
+slug: 2-naming-appliances
 title: The Art of Naming Appliances
 summary: Why giving smart home devices a little personality makes domestic automation feel far more human.
 ---

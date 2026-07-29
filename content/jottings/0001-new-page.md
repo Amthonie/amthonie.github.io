@@ -1,6 +1,6 @@
 ---
 date: 2026-07-09
-slug: rediscovering-html
+slug: 1-rediscovering-html
 title: Rediscovering the simple joy of raw HTML
 summary: Moving away from heavy frameworks to appreciate how much the web has changed since the nineties — for better and for worse.
 ---
