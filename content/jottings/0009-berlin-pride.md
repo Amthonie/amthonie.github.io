@@ -1,7 +1,8 @@
 ---
 date: 2026-07-29
-title: On Hair Types, Zealots, and the Nineties
-summary: Reflections on the news from Berlin Pride, the nature of fanatical hatred, and the misplaced optimism of our youth.
+slug: berlin-news-that-stayed-with-me
+title: On Hair Types, Zealots, and the News from Berlin
+summary: A personal reflection on the Berlin Pride attack, the persistence of fanaticism, and the quiet sadness of realising how fragile our old optimism was.
 ---
 
 Looking back at the nineteen-nineties, it seems we managed to convince ourselves that progress was a one-way street with particularly good paving.
