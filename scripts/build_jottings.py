@@ -7,10 +7,15 @@ with a small frontmatter block:
 
     ---
     date: 2026-07-16
+    slug: 99-a-short-headline
     title: A short headline
     summary: Optional one-line teaser for the homepage. Falls back to the first
              paragraph of the body when omitted.
     ---
+
+    Only `date` and `title` are required. `slug` is optional — it sets the page
+    #anchor (and the homepage teaser link); omit it and one is derived from the
+    filename. `summary` is optional too.
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
 
@@ -46,9 +51,17 @@ INDEX_PAGE = ROOT / "index.html"
 SITEMAP = ROOT / "sitemap.xml"
 
 SITE = "https://amthonie.nl"
+# Full intro — used for the visible page intro and the (uncapped) JSON-LD.
 DESCRIPTION = (
-    "A small set of jottings: passing thoughts, brief notes and whatever else "
-    "seemed worth writing down."
+    "A small collection of passing thoughts, brief notes, and the occasional "
+    "observation that seemed worth writing down — nothing grand, just the quiet "
+    "debris of daily life that lingered long enough to be captured."
+)
+# Shorter form for the <meta name="description"> and og:description, kept near
+# the ~155-char length search engines display before truncating.
+META_DESCRIPTION = (
+    "A small collection of passing thoughts, brief notes, and the occasional "
+    "observation that seemed worth writing down."
 )
 TEASERS_ON_HOME = 4  # how many of the newest jottings to show on the homepage
                      # (fills the 2-column grid in index.html as two rows of two)
@@ -126,9 +139,10 @@ def parse_post(path: Path) -> dict:
         summary = re.sub(r"<[^>]+>", "", first_para.group(1)).strip() if first_para else ""
 
     # A stable anchor: an explicit frontmatter `slug` wins; otherwise fall back
-    # to the filename with any leading date prefix stripped. Either way it is
-    # run through slugify() so the result is always URL/anchor-safe.
-    slug = meta.get("slug") or re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
+    # to the filename with any leading number prefix stripped (files are named
+    # like 0009-a-short-headline.md). Either way it is run through slugify() so
+    # the result is always URL/anchor-safe.
+    slug = meta.get("slug") or re.sub(r"^\d+-", "", path.stem)
     slug = slugify(slug)
 
     return {
@@ -158,20 +172,44 @@ def load_posts() -> list[dict]:
     return posts
 
 
+SECTION_CLASS = (
+    "mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border "
+    "border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 "
+    "md:px-8 md:py-8 shadow-xl"
+)
+
+
 def render_articles(posts: list[dict]) -> str:
+    """Render the jottings as one top-level box per month, newest month first.
+
+    Each month's entries share a box, separated by the usual <hr> divider;
+    the months themselves come out as separate boxes (August above July, …).
+    Posts arrive already sorted newest-first, so both orders fall out for free.
+    """
     if not posts:
         return (
+            f'<section class="{SECTION_CLASS}">'
             '<p class="text-stone-600 dark:text-stone-400">No jottings yet — '
-            "check back soon.</p>"
+            "check back soon.</p></section>"
         )
 
-    blocks = []
-    for i, post in enumerate(posts):
-        divider = "" if i == 0 else (
-            '<hr class="my-10 border-black/10 dark:border-white/10"/>'
-        )
-        blocks.append(
-            f"""{divider}
+    # Group consecutive posts by (year, month), preserving the newest-first order.
+    groups: list[tuple[int, int, list[dict]]] = []
+    for post in posts:
+        year, month = post["date"].year, post["date"].month
+        if not groups or groups[-1][0] != year or groups[-1][1] != month:
+            groups.append((year, month, []))
+        groups[-1][2].append(post)
+
+    sections = []
+    for _year, _month, items in groups:
+        blocks = []
+        for i, post in enumerate(items):
+            divider = "" if i == 0 else (
+                '<hr class="my-10 border-black/10 dark:border-white/10"/>'
+            )
+            blocks.append(
+                f"""{divider}
             <article id="{post['slug']}" class="scroll-mt-28">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
@@ -184,47 +222,73 @@ def render_articles(posts: list[dict]) -> str:
                     {post['body_html']}
                 </div>
             </article>"""
+            )
+        sections.append(
+            f'<section class="{SECTION_CLASS}">\n{"".join(blocks)}\n    </section>'
         )
-    return "\n".join(blocks)
+    return "\n".join(sections)
 
 
 def render_index(posts: list[dict]) -> str:
-    """A compact in-page table of contents (titles only), newest first.
+    """A compact in-page table of contents, grouped by month, newest first.
 
-    Only worth showing once there's more than one jotting. Entries are grouped
-    under a small year heading when the list spans multiple years, so it stays
-    scannable as the archive grows. Posts arrive already sorted newest-first.
+    Only worth showing once there's more than one jotting. Each month gets its
+    own first-level card; inside it the titles run as a single dotted line
+    (Title • Title • …) rather than a bullet list, so the whole archive stays
+    compact and scannable as it grows. The month label is itself an anchor link
+    to its card, giving each month a permalink. Posts arrive already sorted
+    newest-first, so the months come out newest-first too.
     """
     if len(posts) < 2:
         return ""
 
-    years = sorted({p["date"].year for p in posts}, reverse=True)
-    multi_year = len(years) > 1
+    # Group consecutive posts by (year, month), preserving the newest-first order.
+    groups: list[tuple[int, int, list[dict]]] = []
+    for post in posts:
+        year, month = post["date"].year, post["date"].month
+        if not groups or groups[-1][0] != year or groups[-1][1] != month:
+            groups.append((year, month, []))
+        groups[-1][2].append(post)
 
-    rows = []
-    for year in years:
-        if multi_year:
-            rows.append(
-                f'<li class="mt-4 first:mt-0 text-lg font-semibold uppercase '
-                f'tracking-wide text-stone-500 dark:text-stone-400">{year}</li>'
-            )
-        for post in (p for p in posts if p["date"].year == year):
-            rows.append(
-                f"""<li>
-                <a href="#{post['slug']}"
-                   class="group flex items-baseline gap-2.5 -mx-2 rounded-lg px-2 py-1 text-sm text-stone-700 dark:text-stone-300 transition hover:bg-black/5 hover:text-brand-600 dark:hover:bg-white/5 dark:hover:text-brand-400">
-                    <span aria-hidden="true" class="text-stone-400 transition group-hover:text-brand-600 dark:text-stone-500 dark:group-hover:text-brand-400">&bull;</span>
-                    <span>{html.escape(post['title'])}</span>
-                </a>
-            </li>"""
-            )
+    # Literal spaces around the dot (not a Tailwind mx-* utility): the fractional
+    # margin classes aren't in the committed styles.css, so a class-based gap
+    # renders as zero on the preview and on mobile.
+    separator = (
+        ' <span aria-hidden="true" class="text-stone-300 '
+        'dark:text-stone-600">&bull;</span> '
+    )
 
-    items = "\n".join(rows)
-    return f"""<nav aria-label="All jottings"
-         class="mt-5 md:mt-8 rounded-xl border border-black/5 bg-black/5 dark:border-white/5 dark:bg-white/5 p-4 md:p-6">
-        <ul class="-my-1 flex flex-col">
-            {items}
-        </ul>
+    blocks = []
+    for year, month, items in groups:
+        anchor = f"m-{year}-{month:02d}"
+        label = f"{MONTHS[month - 1]} {year}"
+        links = separator.join(
+            f'<a href="#{post["slug"]}" '
+            f'class="text-stone-800 dark:text-stone-100 transition '
+            f'hover:text-brand-600 dark:hover:text-brand-400">'
+            f'{html.escape(post["title"])}</a>'
+            for post in items
+        )
+        # A thin rule above every month — including the first, so it also
+        # separates the intro text from the index. Plain blocks inside the one
+        # first-level box, rather than a box per month, to avoid the boxy
+        # nested-card look.
+        divider = '<hr class="my-4 border-black/10 dark:border-white/10"/>'
+        blocks.append(
+            f"""{divider}
+        <div id="{anchor}" class="scroll-mt-28">
+            <a href="#{anchor}"
+               class="text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                {label}
+            </a>
+            <p class="mt-2 text-sm leading-relaxed">
+                {links}
+            </p>
+        </div>"""
+        )
+
+    return f"""<nav aria-label="All jottings" class="mt-5 md:mt-8">
+        {"".join(blocks)}
     </nav>"""
 
 
@@ -310,7 +374,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <link rel="icon" href="../favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="../images/a.png"/>
     <meta name="description"
-          content="{DESCRIPTION}"/>
+          content="{META_DESCRIPTION}"/>
     <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="index,follow"/>
@@ -319,7 +383,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <meta property="og:url" content="{SITE}/jottings/"/>
     <meta property="og:title" content="Amthonie | Jottings"/>
     <meta property="og:description"
-          content="{DESCRIPTION}"/>
+          content="{META_DESCRIPTION}"/>
     <meta property="og:image" content="{SITE}/images/theme/nouveau/og-image.jpg"/>
     <meta property="og:site_name" content="Amthonie"/>
     <meta property="og:locale" content="en_GB"/>
@@ -381,7 +445,7 @@ def build_jottings_page(posts: list[dict]) -> None:
         </div>
     </div>
 
-    <!-- Jottings -->
+    <!-- Jottings: intro + index -->
     <section
             class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
 
@@ -390,11 +454,10 @@ def build_jottings_page(posts: list[dict]) -> None:
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
 
         {index}
-
-        <div class="mt-4 md:mt-8">
-            {articles}
-        </div>
     </section>
+
+    <!-- Jottings: the entries themselves, one box per month -->
+    {articles}
 </main>
 
 <!-- Footer -->

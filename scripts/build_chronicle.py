@@ -39,11 +39,16 @@ with a small frontmatter block:
 
     ---
     date: 2026-07-17
+    slug: a-satirical-headline
     title: A satirical headline
     summary: One-line teaser for the index. Falls back to the first paragraph
              of the body when omitted.
     image: optional-hero.webp   # bare filename in chronicle/images/; omit = no hero
     ---
+
+    Only `date` and `title` are required. `slug` is optional — it sets the
+    article URL (chronicle/<slug>/); omit it and one is derived from the
+    filename. `summary` and `image` are optional too.
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
 
@@ -276,9 +281,10 @@ def parse_post(path: Path) -> dict:
         summary = re.sub(r"<[^>]+>", "", first_para.group(1)).strip() if first_para else ""
 
     # A stable anchor/slug: an explicit frontmatter `slug` wins; otherwise fall
-    # back to the filename with any leading date prefix stripped. Either way it
-    # is run through slugify() so the result is always URL-safe.
-    slug = meta.get("slug") or re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
+    # back to the filename with any leading number prefix stripped (files are
+    # named like 0001-a-satirical-headline.md). Either way it is run through
+    # slugify() so the result is always URL-safe.
+    slug = meta.get("slug") or re.sub(r"^\d+-", "", path.stem)
     slug = slugify(slug)
 
     # Optional per-article hero image, declared in the frontmatter as a bare
