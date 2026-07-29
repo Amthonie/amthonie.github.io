@@ -1,6 +1,6 @@
 ---
 date: 2026-07-26
-slug: 7-bone-of-contention
+slug: 6-bone-of-contention
 title: Bone of Contention
 summary: The local avian community appears to be running a surprisingly efficient recycling scheme right outside my window.
 ---
