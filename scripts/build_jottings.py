@@ -253,9 +253,11 @@ def render_index(posts: list[dict]) -> str:
     # Literal spaces around the dot (not a Tailwind mx-* utility): the fractional
     # margin classes aren't in the committed styles.css, so a class-based gap
     # renders as zero on the preview and on mobile.
+    # A bold brand-coloured dot at the text's own size, so it stays aligned with
+    # the titles and never makes a wrapped line taller than a dot-free one.
     separator = (
-        ' <span aria-hidden="true" class="text-brand-600 '
-        'dark:text-brand-400">&bull;</span> '
+        ' <span aria-hidden="true" '
+        'class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> '
     )
 
     blocks = []
