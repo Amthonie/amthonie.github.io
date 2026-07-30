@@ -365,6 +365,7 @@ def render_page(
     og_image: str,
     jsonld: str,
     body: str,
+    umami_tag: str,
     robots: str = "index,follow",
     has_lightbox: bool = False,
 ) -> str:
@@ -410,20 +411,8 @@ def render_page(
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="{prefix}styles.css"/>{css_extra}
 
-    <!-- Google tag (gtag.js) -->
-    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-EX67104T6F"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {{
-            dataLayer.push(arguments);
-        }}
-
-        window.addEventListener('DOMContentLoaded', function () {{
-            gtag('js', new Date());
-            gtag('config', 'G-EX67104T6F');
-        }});
-    </script>
+    <!-- Umami tag -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-tag="{umami_tag}"></script>
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
@@ -613,6 +602,7 @@ def build_landing_page(posts: list[dict]) -> None:
         og_image=f"{SITE}/chronicle/header.webp",
         jsonld=jsonld,
         body=body,
+        umami_tag="chronicle",
         has_lightbox=False,
     )
     LANDING_PAGE.parent.mkdir(parents=True, exist_ok=True)
@@ -796,6 +786,7 @@ def build_article_page(post: dict) -> None:
         og_image=og_image,
         jsonld=build_article_jsonld(post),
         body=body,
+        umami_tag="chronicle-article",
         # The Chronicle landing is the single search entry point; individual
         # articles are deliberately kept out of search indexes (still fully
         # readable and shareable — noindex only affects search listing, not
