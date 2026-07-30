@@ -54,7 +54,7 @@
 #weather .wx-astro { margin-top:1rem; }
 #weather .wx-astro-item { display:inline-flex; align-items:center; gap:.3rem; }
 #weather .wx-astro-icon { width:36px; height:36px; flex:none; }
-#weather #wx-sunrise, #weather #wx-sunset { color:#1c1917; } /* sun times are real values → primary text colour */
+#weather #wx-sunrise, #weather #wx-sunset, #weather #wx-moon { color:#1c1917; } /* sun times + moon phase are real values → primary text colour */
 @media (prefers-color-scheme: dark) {
     #weather .wx-val { color:#fff; }
     #weather .wx-dir { fill:#fff; }
@@ -64,7 +64,7 @@
     #weather .wx-fc-lo { color:#d6d3d1; }
     #weather .wx-fc-sub { color:#d6d3d1; }
     #weather .wx-sun, #weather .wx-moon { color:#d6d3d1; }
-    #weather #wx-sunrise, #weather #wx-sunset { color:#fff; }
+    #weather #wx-sunrise, #weather #wx-sunset, #weather #wx-moon { color:#fff; }
     #weather .wx-panel-fc { border-top-color:rgba(255,255,255,.1); }
     #weather .wx-ring { stroke:rgba(255,255,255,.2); }
     #weather .wx-marker { fill:#9ccc66; }

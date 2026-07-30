@@ -11,6 +11,7 @@
      * @property {number} [humidity]
      * @property {number} [wind_speed]
      * @property {string} [wind_unit]
+     * @property {number} [wind_gust_speed]
      * @property {number} [wind_bearing]
      * @property {boolean} [is_dark]
      * @property {number} [precipitation_today]
@@ -96,8 +97,12 @@
                 if (mk) mk.setAttribute("transform", "rotate(" + d.wind_bearing + " 50 50)");
             }
             const bft = d.wind_speed != null ? toBft(d.wind_speed, d.wind_unit) : null;
-            set("wx-bft", bft != null ? bft : "—");
-            set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] : "");
+            const gust = d.wind_gust_speed != null ? toBft(d.wind_gust_speed, d.wind_unit) : null;
+            const gusty = bft != null && gust != null && gust > bft + 1; // only when the gust is ≥2 forces above the sustained wind (a gust barely higher isn't really "gusty")
+            set("wx-bft", bft != null ? bft : "—");                  // sustained value (primary tone in the HTML)
+            set("wx-bft-gust", gusty ? " - " + gust : "");             // gust upper bound in the #wx-bft-gust span; "" hides it
+            // Label tracks the sustained wind; " with gusts" appended (in the muted label tone) when a gust shows.
+            set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] + (gusty ? " with gusts" : "") : "");
             const fc = document.getElementById("wx-forecast");
             if (fc) {
                 fc.innerHTML = "";
