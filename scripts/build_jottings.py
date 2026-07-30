@@ -468,18 +468,6 @@ def build_jottings_page(posts: list[dict]) -> None:
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
-<script type="text/javascript">
-  (() => {
-    const name = 'outbound-link-click';
-    document.querySelectorAll('a').forEach(a => {
-      if (a.host !== window.location.host && !a.getAttribute('data-umami-event')) {
-        a.setAttribute('data-umami-event', name);
-        a.setAttribute('data-umami-event-url', a.href);
-      }
-    });
-  })();
-</script>
-
 </body>
 </html>
 """
