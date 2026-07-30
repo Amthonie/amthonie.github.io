@@ -15,6 +15,12 @@
      * @property {number} [wind_bearing]
      * @property {boolean} [is_dark]
      * @property {number} [precipitation_today]
+     * @property {number} [dew_point]
+     * @property {number} [air_pressure]
+     * @property {number} [uv_index]
+     * @property {number} [cloud_coverage]
+     * @property {number} [visibility]
+     * @property {string} [visibility_unit]
      * @property {string} [sunrise]
      * @property {string} [sunset]
      * @property {string} [moon_fase]
@@ -30,6 +36,32 @@
     const DIRS = ["N","NE","E","SE","S","SW","W","NW"];
     const BFT = ["Calm","Light air","Light breeze","Gentle breeze","Moderate breeze","Fresh breeze","Strong breeze","Near gale","Gale","Strong gale","Storm","Violent storm","Hurricane"];
     const MOON = { new_moon:["moon-new","New moon"], waxing_crescent:["moon-waxing-crescent","Waxing crescent"], first_quarter:["moon-first-quarter","First quarter"], waxing_gibbous:["moon-waxing-gibbous","Waxing gibbous"], full_moon:["moon-full","Full moon"], waning_gibbous:["moon-waning-gibbous","Waning gibbous"], last_quarter:["moon-last-quarter","Last quarter"], waning_crescent:["moon-waning-crescent","Waning crescent"] };
+
+    // Secondary-data ticker: the extra gist fields that don't fit the card, in display
+    // order. Rendered as a marquee across the top of the card (see #weather .wx-ticker-*
+    // in weather.css). Inline line icons stroked in the brand colour; NNBSP between value
+    // and unit (site copy convention). Humidity & rain live here too now (they used to be
+    // the ghosted sub-label / footer text).
+    const TICKER_ICONS = {
+        droplet:'<path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11z"/>',
+        gauge:'<circle cx="12" cy="12" r="9"/><path d="M12 12l3.5-3"/>',
+        cloud:'<path d="M6 16a4 4 0 0 1 .5-8A5.5 5.5 0 0 1 17 8a4 4 0 0 1 1 8H6z"/>',
+        rain:'<path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/><path d="M6 14a4 4 0 0 1 .5-8A5.5 5.5 0 0 1 17 7a4 4 0 0 1 1 7.9"/>',
+        eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+        uv:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>'
+    };
+    const NNBSP = " ";
+    const r1 = v => { const n = parseFloat(v); return Number.isFinite(n) ? Math.round(n * 10) / 10 : v; };
+    const r0 = v => { const n = parseFloat(v); return Number.isFinite(n) ? Math.round(n) : v; };
+    const TICKER_FIELDS = [
+        { key:"humidity",            icon:"droplet", label:"Humidity",    fmt:v => r0(v) + "%" },
+        { key:"precipitation_today", icon:"rain",    label:"Rain today",  fmt:v => r1(v) + NNBSP + "mm" },
+        { key:"dew_point",           icon:"droplet", label:"Dew point",   fmt:v => r1(v) + "°C" },
+        { key:"air_pressure",        icon:"gauge",   label:"Pressure",    fmt:v => r0(v) + NNBSP + "hPa" },
+        { key:"cloud_coverage",      icon:"cloud",   label:"Cloud cover", fmt:v => r0(v) + "%" },
+        { key:"visibility",          icon:"eye",     label:"Visibility",  fmt:(v, d) => r1(v) + NNBSP + (d.visibility_unit || "km") },
+        { key:"uv_index",            icon:"uv",      label:"UV index",    fmt:v => r1(v) }
+    ];
 
     function iconFor(c, dark) {
         let n = ICON[c] || "not-available";
@@ -76,6 +108,18 @@
         box.appendChild(fcell("wx-fc-sub", (Math.round(parseFloat(p[4]) * 10) / 10) + " mm"));
         box.appendChild(fcell("wx-fc-sub", dir8(parseFloat(p[5])) + " " + p[6] + " Bft"));
     }
+    // Build the secondary-data marquee from whichever ticker fields the gist carries.
+    // Content is emitted twice so the CSS translateX(0→-50%) loop is seamless. innerHTML
+    // is safe here: every value comes from our own fmt() over numeric gist fields.
+    function buildTicker(d) {
+        const el = document.getElementById("wx-ticker");
+        if (!el) return;
+        const items = TICKER_FIELDS
+            .filter(f => d[f.key] != null)
+            .map(f => '<span class="wx-ticker-item"><svg viewBox="0 0 24 24" aria-hidden="true">' + TICKER_ICONS[f.icon] + '</svg>' + f.label + ' <span class="v">' + f.fmt(d[f.key], d) + '</span></span><span class="wx-ticker-sep">•</span>')
+            .join("");
+        el.innerHTML = items + items;
+    }
 
     fetch(GIST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // 5-min bucket: fresh within 5 min, still CDN-shareable inside each window
         .then(function (r) { if (!r.ok) throw 0; return r.json(); })
@@ -88,9 +132,7 @@
             set("wx-condition", LABEL[d.condition] || d.condition || "—");
             set("wx-temp", Math.round(d.temperature));
             set("wx-feels", d.apparent != null ? ("Feels like " + Math.round(d.apparent) + "°") : "");
-            set("wx-humidity", d.humidity != null ? ("Humidity " + Math.round(d.humidity) + "%") : "");
-            const rain = d.precipitation_today;
-            set("wx-rain", rain != null ? (Math.round(rain * 10) / 10) + " mm rain today so far · " : "");
+            buildTicker(d); // humidity, rain & the other secondary fields now live in the top marquee
             if (d.wind_bearing != null) {
                 set("wx-winddir", dir8(d.wind_bearing));
                 const mk = document.getElementById("wx-windmarker");

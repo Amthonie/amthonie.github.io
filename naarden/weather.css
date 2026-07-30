@@ -55,6 +55,12 @@
 #weather .wx-astro-item { display:inline-flex; align-items:center; gap:.3rem; }
 #weather .wx-astro-icon { width:36px; height:36px; flex:none; }
 #weather #wx-sunrise, #weather #wx-sunset, #weather #wx-moon { color:#1c1917; } /* sun times + moon phase are real values → primary text colour */
+/* Footer mirrors the ticker as a bottom bookend: it bleeds to the card's side & bottom
+   padding (negative margins), so the divider spans the full card width and the text sits
+   with a symmetric .5rem above and below — evenly divided, like the ticker's band up top.
+   Horizontal padding re-insets the right-aligned "Updated" so it never touches the edge. */
+#weather .wx-foot-right { text-align:right; margin:1rem -1rem -1rem; padding:.5rem 1rem; }
+@media (min-width:768px) { #weather .wx-foot-right { margin:1.25rem -2rem -1.5rem; padding:.5rem 2rem; } }
 @media (prefers-color-scheme: dark) {
     #weather .wx-val { color:#fff; }
     #weather .wx-dir { fill:#fff; }
@@ -68,4 +74,34 @@
     #weather .wx-panel-fc { border-top-color:rgba(255,255,255,.1); }
     #weather .wx-ring { stroke:rgba(255,255,255,.2); }
     #weather .wx-marker { fill:#9ccc66; }
+}
+
+/* Secondary-data ticker (marquee) across the top of the card — a bonus layer carrying
+   the extra gist fields that don't fit the card (humidity, rain today, dew point,
+   pressure, cloud cover, visibility, UV index). Palette matches the card. It is
+   supplementary, so under prefers-reduced-motion it is hidden entirely (not shown as a
+   static block): motion-averse visitors get the clean core card. Populated by weather.js;
+   content is doubled so the loop is seamless. */
+#weather .wx-ticker-wrap {
+    overflow:hidden; white-space:nowrap; position:relative;
+    margin:-1rem -1rem 1rem;                                  /* bleed to the card's padded edges, sit above .wx-cols */
+    padding:.5rem 0; border-bottom:1px solid rgba(0,0,0,.06);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent); /* fade the scroll in/out at the edges */
+}
+@media (min-width:768px) { #weather .wx-ticker-wrap { margin:-1.5rem -2rem 1.25rem; } }
+#weather .wx-ticker-track { display:inline-flex; align-items:center; animation:wx-ticker-scroll 34s linear infinite; will-change:transform; }
+#weather .wx-ticker-wrap:hover .wx-ticker-track { animation-play-state:paused; }   /* hover to read */
+@keyframes wx-ticker-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+#weather .wx-ticker-item { display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; padding:0 1.1rem; font-size:.8rem; color:#44403c; font-variant-numeric:tabular-nums; }
+#weather .wx-ticker-item svg { width:16px; height:16px; flex:none; stroke:#4a7a2c; fill:none; stroke-width:1.8; }
+#weather .wx-ticker-item .v { font-weight:700; color:#1c1917; }
+#weather .wx-ticker-sep { color:#a8a29e; }
+@media (prefers-reduced-motion: reduce) { #weather .wx-ticker-wrap { display:none; } }
+@media (prefers-color-scheme: dark) {
+    #weather .wx-ticker-item { color:#d6d3d1; }
+    #weather .wx-ticker-item svg { stroke:#9ccc66; }
+    #weather .wx-ticker-item .v { color:#fff; }
+    #weather .wx-ticker-sep { color:#57534e; }
+    #weather .wx-ticker-wrap { border-bottom-color:rgba(255,255,255,.1); }
 }
