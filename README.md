@@ -1,5 +1,7 @@
 # amthonie.github.io
 
+![](https://cloud.umami.is/p/UmHrKf2kJ)
+
 A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 
 ## Tech
