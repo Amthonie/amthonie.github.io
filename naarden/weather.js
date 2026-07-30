@@ -10,6 +10,7 @@
      * @property {number} [apparent]
      * @property {number} [humidity]
      * @property {number} [wind_speed]
+     * @property {string} [wind_unit]
      * @property {number} [wind_bearing]
      * @property {boolean} [is_dark]
      * @property {number} [precipitation_today]
@@ -36,6 +37,18 @@
         return n;
     }
     function dir8(b) { b = ((b % 360) + 360) % 360; return DIRS[Math.round(b / 45) % 8]; }
+    // Wind speed → Beaufort force (0–12). Converts when the gist unit is km/h (or,
+    // defensively, when a value is out of the 0–12 Beaufort range so must be a real
+    // speed); passes the value through when the gist already sends Beaufort.
+    function toBft(speed, unit) {
+        const v = parseFloat(speed);
+        if (isNaN(v)) return null;
+        const u = String(unit || "").toLowerCase().replace(/\s/g, "");
+        if (u.indexOf("km") !== -1 || u.indexOf("kph") !== -1 || v > 12) {
+            return Math.min(12, Math.round((v / (0.836 * 3.6)) ** (2 / 3))); // km/h → Bft (same curve as HA)
+        }
+        return Math.max(0, Math.min(12, Math.round(v))); // already Beaufort
+    }
     function ago(iso) {
         const t = Date.parse(iso); if (isNaN(t)) return "";
         const s = Math.max(0, (Date.now() - t) / 1000);
@@ -82,7 +95,7 @@
                 const mk = document.getElementById("wx-windmarker");
                 if (mk) mk.setAttribute("transform", "rotate(" + d.wind_bearing + " 50 50)");
             }
-            const bft = d.wind_speed != null ? Math.round(d.wind_speed) : null;
+            const bft = d.wind_speed != null ? toBft(d.wind_speed, d.wind_unit) : null;
             set("wx-bft", bft != null ? bft : "—");
             set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] : "");
             const fc = document.getElementById("wx-forecast");
