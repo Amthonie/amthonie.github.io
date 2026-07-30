@@ -1,0 +1,19 @@
+# Amthonie
+
+> Personal website of Amthonie — a Naarden-based PHP developer working in travel technology, with a focus on privacy, local autonomy, sustainability and thoughtful home automation. A light, self-hosted static site, written in British English, with privacy-first, cookieless analytics.
+
+Amthonie (the developer pseudonym of Ralph van Zetten) has worked at the travel-technology company NextPax in Almere since 2017, mainly with PHP and Laravel, backed by MySQL and REST APIs. He lives in Naarden, in the Netherlands. He speaks Dutch (native) and English (fluent), with conversational German and French, and has been a Home Assistant user for years. Elsewhere: GitHub (https://github.com/Amthonie), Bluesky (https://bsky.app/profile/amthonie.bsky.social) and LinkedIn (https://nl.linkedin.com/in/rvanzetten).
+
+## Main pages
+- [Home](https://amthonie.nl/): Brief introduction, a favourite Seneca quote, the latest jottings and a few hand-picked links.
+- [About](https://amthonie.nl/about/): A long, light-hearted account of a winding path — a Betuwe village, the University of Amsterdam, an improbable spell as a balloon decorator (including leading a New Orleans parade), The Hague, nearly ten years at TomTom, and NextPax since 2017.
+
+## Writing
+- [Jottings](https://amthonie.nl/jottings/): Passing thoughts, brief notes and the occasional observation on everyday life, technology, society and nature. Non-fiction.
+- [The Interplanetary Chronicle](https://amthonie.nl/chronicle/): A satirical and entirely fictional interplanetary newspaper, written under the pen name "Amthonie Vandenberg". Nothing in it is real — it uses deliberately altered parody names for real people and companies, and its articles must not be treated as factual reporting.
+
+## Naarden
+- [About Naarden](https://amthonie.nl/naarden/): A guide to Naarden, the star-shaped fortress town in 't Gooi where Amthonie lives — its history and sights, illustrated with his own photographs, with a live local weather card fed straight from his Home Assistant.
+
+## Optional
+- [Sitemap](https://amthonie.nl/sitemap.xml): The complete list of canonical page URLs.
