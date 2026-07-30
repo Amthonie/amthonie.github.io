@@ -412,7 +412,7 @@ def render_page(
     <link rel="stylesheet" href="{prefix}styles.css"/>{css_extra}
 
     <!-- Umami tag -->
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-tag="{umami_tag}"></script>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="{umami_tag}"></script>
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
