@@ -30,6 +30,7 @@
      * @property {string} [updated]
      */
     const GIST = "https://gist.githubusercontent.com/Amthonie/6e1d57a913650f780d441db67d8d0ca6/raw/weather-naarden.json";
+    const FORECAST = "https://gist.githubusercontent.com/Amthonie/6e1d57a913650f780d441db67d8d0ca6/raw/forecast_naarden.txt"; // plain-text forecast in words, same gist
     const ICONS = "/vendor/meteocons/"; // root-absolute so the card works at any page depth
     const ICON = { "clear-night":"clear-night","cloudy":"overcast","fog":"fog","hail":"hail","lightning":"thunderstorms","lightning-rainy":"thunderstorms-rain","partlycloudy":"partly-cloudy-day","pouring":"rain","rainy":"rain","snowy":"snow","snowy-rainy":"sleet","sunny":"clear-day","windy":"wind","windy-variant":"wind","exceptional":"not-available" };
     const LABEL = { "clear-night":"Clear","cloudy":"Cloudy","fog":"Fog","hail":"Hail","lightning":"Thunder","lightning-rainy":"Thunderstorms","partlycloudy":"Partly cloudy","pouring":"Pouring","rainy":"Rainy","snowy":"Snowy","snowy-rainy":"Sleet","sunny":"Sunny","windy":"Windy","windy-variant":"Windy","exceptional":"Exceptional" };
@@ -172,4 +173,24 @@
             document.getElementById("weather").hidden = false;
         })
         .catch(function () { /* leave the tile hidden on any error */ });
+
+    // Forecast in words: a separate plain-text file in the same gist, shown in the
+    // #wx-forecast-text box above the card (on both /naarden/ and the checking page).
+    // Fetched independently of the JSON card so one failing doesn't hide the other;
+    // textContent (not innerHTML) so the gist text can't inject markup. No-op when
+    // the box isn't on the page.
+    (function () {
+        const box = document.getElementById("wx-forecast-text");
+        const body = document.getElementById("wx-forecast-text-body");
+        if (!box || !body) return;
+        fetch(FORECAST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // same 5-min freshness bucket as the card
+            .then(function (r) { if (!r.ok) throw 0; return r.text(); })
+            .then(function (text) {
+                text = text.trim();
+                if (!text) return;              // empty file → leave the box hidden
+                body.textContent = text;
+                box.hidden = false;
+            })
+            .catch(function () { /* leave the box hidden on any error */ });
+    })();
 })();

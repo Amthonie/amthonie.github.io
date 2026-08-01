@@ -33,9 +33,11 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── gallery/
 │   └── index.html      # permanent redirect stub → /naarden/
 ├── naarden/
-│   ├── index.html      # Naarden page + photo gallery + live weather card (served at /naarden/)
+│   ├── index.html      # Naarden page + photo gallery + live weather card + forecast box (served at /naarden/)
 │   ├── weather.css     # weather-card styles (scoped #weather .wx-*)
-│   ├── weather.js      # weather-card behaviour (fetches the gist, renders the card)
+│   ├── weather.js      # weather behaviour (fetches the gist: renders the card + fills the forecast box)
+│   ├── weather/
+│   │   └── index.html  # unlisted lightweight "just the weather" page (/naarden/weather/, noindex)
 │   ├── images/         # full-size photos (~2048px long edge)
 │   └── thumbnails/     # grid thumbnails (~640px wide)
 ├── vendor/
@@ -201,12 +203,28 @@ the site fully static:
   (scoped to `#weather`, light/dark via `prefers-color-scheme`).
 - Weather icons are [Meteocons](https://bas.dev/work/meteocons) (MIT),
   self-hosted under `vendor/meteocons/` — no third-party CDN.
+- The card's footer carries a **source note** ("Sourced from my Home Assistant")
+  beside the JS-driven "Updated …" freshness stamp.
+
+**Forecast in words.** Above the card sits a `#wx-forecast-text` box ("The
+weather in Naarden") with a plain-language forecast. The text is a second file
+(`forecast_naarden.txt`) in the **same gist**; `weather.js` fetches it
+independently of the JSON card (so one failing doesn't hide the other) and drops
+it in with `textContent`. The box stays hidden until the text loads, and on any
+failure — matching the card.
+
+**Standalone weather page.** `naarden/weather/index.html` (served at
+`/naarden/weather/`) is an unlisted, `noindex` "just the weather" view — the same
+header, forecast box and card, **without** the Naarden article or gallery images,
+so it loads light for glancing at the weather. It reuses the shared `weather.css`
+/ `weather.js` and has its own canonical URL + JSON-LD, but is kept out of the
+sitemap.
 
 The behaviour is deliberately forgiving: missing fields are skipped, and if the
-fetch fails the card simply stays hidden rather than rendering a broken tile.
-Icon paths are root-absolute (`/vendor/meteocons/…`), so the card can be reused
-on another page at any depth by copying the `#weather` markup and referencing
-`weather.css` and `weather.js`.
+fetch fails the card (and the forecast box) simply stay hidden rather than
+rendering broken. Icon paths are root-absolute (`/vendor/meteocons/…`), so the
+card can be reused on another page at any depth by copying the `#weather` markup
+(and the `#wx-forecast-text` box) and referencing `weather.css` and `weather.js`.
 
 ## Local development
 

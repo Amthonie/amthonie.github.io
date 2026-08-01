@@ -4,18 +4,65 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Naarden weather</title>
-    <link rel="icon" href="../favicon.ico" sizes="any"/>
-    <link rel="icon" type="image/png" href="../images/a.png"/>
+    <link rel="canonical" href="https://amthonie.nl/naarden/weather/">
+    <link rel="icon" href="../../favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="../../images/a.png"/>
     <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
+    <!-- Unlisted for now: canonical URL + JSON-LD in place, but kept out of the
+         index and the sitemap until it graduates from a checking page. -->
     <meta name="robots" content="noindex,nofollow"/>
 
-    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
-    <link rel="stylesheet" href="../styles.css"/>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "WebPage",
+                    "@id": "https://amthonie.nl/naarden/weather/#webpage",
+                    "url": "https://amthonie.nl/naarden/weather/",
+                    "name": "Naarden weather",
+                    "description": "Live weather and a plain-language forecast for Naarden, sourced from Amthonie's home Home Assistant instance.",
+                    "isPartOf": {
+                        "@id": "https://amthonie.nl/#website"
+                    },
+                    "about": {
+                        "@id": "https://amthonie.nl/naarden/#place"
+                    }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Home",
+                            "item": "https://amthonie.nl/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "Naarden",
+                            "item": "https://amthonie.nl/naarden/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "Weather",
+                            "item": "https://amthonie.nl/naarden/weather/"
+                        }
+                    ]
+                }
+            ]
+        }
+    </script>
 
-    <!-- Weather-card styling — see weather.css (scoped .wx-*, palette from
-         src/input.css, dark mode via prefers-color-scheme). -->
-    <link rel="stylesheet" href="weather.css"/>
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="../../styles.css"/>
+
+    <!-- Weather-card styling — see ../weather.css, shared with the main Naarden
+         page (scoped .wx-*, palette from src/input.css, dark via prefers-color-scheme). -->
+    <link rel="stylesheet" href="../weather.css"/>
 
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="weather"></script>
@@ -27,16 +74,16 @@
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
     <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
-        <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
+        <a href="/naarden/" aria-label="Back to Naarden" class="group relative block aspect-[4/1] overflow-hidden">
             <img
-                    src="../images/theme/nouveau/header.webp"
+                    src="../../images/theme/nouveau/header.webp"
                     alt="Decorative abstract header background"
                     aria-hidden="true"
                     class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
                     draggable="false"
             />
             <img
-                    src="../images/theme/nouveau/avatar.webp"
+                    src="../../images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
                     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
                     draggable="false"
@@ -44,18 +91,28 @@
         </a>
         <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
             <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
-            <a href="../"
-               aria-label="Back to home"
+            <a href="/naarden/"
+               aria-label="Back to Naarden"
                class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M19 12H5"/>
                     <path d="m12 19-7-7 7-7"/>
                 </svg>
-                Back home
+                Back to Naarden
             </a>
         </div>
     </div>
+
+    <!-- Forecast in words for Naarden. A plain-text paragraph pushed to the same
+         GitHub gist as the weather card by Home Assistant, fetched client-side
+         (see the <script> near </body>). Hidden until it loads; stays hidden on
+         failure so a bad fetch leaves no empty box. -->
+    <section id="wx-forecast-text" hidden aria-label="Weather forecast for Naarden, in words"
+             class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
+        <h2 class="text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-white">The weather in Naarden</h2>
+        <p id="wx-forecast-text-body" class="mt-2 text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
+    </section>
 
     <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
          gist and fetched client-side; see the <script> near </body>. Meteocons
@@ -74,7 +131,7 @@
                 <div class="wx-r1">
                     <div class="wx-sub">
                         <div class="wx-group">
-                            <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
+                            <img id="wx-icon" class="wx-icon" src="../../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
                             <div>
                                 <div id="wx-condition" class="wx-val">—</div>
                                 <div class="wx-lbl">Naarden</div>
@@ -101,11 +158,11 @@
                 </div>
                 <div id="wx-astro" class="wx-astro" hidden>
                     <div class="wx-sub wx-sun">
-                        <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
-                        <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
+                        <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
+                        <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
                     </div>
                     <div class="wx-sub wx-moon">
-                        <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
+                        <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
                     </div>
                 </div>
             </div>
@@ -114,7 +171,9 @@
                 <div id="wx-forecast" class="wx-fc"></div>
             </div>
         </div>
-        <div class="wx-foot wx-foot-right"><span id="wx-updated">Updated —</span></div>
+        <!-- Source attribution + freshness. weather.js only rewrites #wx-updated,
+             so the static "Sourced from…" note beside it is safe. -->
+        <div class="wx-foot wx-foot-right"><span>Sourced from my Home Assistant</span> · <span id="wx-updated">Updated —</span></div>
     </div>
 
 </main>
@@ -137,8 +196,8 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
-<!-- Live weather tile: fetches the HA-pushed gist and populates #weather. See weather.js. -->
-<script src="weather.js"></script>
+<!-- Live weather tile + forecast-in-words box: both fetched by weather.js. -->
+<script src="../weather.js"></script>
 
 </body>
 </html>
