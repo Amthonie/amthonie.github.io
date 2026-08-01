@@ -63,6 +63,9 @@
         }
     </script>
 
+    <!-- PhotoSwipe stylesheet (self-hosted; only when a jotting has an image) -->
+    <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>
+
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
 
@@ -150,8 +153,8 @@
                 </h2>
                 <div class="update-body mt-4">
                     <div class="flow-root">
-                    <figure class="my-4 mx-auto w-2/3 max-w-[240px] md:my-0 md:mb-3 md:float-right md:ml-6">
-                    <a href="images/11-chicken-jocky.webp" target="_blank" rel="noopener"
+                    <figure class="my-4 mx-auto w-[50vw] max-w-[240px] md:my-0 md:mb-3 md:float-right md:ml-6">
+                    <a href="images/11-chicken-jocky.webp" data-pswp-width="969" data-pswp-height="1536" data-caption="Baby chick riding Chicken from the Jockey&#x27;s lap" target="_blank" rel="noopener"
                        class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/11-chicken-jocky.webp" alt="The LEGO Minecraft Chicken Jockey set — the Jockey astride Chicken, with the baby chick riding along on the Jockey&#x27;s lap" loading="lazy" width="404" height="640"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
@@ -359,6 +362,43 @@
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<!-- PhotoSwipe: a per-jotting single-image lightbox (self-hosted; see naarden). -->
+<script type="module">
+    import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '.update-body',
+        children: 'a[data-pswp-width]',
+        pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
+    });
+
+    // Caption below each slide: prefer the narrative data-caption, then alt.
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const link = pswp.currSlide.data.element;
+                    const img = link?.querySelector('img');
+                    el.textContent =
+                        link?.getAttribute('data-caption') ||
+                        (img ? img.getAttribute('alt') : '');
+                });
+            },
+        });
+    });
+
+    lightbox.init();
 </script>
 
 <!-- Umami Outbound links tracking -->

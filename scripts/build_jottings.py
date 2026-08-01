@@ -173,17 +173,32 @@ def render_figure(meta: dict, source_name: str) -> str:
     is_portrait = bool(dims and dims[1] > dims[0])
     dim_attrs = f' width="{dims[0]}" height="{dims[1]}"' if dims else ""
 
+    # PhotoSwipe opens the full-size image, so it needs *its* real pixel size on
+    # the link (data-pswp-width/height, read straight from the file). Without
+    # them the lightbox init skips this link and it stays a plain new-tab link —
+    # a clean graceful fallback. The optional caption rides along as data-caption.
+    full_dims = webp_size(full_path)
+    pswp_attrs = (
+        f' data-pswp-width="{full_dims[0]}" data-pswp-height="{full_dims[1]}"'
+        if full_dims else ""
+    )
+    caption_attr = (
+        f' data-caption="{html.escape(meta["image_caption"])}"'
+        if meta.get("image_caption") else ""
+    )
+
     side = meta.get("image_side", "right").lower()
     if side == "left":
         float_cls = "md:float-left md:mr-6"
     else:
         float_cls = "md:float-right md:ml-6"
 
-    # Mobile: portrait → centred, capped inset; landscape → full width (as
-    # Naarden). Desktop: a slim floated column either way — for portrait the
-    # max-w cap governs the width, for landscape an explicit fraction does.
+    # Mobile: portrait → centred inset at half the screen width (50vw), capped;
+    # landscape → full width (as Naarden). Desktop: a slim floated column either
+    # way — for portrait the max-w cap governs the width (50vw is far wider than
+    # the cap on a desktop viewport), for landscape an explicit fraction does.
     if is_portrait:
-        size_cls = "mx-auto w-2/3 max-w-[240px] md:my-0 md:mb-3"
+        size_cls = "mx-auto w-[50vw] max-w-[240px] md:my-0 md:mb-3"
     else:
         size_cls = "w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4"
     fig_cls = f"my-4 {size_cls} {float_cls}"
@@ -198,7 +213,7 @@ def render_figure(meta: dict, source_name: str) -> str:
         )
 
     return f"""<figure class="{fig_cls}">
-                    <a href="{full_rel}" target="_blank" rel="noopener"
+                    <a href="{full_rel}"{pswp_attrs}{caption_attr} target="_blank" rel="noopener"
                        class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
                              class="block w-full transition duration-300 group-hover:scale-105"/>
@@ -488,10 +503,65 @@ def build_jsonld() -> str:
     return f'<script type="application/ld+json">\n{payload}\n    </script>'
 
 
+# PhotoSwipe lightbox, ported from the Naarden gallery (same self-hosted vendor
+# files, same relative depth). gallery=".update-body" scopes a gallery to each
+# article, so a jotting's image(s) open on their own rather than as one big
+# cross-jotting gallery. The main module is imported on demand at first open, so
+# page load stays light. The caption element shows data-caption, else the alt.
+# Injected only when at least one jotting on the page carries an image.
+PHOTOSWIPE_SCRIPT = """<!-- PhotoSwipe: a per-jotting single-image lightbox (self-hosted; see naarden). -->
+<script type="module">
+    import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '.update-body',
+        children: 'a[data-pswp-width]',
+        pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
+    });
+
+    // Caption below each slide: prefer the narrative data-caption, then alt.
+    lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+            name: 'caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'root',
+            html: '',
+            onInit: (el, pswp) => {
+                el.style.cssText =
+                    'position:absolute;bottom:16px;left:0;right:0;text-align:center;' +
+                    'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
+                    'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
+                pswp.on('change', () => {
+                    const link = pswp.currSlide.data.element;
+                    const img = link?.querySelector('img');
+                    el.textContent =
+                        link?.getAttribute('data-caption') ||
+                        (img ? img.getAttribute('alt') : '');
+                });
+            },
+        });
+    });
+
+    lightbox.init();
+</script>
+"""
+
+
 def build_jottings_page(posts: list[dict]) -> None:
     articles = render_articles(posts)
     index = render_index(posts)
     jsonld = build_jsonld()
+
+    # PhotoSwipe assets only when a jotting on the page has an image (keeps an
+    # image-free listing exactly as it was — no vendor CSS/JS, no behaviour).
+    has_image = any(post["figure_html"] for post in posts)
+    pswp_css = (
+        '    <!-- PhotoSwipe stylesheet (self-hosted; only when a jotting has an image) -->\n'
+        '    <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>\n\n'
+        if has_image else ""
+    )
+    pswp_script = f"\n{PHOTOSWIPE_SCRIPT}" if has_image else ""
     page = f"""<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -518,7 +588,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 
     {jsonld}
 
-    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+{pswp_css}    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
 
     <!-- Umami tag -->
@@ -593,7 +663,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-
+{pswp_script}
 <!-- Umami Outbound links tracking -->
 <script type="text/javascript">
   (() => {{
