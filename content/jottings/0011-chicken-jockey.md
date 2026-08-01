@@ -5,7 +5,7 @@ title: Play Is Mandatory
 summary: A brief note on why some displays demand immediate adult intervention.
 ---
 
-In "[The Blocky Renaissance](#4-the-blocky-renaissance)", I quietly admitted that I couldn’t wait for the Chicken Jockey to finally go on sale. 
+In "[The Blocky Renaissance](#4-the-blocky-renaissance)", I quietly admitted that I couldn’t wait for the LEGO Minecraft Chicken Jockey to finally go on sale. 
 
 Well, today is the first of August—official release day—and the little fellow is already taking pride of place. Though "taking pride of place" implies sitting quietly on a shelf, which turned out to be entirely impossible. There is something delightfully satisfying about those reassuringly large, square blocks that instantly compels a child of somewhat advanced years to start playing immediately. 
 
