@@ -1,6 +1,7 @@
 ---
+id: 11
 date: 2026-08-01
-slug: 11-play-is-mandatory
+slug: play-is-mandatory
 title: Play Is Mandatory
 summary: A brief note on why some displays demand immediate adult intervention.
 image: 11-chicken-jocky.webp

@@ -1,6 +1,7 @@
 ---
+id: 5
 date: 2026-07-22
-slug: 5-zebra-crossing-decline
+slug: zebra-crossing-decline
 title: The Vanishing Zebra and Other Urban Optimisations
 summary: A gentle plea for town planners and drivers to remember that pedestrians lack crumple zones and onboard sensors.
 ---

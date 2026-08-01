@@ -6,16 +6,21 @@ Source of truth: content/jottings/*.md — one file per jotting, each starting
 with a small frontmatter block:
 
     ---
+    id: 99
     date: 2026-07-16
-    slug: 99-a-short-headline
+    slug: a-short-headline
     title: A short headline
     summary: Optional one-line teaser for the homepage. Falls back to the first
              paragraph of the body when omitted.
     ---
 
-    Only `date` and `title` are required. `slug` is optional — it sets the page
-    #anchor (and the homepage teaser link); omit it and one is derived from the
-    filename. `summary` is optional too.
+    `id`, `date` and `title` are required. The page #anchor (and the homepage
+    teaser link) is "<id>-<slug>", e.g. 99-a-short-headline. `slug` is optional —
+    omit it and it's derived from the (required) title, slugified. `summary` is
+    optional too.
+
+    An image can be floated beside a jotting (see render_figure) via optional
+    `image` / `image_alt` / `image_caption` / `image_side` fields.
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
 
@@ -217,7 +222,7 @@ def parse_post(path: Path) -> dict:
             key, value = line.split(":", 1)
             meta[key.strip().lower()] = value.strip()
 
-    for required in ("date", "title"):
+    for required in ("id", "date", "title"):
         if required not in meta:
             raise SystemExit(f"{path.name}: frontmatter is missing '{required}'")
 
@@ -237,12 +242,16 @@ def parse_post(path: Path) -> dict:
         first_para = re.search(r"<p>(.*?)</p>", body_html, re.DOTALL)
         summary = re.sub(r"<[^>]+>", "", first_para.group(1)).strip() if first_para else ""
 
-    # A stable anchor: an explicit frontmatter `slug` wins; otherwise fall back
-    # to the filename with any leading number prefix stripped (files are named
-    # like 0009-a-short-headline.md). Either way it is run through slugify() so
-    # the result is always URL/anchor-safe.
-    slug = meta.get("slug") or re.sub(r"^\d+-", "", path.stem)
+    # The published anchor is "<id>-<slug>" (e.g. 11-play-is-mandatory). The `id`
+    # is the first frontmatter field (required) and namespaces the anchor; the
+    # `slug` is the human-readable tail. The slug is optional — omit it and it
+    # falls back to the (required) title. Either way it's run through slugify()
+    # so the anchor is always URL/anchor-safe. Title, not filename, so it's
+    # editable from a phone (where files can't easily be renamed).
+    jotting_id = meta["id"]
+    slug = meta.get("slug") or meta["title"]
     slug = slugify(slug)
+    anchor = f"{jotting_id}-{slug}"
 
     # Optional floated image (see render_figure). Only built when `image:` is set.
     figure_html = render_figure(meta, path.name) if meta.get("image") else ""
@@ -253,7 +262,9 @@ def parse_post(path: Path) -> dict:
         "summary": summary,
         "body_html": body_html,
         "figure_html": figure_html,
+        "id": jotting_id,
         "slug": slug,
+        "anchor": anchor,
     }
 
 
@@ -265,13 +276,13 @@ def load_posts() -> list[dict]:
 
     seen: set[str] = set()
     for post in posts:
-        slug = post["slug"]
+        anchor = post["anchor"]
         n = 2
-        while slug in seen:  # guarantee unique anchors
-            slug = f"{post['slug']}-{n}"
+        while anchor in seen:  # guarantee unique anchors
+            anchor = f"{post['anchor']}-{n}"
             n += 1
-        post["slug"] = slug
-        seen.add(slug)
+        post["anchor"] = anchor
+        seen.add(anchor)
     return posts
 
 
@@ -325,7 +336,7 @@ def render_articles(posts: list[dict]) -> str:
                 body = post["body_html"]
             blocks.append(
                 f"""{divider}
-            <article id="{post['slug']}" class="scroll-mt-28">
+            <article id="{post['anchor']}" class="scroll-mt-28">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
@@ -380,7 +391,7 @@ def render_index(posts: list[dict]) -> str:
         anchor = f"m-{year}-{month:02d}"
         label = f"{MONTHS[month - 1]} {year}"
         links = separator.join(
-            f'<a href="#{post["slug"]}" '
+            f'<a href="#{post["anchor"]}" '
             f'class="text-stone-800 dark:text-stone-100 transition '
             f'hover:text-brand-600 dark:hover:text-brand-400">'
             f'{html.escape(post["title"])}</a>'
@@ -420,7 +431,7 @@ def render_teasers(posts: list[dict]) -> str:
     for post in posts[:TEASERS_ON_HOME]:
         summary = html.escape(post["summary"])
         cards.append(
-            f"""<a href="jottings/#{post['slug']}"
+            f"""<a href="jottings/#{post['anchor']}"
                class="group flex flex-col rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">

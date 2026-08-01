@@ -74,6 +74,8 @@ needs — no larger, which is what keeps the pages loading instantly.
 | **Link cards** | `images/links/` | **640×360** (16:9) | Shown in a 16:9 card with `object-cover`. Crop the source to 16:9 and nothing needs aligning. If it isn't 16:9, keep it as-is and add an `object-*` class (e.g. `object-bottom`, `object-left`) so the auto-crop keeps the important part — otherwise it centre-crops. |
 | **Gallery photos** | `naarden/images/` | **2048px on the longest edge** (keep native aspect), quality ≈80 | Opened full-screen in the PhotoSwipe lightbox. Long-edge cap so portrait and landscape both fit the screen. Set each link's `data-pswp-width` / `data-pswp-height` to the photo's real pixel size, or the lightbox mis-sizes it. |
 | **Gallery thumbnails** | `naarden/thumbnails/` | **640px wide** (keep native aspect), quality ≈75 | Shown 16:9 with `object-cover` (centre-cropped), so keep the subject roughly centred. Use the **same base filename** as the full photo. |
+| **Jotting images** | `jottings/images/` | **~1536px on the longest edge** (keep native aspect), quality ≈80 | Optional per-jotting figure, referenced by the jotting's `image:` frontmatter (bare filename). Opens full-size in a new tab (no PhotoSwipe — nothing to set by hand). Floated beside the text on desktop; portrait images become a centred, capped inset on mobile, landscape ones go full-width. |
+| **Jotting thumbnails** | `jottings/images/thumbnails/` | **640px on the longest edge** (keep native aspect), quality ≈75 | The image actually shown inline (the full-size is only the click target). Shown uncropped, so any aspect is fine. Use the **same base filename** as the full-size image; the card falls back to the full-size image if a thumbnail is missing. |
 | **Chronicle heroes** | `chronicle/images/` | **~1024px on the longest edge** (any aspect), quality ≈80 | Per-article hero, referenced by the article's `image:` frontmatter (bare filename). Shown uncropped — floated beside the text on wide screens, full-width on mobile — and clickable to open full-size in the PhotoSwipe lightbox. The generator reads the pixel size from the file, so there's no `data-pswp-*` to set by hand. |
 | **Chronicle index thumbnails** | `chronicle/images/thumbs/` | **480px wide**, quality ≈72 | Small teaser image leading each front-page index card. Use the **same base filename** as the hero; generate with e.g. `convert hero.webp -resize 480x -quality 72 thumbs/hero.webp`. The card falls back to the full hero if a thumbnail is missing. |
 | **Chronicle favicon** | `chronicle/` | `icon.png` 512×512 + `favicon.ico` (16/32/48) | The Chronicle's own tab icon (a navy TIC monogram, rounded), distinct from the main site. `favicon.ico` is regenerated from `icon.png`: `convert icon.png -define icon:auto-resize=48,32,16 favicon.ico`. |
@@ -96,25 +98,42 @@ starting with a small frontmatter block:
 
 ```markdown
 ---
+id: 12
 date: 2026-07-16
 slug: a-short-headline
 title: A short headline
 summary: Optional one-line teaser for the homepage (defaults to the first paragraph).
+image: 12-a-photo.webp
+image_alt: What the photo shows (optional; defaults to the title)
+image_caption: Optional caption shown under the image
+image_side: right
 ---
 
 The body is regular **markdown** — links, lists, etc.
 ```
 
-**Frontmatter keys:** `date` (required, `YYYY-MM-DD`) and `title` (required);
-`slug` and `summary` are optional. The `slug` sets the item's URL — the
-on-page anchor for jottings (`/jottings/#<slug>`) and the directory for a
-Chronicle article (`/chronicle/<slug>/`). It's slugified either way, so it's
-always URL-safe. **If `slug` is omitted it falls back to the filename** (with a
-leading `YYYY-MM-DD-` date prefix stripped, if present) — the original
-behaviour. Setting it explicitly decouples the URL from the filename, so you can
-rename or renumber the source file (e.g. to a plain `0003-eva-walks.md` index)
-without changing the published URL, and change a URL by editing one line rather
-than renaming the file. The list is still ordered by `date`, not by filename.
+**Frontmatter keys:** `id` (required), `date` (required, `YYYY-MM-DD`) and
+`title` (required); everything else is optional. The on-page anchor for a
+jotting (`/jottings/#<anchor>`) is composed as **`<id>-<slug>`** — e.g.
+`12-a-short-headline`. The `id` is a stable numeric handle that namespaces the
+anchor (so two jottings can share a slug without colliding); the `slug` is the
+human-readable tail. **If `slug` is omitted it falls back to the (required)
+title, slugified** — e.g. a title of *A short headline* yields `a-short-headline`.
+(The title, not the filename, so the anchor is fully editable from a phone, where
+files can't easily be renamed.) Setting the slug explicitly keeps the anchor tidy
+when the title is long, or lets you retitle without moving the URL. The list is
+ordered by `date`, not by `id` or filename.
+
+**Optional image** (floated beside the note, like the Naarden and Chronicle
+figures): set `image` to a **bare WebP filename** living in `jottings/images/`
+(with a matching thumbnail in `jottings/images/thumbnails/` — see the image-prep
+table above). The thumbnail is shown and links to the full-size image in a new
+tab. Orientation is auto-detected from the file: a **portrait** image is shown
+as a centred, width-capped inset on mobile (rather than a full-width tower) and
+floats on desktop; a **landscape** image is full-width on mobile like the other
+figures. Companion keys, all optional: `image_alt` (defaults to the title),
+`image_caption` (omit for none) and `image_side` (`right` — the default — or
+`left`).
 
 **Body links:** links in the markdown body that point off-site (an
 `http(s)://` URL) are rewritten to open in a new tab (`target="_blank"
