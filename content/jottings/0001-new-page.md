@@ -4,6 +4,9 @@ date: 2026-07-09
 slug: rediscovering-html
 title: Rediscovering the simple joy of raw HTML
 summary: Moving away from heavy frameworks to appreciate how much the web has changed since the nineties — for better and for worse.
+image: 1-rediscovering-html.webp
+image_alt: Whimsical cartoon landscape contrasting automated modern web tools with older manual web‑development methods
+image_caption: Rediscovering the simple joy of raw HTML
 ---
 
 For longer than I’d care to confess, amthonie.nl led visitors straight to a Gravatar page — perfectly functional, but about as personal as a waiting room leaflet. As a developer, it felt faintly embarrassing not to have a small digital home of my own.
