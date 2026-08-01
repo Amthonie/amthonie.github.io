@@ -38,6 +38,7 @@ the committed styles.css stays valid.
 import html
 import json
 import re
+import struct
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -47,6 +48,7 @@ import markdown
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT_DIR = ROOT / "content" / "jottings"
 JOTTINGS_PAGE = ROOT / "jottings" / "index.html"
+JOTTINGS_IMAGES = ROOT / "jottings" / "images"  # full-size webp; thumbs in ./thumbnails/
 INDEX_PAGE = ROOT / "index.html"
 SITEMAP = ROOT / "sitemap.xml"
 
@@ -102,6 +104,103 @@ def open_external_links_in_new_tab(html: str) -> str:
     return re.sub(r"<a ([^>]*?)>", add_target, html)
 
 
+def webp_size(path: Path) -> tuple[int, int] | None:
+    """Return (width, height) of a WebP file by reading its RIFF header only.
+
+    Handles the three chunk variants ImageMagick emits: simple lossy ``VP8 ``,
+    simple lossless ``VP8L`` and extended ``VP8X``. Dependency-light on purpose
+    (no Pillow/imagesize) — every jotting image comes from Ralph's WebP pipeline.
+    Returns None when the file is missing or not a WebP we can read.
+    """
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if len(data) < 30 or data[0:4] != b"RIFF" or data[8:12] != b"WEBP":
+        return None
+    fourcc = data[12:16]
+    if fourcc == b"VP8 ":  # simple lossy — 14-bit dims at fixed offsets
+        w = struct.unpack("<H", data[26:28])[0] & 0x3FFF
+        h = struct.unpack("<H", data[28:30])[0] & 0x3FFF
+        return w, h
+    if fourcc == b"VP8L":  # simple lossless — 14-bit dims packed after the 0x2F sig
+        bits = int.from_bytes(data[21:25], "little")
+        return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+    if fourcc == b"VP8X":  # extended — 24-bit canvas dims, stored minus one
+        w = (data[24] | (data[25] << 8) | (data[26] << 16)) + 1
+        h = (data[27] | (data[28] << 8) | (data[29] << 16)) + 1
+        return w, h
+    return None
+
+
+def render_figure(meta: dict, source_name: str) -> str:
+    """Build a floated <figure> for a jotting from its `image:` frontmatter.
+
+    Mirrors the figures on the Naarden page: the thumbnail is shown and links to
+    the full-size image in a new tab; on desktop it floats beside the text
+    (right by default, `image_side: left` to flip). The one jotting-specific
+    twist is portrait handling — a portrait image is *not* shown full-width on
+    mobile (that would tower over the note); it's centred at two-thirds width and
+    capped, so it stays a tidy inset. Orientation is auto-detected from the
+    image's own WebP header, so nothing extra need be set in frontmatter.
+
+    Files live under jottings/images/ (full) and jottings/images/thumbnails/
+    (thumb); the page is served from /jottings/, so the emitted paths are
+    relative (images/… and images/thumbnails/…). A missing full-size file is a
+    hard error — a typo'd filename should fail the build, not ship a broken img.
+    """
+    name = meta["image"]
+    full_path = JOTTINGS_IMAGES / name
+    thumb_path = JOTTINGS_IMAGES / "thumbnails" / name
+    if not full_path.is_file():
+        raise SystemExit(
+            f"{source_name}: image '{name}' not found at "
+            f"{full_path.relative_to(ROOT)}"
+        )
+
+    # Thumbnail is preferred for display; fall back to the full image if absent.
+    thumb_rel = f"images/thumbnails/{name}" if thumb_path.is_file() else f"images/{name}"
+    full_rel = f"images/{name}"
+
+    # Orientation + intrinsic dimensions from whichever file we display (guards
+    # against layout shift via width/height, and drives the portrait sizing).
+    dims = webp_size(thumb_path if thumb_path.is_file() else full_path)
+    is_portrait = bool(dims and dims[1] > dims[0])
+    dim_attrs = f' width="{dims[0]}" height="{dims[1]}"' if dims else ""
+
+    side = meta.get("image_side", "right").lower()
+    if side == "left":
+        float_cls = "md:float-left md:mr-6"
+    else:
+        float_cls = "md:float-right md:ml-6"
+
+    # Mobile: portrait → centred, capped inset; landscape → full width (as
+    # Naarden). Desktop: a slim floated column either way — for portrait the
+    # max-w cap governs the width, for landscape an explicit fraction does.
+    if is_portrait:
+        size_cls = "mx-auto w-2/3 max-w-[240px] md:my-0 md:mb-3"
+    else:
+        size_cls = "w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4"
+    fig_cls = f"my-4 {size_cls} {float_cls}"
+
+    alt = html.escape(meta.get("image_alt", meta.get("title", "")))
+
+    caption = ""
+    if meta.get("image_caption"):
+        caption = (
+            '\n                    <figcaption class="mt-1.5 text-xs text-stone-500 '
+            f'dark:text-stone-400">{html.escape(meta["image_caption"])}</figcaption>'
+        )
+
+    return f"""<figure class="{fig_cls}">
+                    <a href="{full_rel}" target="_blank" rel="noopener"
+                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                        <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
+                             class="block w-full transition duration-300 group-hover:scale-105"/>
+                    </a>{caption}
+                </figure>"""
+
+
 def parse_post(path: Path) -> dict:
     """Parse one markdown file with a leading '--- ... ---' frontmatter block."""
     text = path.read_text(encoding="utf-8")
@@ -145,11 +244,15 @@ def parse_post(path: Path) -> dict:
     slug = meta.get("slug") or re.sub(r"^\d+-", "", path.stem)
     slug = slugify(slug)
 
+    # Optional floated image (see render_figure). Only built when `image:` is set.
+    figure_html = render_figure(meta, path.name) if meta.get("image") else ""
+
     return {
         "date": date,
         "title": meta["title"],
         "summary": summary,
         "body_html": body_html,
+        "figure_html": figure_html,
         "slug": slug,
     }
 
@@ -208,6 +311,18 @@ def render_articles(posts: list[dict]) -> str:
             divider = "" if i == 0 else (
                 '<hr class="my-10 border-black/10 dark:border-white/10"/>'
             )
+            # With an image, wrap the figure + body in a flow-root so the float
+            # is contained inside the article (and the text top-aligns with the
+            # image); without one, keep the body as the bare update-body content.
+            if post["figure_html"]:
+                body = (
+                    f'<div class="flow-root">\n'
+                    f'                    {post["figure_html"]}\n'
+                    f'                    {post["body_html"]}\n'
+                    f'                </div>'
+                )
+            else:
+                body = post["body_html"]
             blocks.append(
                 f"""{divider}
             <article id="{post['slug']}" class="scroll-mt-28">
@@ -219,7 +334,7 @@ def render_articles(posts: list[dict]) -> str:
                     {html.escape(post['title'])}
                 </h2>
                 <div class="update-body mt-4">
-                    {post['body_html']}
+                    {body}
                 </div>
             </article>"""
             )

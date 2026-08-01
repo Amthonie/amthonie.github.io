@@ -3,6 +3,9 @@ date: 2026-08-01
 slug: 11-play-is-mandatory
 title: Play Is Mandatory
 summary: A brief note on why some displays demand immediate adult intervention.
+image: 11-chicken-jocky.webp
+image_alt: The LEGO Minecraft Chicken Jockey set — the Jockey astride Chicken, with the baby chick riding along on the Jockey's lap
+image_caption: Baby chick riding Chicken from the Jockey's lap
 ---
 
 In "[The Blocky Renaissance](#4-the-blocky-renaissance)", I quietly admitted that I couldn’t wait for the LEGO Minecraft Chicken Jockey to finally go on sale. 
