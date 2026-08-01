@@ -4,6 +4,9 @@ date: 2026-07-10
 slug: naming-appliances
 title: The Art of Naming Appliances
 summary: Why giving smart home devices a little personality makes domestic automation feel far more human.
+image: 2-naming-appliances.webp
+image_alt: Cartoon living room with a cheerful smart speaker and a dejected robot vacuum, highlighting the personalities of household devices
+image_caption: Where appliances earn their names
 ---
 
 There is a distinct moment in any smart home journey when sheer utility gives way to character. It usually happens the moment you tire of addressing a device by its clinical factory model or its sterile room assignment in an app. For me, that transition involved giving the household appliances actual names.

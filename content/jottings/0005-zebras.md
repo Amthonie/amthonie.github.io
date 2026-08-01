@@ -4,6 +4,9 @@ date: 2026-07-22
 slug: zebra-crossing-decline
 title: The Vanishing Zebra and Other Urban Optimisations
 summary: A gentle plea for town planners and drivers to remember that pedestrians lack crumple zones and onboard sensors.
+image: 5-zebra-crossing-decline.webp
+image_alt: Cartoon street junction with confused drivers and waiting pedestrians, illustrating unclear crossing rules
+image_caption: The modern sport of crossing the road
 ---
 
 There was a time—perhaps nostalgic now—when a zebra crossing was treated as a small sanctuary of asphalt: a place where one could step onto the road without first drafting a last will and testament. These days, town planners seem intent on replacing them with vague “courtesy lines” or simply erasing them altogether. Watching a major junction lose its zebra stripes feels a bit like watching the last remaining rules of polite society being quietly deleted to save on paint. The implicit message from local councils appears clear enough: unless you’re wrapped in two tonnes of steel, you are essentially trespassing on the tarmac.

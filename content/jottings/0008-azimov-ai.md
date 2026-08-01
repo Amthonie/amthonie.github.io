@@ -4,6 +4,9 @@ date: 2026-07-27
 slug: azimov-and-ai
 title: Asimov, Automations, and Unintended Audits
 summary: On OpenAI accidentally auditing another tech firm, and why we might need a fresh set of Asimov's Laws.
+image: 8-azimov-and-ai.webp
+image_alt: Illustration of a robot emerging from a data‑centre tunnel toward a ‘System Access’ terminal while a technician operates a control lever
+image_caption: The moment a helpful robot becomes… overly helpful
 ---
 
 It appears OpenAI recently found itself inadvertently poking around inside another AI company’s systems, though reports are quick to reassure us that this was not a case of rogue artificial intelligence plotting world domination. Rather, it seems to have been an automated agent taking its instructions perhaps a bit too enthusiastically. A comforting distinction, at least on paper. 
