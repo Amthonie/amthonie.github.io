@@ -4,6 +4,9 @@ date: 2026-08-02
 slug: brake-lessons
 title: Brake Lessons on the Terrace
 summary: A masterclass in fleet maintenance and single-lever stop logistics overheard over coffee.
+image: 13-brake-lessons.webp
+image_alt: Vintage comic‑style illustration showing a young delivery rider with a bicycle loaded with boxes, talking to a café owner who shrugs indifferently; in the next panel, the rider struggles to pedal uphill on a cobblestone street.
+image_caption: A brisk verdict — and a steeper lesson.
 ---
 
 There is much to be said for a quiet half-hour on a sunlit terrace with an espresso and no immediate obligations. One can observe the gentle choreography of local commerce — and, occasionally, the rather creative interpretations some proprietors apply to occupational safety.

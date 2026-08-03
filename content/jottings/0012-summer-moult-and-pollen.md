@@ -4,6 +4,9 @@ date: 2026-08-02
 slug: summer-moult-and-pollen
 title: A Midsummer Walk with Beginners’ Mistakes
 summary: A quiet stroll past an abandoned swimming pool, a few scruffy birds, and the inescapable return of local pollen.
+image: 12-summer-moult-and-pollen.webp
+image_alt: Sunny summer view of Zanderij Cruysbergen with a dry sandy path curving through grassland and young shrubs, bordered by dense green forest under a clear blue sky.
+image_caption: Late‑summer stillness at Zanderij Cruysbergen.
 ---
 
 I stepped out for a perfectly pleasant walk earlier today, though I managed to make a classic beginner's error in the route selection. 
