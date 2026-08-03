@@ -129,64 +129,69 @@
         el.innerHTML = items + items;
     }
 
-    fetch(GIST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // 5-min bucket: fresh within 5 min, still CDN-shareable inside each window
-        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-        .then(function (/** @type {WeatherData} */ d) {
-            if (d == null || d.temperature == null) throw 0;
-            const dark = !!d.is_dark;
-            const img = document.getElementById("wx-icon");
-            img.src = ICONS + iconFor(d.condition, dark) + ".svg";
-            img.alt = LABEL[d.condition] || d.condition || "Weather";
-            set("wx-condition", LABEL[d.condition] || d.condition || "—");
-            set("wx-temp", Math.round(d.temperature));
-            set("wx-feels", d.apparent != null ? ("Feels like " + Math.round(d.apparent) + "°") : "");
-            buildTicker(d); // humidity, rain & the other secondary fields now live in the top marquee
-            if (d.wind_bearing != null) {
-                set("wx-winddir", dir8(d.wind_bearing));
-                const mk = document.getElementById("wx-windmarker");
-                if (mk) mk.setAttribute("transform", "rotate(" + d.wind_bearing + " 50 50)");
-            }
-            const bft = d.wind_speed != null ? toBft(d.wind_speed, d.wind_unit) : null;
-            const gust = d.wind_gust_speed != null ? toBft(d.wind_gust_speed, d.wind_unit) : null;
-            const gusty = bft != null && gust != null && gust > bft + 1; // only when the gust is ≥2 forces above the sustained wind (a gust barely higher isn't really "gusty")
-            set("wx-bft", bft != null ? bft : "—");                  // sustained value (primary tone in the HTML)
-            set("wx-bft-gust", gusty ? " - " + gust : "");             // gust upper bound in the #wx-bft-gust span; "" hides it
-            // Label tracks the sustained wind; " with gusts" appended (in the muted label tone) when a gust shows.
-            set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] + (gusty ? " with gusts" : "") : "");
-            const fc = document.getElementById("wx-forecast");
-            if (fc) {
-                fc.innerHTML = "";
-                if (d.forecast_day_1) addForecast(fc, "Today", d.forecast_day_1);
-                if (d.forecast_day_2) addForecast(fc, "Tomorrow", d.forecast_day_2);
-                if (d.forecast_day_3) addForecast(fc, "", d.forecast_day_3);
-                const fcCard = document.getElementById("weather-fc");
-                if (fcCard) fcCard.hidden = fc.childElementCount === 0;
-            }
-            const astro = document.getElementById("wx-astro");
-            if (astro) {
-                const showItem = function (id, ok) { const el = document.getElementById(id); if (el) el.style.display = ok ? "" : "none"; };
-                showItem("wx-astro-sunrise", !!d.sunrise); if (d.sunrise) set("wx-sunrise", d.sunrise);
-                showItem("wx-astro-sunset", !!d.sunset); if (d.sunset) set("wx-sunset", d.sunset);
-                const moon = d.moon_fase && MOON[d.moon_fase];
-                showItem("wx-astro-moon", !!moon);
-                if (moon) {
-                    const mi = document.getElementById("wx-moon-icon");
-                    if (mi) { mi.src = ICONS + moon[0] + ".svg"; mi.alt = moon[1]; }
-                    set("wx-moon", moon[1]);
+    // Card: re-fetch the gist JSON and repaint #weather in place. On a failed refresh the
+    // .catch does nothing, so the last-good card stays put — a network blip never blanks a
+    // tile that's already showing (and a first-load failure just leaves it hidden, as before).
+    function loadCard() {
+        fetch(GIST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // 5-min bucket: fresh within 5 min, still CDN-shareable inside each window
+            .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (/** @type {WeatherData} */ d) {
+                if (d == null || d.temperature == null) throw 0;
+                const dark = !!d.is_dark;
+                const img = document.getElementById("wx-icon");
+                img.src = ICONS + iconFor(d.condition, dark) + ".svg";
+                img.alt = LABEL[d.condition] || d.condition || "Weather";
+                set("wx-condition", LABEL[d.condition] || d.condition || "—");
+                set("wx-temp", Math.round(d.temperature));
+                set("wx-feels", d.apparent != null ? ("Feels like " + Math.round(d.apparent) + "°") : "");
+                buildTicker(d); // humidity, rain & the other secondary fields now live in the top marquee
+                if (d.wind_bearing != null) {
+                    set("wx-winddir", dir8(d.wind_bearing));
+                    const mk = document.getElementById("wx-windmarker");
+                    if (mk) mk.setAttribute("transform", "rotate(" + d.wind_bearing + " 50 50)");
                 }
-                astro.hidden = !(d.sunrise || d.sunset || moon);
-            }
-            set("wx-updated", "Updated " + stamp(d.updated));
-            document.getElementById("weather").hidden = false;
-        })
-        .catch(function () { /* leave the tile hidden on any error */ });
+                const bft = d.wind_speed != null ? toBft(d.wind_speed, d.wind_unit) : null;
+                const gust = d.wind_gust_speed != null ? toBft(d.wind_gust_speed, d.wind_unit) : null;
+                const gusty = bft != null && gust != null && gust > bft + 1; // only when the gust is ≥2 forces above the sustained wind (a gust barely higher isn't really "gusty")
+                set("wx-bft", bft != null ? bft : "—");                  // sustained value (primary tone in the HTML)
+                set("wx-bft-gust", gusty ? " - " + gust : "");             // gust upper bound in the #wx-bft-gust span; "" hides it
+                // Label tracks the sustained wind; " with gusts" appended (in the muted label tone) when a gust shows.
+                set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] + (gusty ? " with gusts" : "") : "");
+                const fc = document.getElementById("wx-forecast");
+                if (fc) {
+                    fc.innerHTML = "";
+                    if (d.forecast_day_1) addForecast(fc, "Today", d.forecast_day_1);
+                    if (d.forecast_day_2) addForecast(fc, "Tomorrow", d.forecast_day_2);
+                    if (d.forecast_day_3) addForecast(fc, "", d.forecast_day_3);
+                    const fcCard = document.getElementById("weather-fc");
+                    if (fcCard) fcCard.hidden = fc.childElementCount === 0;
+                }
+                const astro = document.getElementById("wx-astro");
+                if (astro) {
+                    const showItem = function (id, ok) { const el = document.getElementById(id); if (el) el.style.display = ok ? "" : "none"; };
+                    showItem("wx-astro-sunrise", !!d.sunrise); if (d.sunrise) set("wx-sunrise", d.sunrise);
+                    showItem("wx-astro-sunset", !!d.sunset); if (d.sunset) set("wx-sunset", d.sunset);
+                    const moon = d.moon_fase && MOON[d.moon_fase];
+                    showItem("wx-astro-moon", !!moon);
+                    if (moon) {
+                        const mi = document.getElementById("wx-moon-icon");
+                        if (mi) { mi.src = ICONS + moon[0] + ".svg"; mi.alt = moon[1]; }
+                        set("wx-moon", moon[1]);
+                    }
+                    astro.hidden = !(d.sunrise || d.sunset || moon);
+                }
+                set("wx-updated", "Updated " + stamp(d.updated));
+                document.getElementById("weather").hidden = false;
+            })
+            .catch(function () { /* leave the tile as-is on any error */ });
+    }
 
     // Forecast in words: a separate plain-text file in the same gist, shown in the
     // #wx-forecast-text box above the card (on both /naarden/ and the checking page).
     // Fetched independently of the JSON card so one failing doesn't hide the other;
     // textContent (not innerHTML) so the gist text can't inject markup. No-op when
     // the box isn't on the page.
-    (function () {
+    function loadForecast() {
         const box = document.getElementById("wx-forecast-text");
         const body = document.getElementById("wx-forecast-text-body");
         if (!box || !body) return;
@@ -199,5 +204,18 @@
                 box.hidden = false;
             })
             .catch(function () { /* leave the box hidden on any error */ });
-    })();
+    }
+
+    function refresh() { loadCard(); loadForecast(); }
+
+    // Keep an open tab current without a page reload — a reload would re-download assets,
+    // flash, drop scroll/lightbox state and log a phantom Umami pageview. Instead re-fetch
+    // the data and repaint in place. Poll every 10 min, but skip the poll while the tab is
+    // hidden (a backgrounded tab shouldn't hit the network for hours), and refresh at once
+    // when the tab returns to the foreground so a long-open tab is current the instant it's
+    // looked at. The gist's ~5-min CDN cache means a faster poll wouldn't surface fresher
+    // data anyway.
+    refresh();
+    setInterval(function () { if (document.visibilityState === "visible") refresh(); }, 10 * 60 * 1000);
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
 })();
