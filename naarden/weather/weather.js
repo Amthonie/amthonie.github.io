@@ -322,6 +322,7 @@
             if (label) label.textContent = show ? "Hide" : "Show";
             if (chevron) chevron.classList.toggle("rotate-180", show);
             if (show) loadMaps();   // opt-in: fetch the KNMI maps only now
+            if (show && window.umami) window.umami.track("show-weather-maps");   // count opens only, not closes
         });
     })();
 })();

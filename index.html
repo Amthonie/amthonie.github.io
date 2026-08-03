@@ -611,6 +611,7 @@
             toggle.setAttribute('aria-expanded', String(show));
             if (label) label.textContent = show ? 'Hide' : 'Show';
             if (chevron) chevron.classList.toggle('rotate-180', show);
+            if (show && window.umami) window.umami.track('show-links-box');   // count opens only, not closes
         });
     })();
 </script>
