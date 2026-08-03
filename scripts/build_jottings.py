@@ -287,7 +287,11 @@ def load_posts() -> list[dict]:
     if not CONTENT_DIR.is_dir():
         return []
     posts = [parse_post(p) for p in CONTENT_DIR.glob("*.md")]
-    posts.sort(key=lambda p: p["date"], reverse=True)
+    # Newest first: by date, then by numeric id within a shared date — so a
+    # jotting posted the same day as an earlier one still sorts above it (ids
+    # only ever increase). Without the id tiebreaker the stable sort would keep
+    # same-date posts in filename order, burying the newer one. See issue #92.
+    posts.sort(key=lambda p: (p["date"], int(p["id"])), reverse=True)
 
     seen: set[str] = set()
     for post in posts:
