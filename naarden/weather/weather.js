@@ -143,6 +143,20 @@
         el.innerHTML = items + items;
     }
 
+    // Compact live teaser (the "Live weather in Naarden" link box on /naarden/): the current
+    // condition icon + temperature. Revealed only once we have live data, so a failed/empty
+    // fetch leaves the box hidden — nothing to click through to. No-op where its elements
+    // are absent (e.g. the dedicated weather page, which shows the full card instead).
+    function updateMini(d) {
+        const box = document.getElementById("wx-mini");
+        if (!box) return;
+        const icon = document.getElementById("wx-mini-icon");
+        if (icon) icon.src = ICONS + iconFor(d.condition, !!d.is_dark) + ".svg";
+        const temp = document.getElementById("wx-mini-temp");
+        if (temp) temp.textContent = Math.round(d.temperature) + "°C";
+        box.hidden = false;
+    }
+
     // Card: re-fetch the gist JSON and repaint #weather in place. On a failed refresh the
     // .catch does nothing, so the last-good card stays put — a network blip never blanks a
     // tile that's already showing (and a first-load failure just leaves it hidden, as before).
@@ -151,6 +165,8 @@
             .then(function (r) { if (!r.ok) throw 0; return r.json(); })
             .then(function (/** @type {WeatherData} */ d) {
                 if (d == null || d.temperature == null) throw 0;
+                updateMini(d);                                    // compact live teaser (the /naarden/ link box); no-op where absent
+                if (!document.getElementById("weather")) return;  // full card not on this page → teaser only
                 const dark = !!d.is_dark;
                 const img = document.getElementById("wx-icon");
                 img.src = ICONS + iconFor(d.condition, dark) + ".svg";
@@ -218,24 +234,23 @@
             .catch(function () { /* leave the tile as-is on any error */ });
     }
 
-    // Forecast in words: a separate plain-text file in the same gist, shown in the
-    // #wx-forecast-text box above the card (on both /naarden/ and the checking page).
-    // Fetched independently of the JSON card so one failing doesn't hide the other;
-    // textContent (not innerHTML) so the gist text can't inject markup. No-op when
-    // the box isn't on the page.
+    // Forecast in words: a separate plain-text file in the same gist, shown as the
+    // paragraph beneath the page heading in the title box. Fetched independently of
+    // the JSON card so one failing doesn't hide the other; textContent (not innerHTML)
+    // so the gist text can't inject markup. The heading is always visible — only this
+    // paragraph is revealed on success, so a failed/empty fetch just leaves the heading.
     function loadForecast() {
-        const box = document.getElementById("wx-forecast-text");
         const body = document.getElementById("wx-forecast-text-body");
-        if (!box || !body) return;
+        if (!body) return;
         fetch(FORECAST + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" }) // same 5-min freshness bucket as the card
             .then(function (r) { if (!r.ok) throw 0; return r.text(); })
             .then(function (text) {
                 text = text.trim();
-                if (!text) return;              // empty file → leave the box hidden
+                if (!text) return;              // empty file → leave the paragraph hidden
                 body.textContent = text;
-                box.hidden = false;
+                body.hidden = false;
             })
-            .catch(function () { /* leave the box hidden on any error */ });
+            .catch(function () { /* leave the paragraph hidden on any error */ });
     }
 
     function refresh() { loadCard(); loadForecast(); }

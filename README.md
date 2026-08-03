@@ -13,11 +13,12 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
   `naarden/index.html` for how to update it). The lightbox is shared: the Chronicle
   article heroes reuse the same vendored copy. The old `/gallery/` URL is a permanent
   redirect stub to `/naarden/`.
-- A live weather card on the Naarden page — current conditions, sunrise/sunset,
-  moon phase and a short forecast. Data is pushed to a GitHub gist by a
-  home-automation server on a schedule and fetched client-side; icons are
-  [Meteocons](https://bas.dev/work/meteocons) (MIT), self-hosted under
-  `vendor/meteocons/`. See [Weather card](#weather-card).
+- A dedicated **live weather page** at `/naarden/weather/` — current conditions,
+  an hourly and three-day forecast, sun/moon times and a plain-language outlook.
+  Data is pushed to a GitHub gist by a home-automation server on a schedule and
+  fetched client-side; icons are [Meteocons](https://bas.dev/work/meteocons)
+  (MIT), self-hosted under `vendor/meteocons/`. The Naarden page links to it with
+  a compact live teaser (condition icon + temperature). See [Weather](#weather).
 - `/jottings/` and `/chronicle/` are generated from markdown sources at build time
   (see [Generated pages](#generated-pages)).
 - A custom `404.html` and `sitemap.xml`, plus JSON-LD structured data and Open Graph
@@ -33,11 +34,11 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 ├── gallery/
 │   └── index.html      # permanent redirect stub → /naarden/
 ├── naarden/
-│   ├── index.html      # Naarden page + photo gallery + live weather card + forecast box (served at /naarden/)
-│   ├── weather.css     # weather-card styles (scoped #weather .wx-*)
-│   ├── weather.js      # weather behaviour (fetches the gist: renders the card + fills the forecast box)
+│   ├── index.html      # Naarden page + photo gallery + live-weather teaser link (served at /naarden/)
 │   ├── weather/
-│   │   └── index.html  # unlisted lightweight "just the weather" page (/naarden/weather/, noindex)
+│   │   ├── index.html  # live weather page (served at /naarden/weather/) — the card + forecast box
+│   │   ├── weather.css # weather-card styles (scoped #weather .wx-*)
+│   │   └── weather.js  # weather behaviour (fetches the gist: card, forecast box, and the /naarden/ teaser)
 │   ├── images/         # full-size photos (~2048px long edge)
 │   └── thumbnails/     # grid thumbnails (~640px wide)
 ├── vendor/
@@ -190,41 +191,42 @@ same way: `python3 scripts/build_chronicle.py`.
 `content/` and `scripts/` are build inputs and are excluded from the published
 site. The markdown content itself is never served raw.
 
-## Weather card
+## Weather
 
-The Naarden page shows a live weather card — current conditions, sunrise/sunset,
-moon phase and a short multi-day forecast. It's a pull-based design that keeps
-the site fully static:
+A dedicated **live weather page** at `/naarden/weather/` shows current
+conditions, an hourly and three-day forecast, sun/moon times and a plain-language
+outlook. It's a pull-based design that keeps the site fully static:
 
 - A home-automation server (Home Assistant) pushes a small JSON snapshot to a
   **GitHub gist** on a schedule — nothing runs server-side here.
-- `naarden/weather.js` fetches that gist client-side and populates the
-  `#weather` markup in `naarden/index.html`; `naarden/weather.css` styles it
-  (scoped to `#weather`, light/dark via `prefers-color-scheme`).
+- `naarden/weather/weather.js` fetches that gist client-side and populates the
+  `#weather` card in `naarden/weather/index.html`; `naarden/weather/weather.css`
+  styles it (scoped to `#weather`, light/dark via `prefers-color-scheme`).
+- The card body is one grid of six blocks — condition, temp+wind, hourly
+  forecast, daily forecast, sun times, moon phase — one column on small screens,
+  two from 1020px up, with a full-width rule between the current / forecast /
+  astro pairs.
 - Weather icons are [Meteocons](https://bas.dev/work/meteocons) (MIT),
   self-hosted under `vendor/meteocons/` — no third-party CDN.
 - The card's footer carries a **source note** ("Sourced from my Home Assistant")
   beside the JS-driven "Updated …" freshness stamp.
 
-**Forecast in words.** Above the card sits a `#wx-forecast-text` box ("The
-weather in Naarden") with a plain-language forecast. The text is a second file
-(`forecast_naarden.txt`) in the **same gist**; `weather.js` fetches it
-independently of the JSON card (so one failing doesn't hide the other) and drops
-it in with `textContent`. The box stays hidden until the text loads, and on any
-failure — matching the card.
+**Forecast in words.** The page's title box leads with a plain-language forecast
+paragraph beneath the `<h1>`. The text is a second file (`forecast_naarden.txt`)
+in the **same gist**; `weather.js` fetches it independently of the JSON card (so
+one failing doesn't hide the other) and drops it in with `textContent`. The
+heading is always shown; the paragraph appears only once the text loads.
 
-**Standalone weather page.** `naarden/weather/index.html` (served at
-`/naarden/weather/`) is an unlisted, `noindex` "just the weather" view — the same
-header, forecast box and card, **without** the Naarden article or gallery images,
-so it loads light for glancing at the weather. It reuses the shared `weather.css`
-/ `weather.js` and has its own canonical URL + JSON-LD, but is kept out of the
-sitemap.
+**Teaser on the Naarden page.** `/naarden/` doesn't embed the card — it shows a
+compact link box (driven by the same `weather.js`, via a guarded code path) with
+the live condition icon + temperature, linking through to the weather page. The
+box is revealed only when the gist has data, so a failed/empty fetch just leaves
+it hidden — nothing to click through to.
 
 The behaviour is deliberately forgiving: missing fields are skipped, and if the
-fetch fails the card (and the forecast box) simply stay hidden rather than
-rendering broken. Icon paths are root-absolute (`/vendor/meteocons/…`), so the
-card can be reused on another page at any depth by copying the `#weather` markup
-(and the `#wx-forecast-text` box) and referencing `weather.css` and `weather.js`.
+fetch fails the card, forecast paragraph and teaser simply stay hidden rather
+than rendering broken. Icon paths are root-absolute (`/vendor/meteocons/…`), so
+the script works at any page depth.
 
 ## Local development
 
@@ -249,8 +251,9 @@ Tailwind CLI against the input file and output to `styles.css`.
 
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
-`naarden/index.html`, `jottings/index.html`, `chronicle/index.html`, the
-`chronicle/*/index.html` article pages and `404.html` are listed) — otherwise
+`naarden/index.html`, `naarden/weather/index.html`, `jottings/index.html`,
+`chronicle/index.html`, the `chronicle/*/index.html` article pages and
+`404.html` are listed) — otherwise
 its utility classes are dropped from the build.
 
 ### Production-parity preview

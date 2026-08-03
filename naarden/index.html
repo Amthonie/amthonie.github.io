@@ -97,10 +97,6 @@
     -->
     <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>
 
-    <!-- Weather-card styling — see weather.css (scoped .wx-*, palette from
-         src/input.css, dark mode via prefers-color-scheme). -->
-    <link rel="stylesheet" href="weather.css"/>
-
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="homepage"></script>
 </head>
@@ -148,87 +144,25 @@
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Forecast in words for Naarden. A plain-text paragraph pushed to the same
-         GitHub gist as the weather card by Home Assistant, fetched by weather.js.
-         Hidden until it loads; stays hidden on failure so a bad fetch leaves no
-         empty box. Kept in sync with the /naarden/weather/ checking page. -->
-    <section id="wx-forecast-text" hidden aria-label="Weather forecast for Naarden, in words"
-             class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <h2 class="text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-white">The weather in Naarden</h2>
-        <p id="wx-forecast-text-body" class="mt-2 text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
-    </section>
-
-    <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
-         gist and fetched client-side; see the <script> near </body>. Meteocons
-         icons (MIT) self-hosted in /vendor/meteocons. Two cards (current + forecast)
-         sit side by side on wide screens, stacked on narrow. Hidden until data loads. -->
-    <div id="weather" hidden aria-label="Current weather and forecast for Naarden"
-         class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <!-- Secondary-data ticker: a marquee of the extra gist fields that don't fit the
-             card proper (humidity, rain today, dew point, pressure, cloud cover, visibility,
-             UV index). Populated by weather.js. A bonus layer — hidden entirely under
-             prefers-reduced-motion (see weather.css), so motion-averse visitors get the
-             clean core card. -->
-        <div class="wx-ticker-wrap"><div class="wx-ticker-track" id="wx-ticker"></div></div>
-        <!-- Six uniform blocks in one grid: 1 column on small screens, 2 on wider ones. -->
-        <div class="wx-cols">
-            <!-- Block 1: current condition -->
-            <div class="wx-sub">
-                <div class="wx-group">
-                    <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
-                    <div>
-                        <div id="wx-condition" class="wx-val">—</div>
-                        <div class="wx-lbl">Naarden</div>
-                    </div>
-                </div>
-            </div>
-            <!-- Block 2: temperature + wind -->
-            <div class="wx-sub wx-tempwind">
-                <div>
-                    <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
-                    <div class="wx-lbl"><span id="wx-feels"></span></div>
-                </div>
-                <div class="wx-group">
-                    <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
-                        <circle class="wx-ring" cx="50" cy="50" r="44"/>
-                        <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
-                        <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
-                    </svg>
-                    <div>
-                        <div class="wx-val"><span id="wx-bft">—</span><span id="wx-bft-gust"></span> <span class="u">Bft</span></div>
-                        <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
-                    </div>
-                </div>
-            </div>
-            <!-- Separator between the current-conditions blocks and the forecast blocks -->
-            <div class="wx-div" aria-hidden="true"></div>
-            <!-- Block 3: hourly forecast -->
-            <div id="wx-hourly-block" class="wx-sub wx-fc-group" hidden>
-                <div class="wx-fc-head">Hourly forecast</div>
-                <div id="wx-hourly" class="wx-fc"></div>
-            </div>
-            <!-- Block 4: daily forecast -->
-            <div id="wx-daily-block" class="wx-sub wx-fc-group" hidden>
-                <div class="wx-fc-head">Daily forecast</div>
-                <div id="wx-forecast" class="wx-fc"></div>
-            </div>
-            <!-- Separator between the forecast blocks and the sun/moon blocks -->
-            <div class="wx-div" aria-hidden="true"></div>
-            <!-- Block 5: sun times -->
-            <div id="wx-sun" class="wx-sub wx-sun" hidden>
-                <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
-                <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
-            </div>
-            <!-- Block 6: moon phase -->
-            <div id="wx-moon-card" class="wx-sub wx-moon" hidden>
-                <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
-            </div>
-        </div>
-        <!-- Source attribution + freshness. weather.js only rewrites #wx-updated,
-             so the static "Sourced from…" note beside it is safe. Kept in sync
-             with the /naarden/weather/ checking page. -->
-        <div class="wx-foot wx-foot-right"><span>Sourced from my Home Assistant</span> · <span id="wx-updated">Updated —</span></div>
-    </div>
+    <!-- Live-weather teaser linking to the dedicated page (the card used to sit here).
+         Hidden until weather.js confirms the gist has data, then revealed with the live
+         condition icon + temperature; a failed or empty fetch just leaves it hidden.
+         No `flex` on the <a> itself so the `hidden` attribute works — it's a flex item of
+         <main>, so it still lays out as a block once shown; the inner span does the row. -->
+    <a id="wx-mini" href="/naarden/weather/" data-umami-event="weather-link" hidden
+       class="group mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-3 md:px-8 md:py-4 shadow-xl transition hover:bg-black/10 dark:hover:bg-white/15">
+        <span class="flex items-center justify-between gap-4">
+            <span class="text-base md:text-lg font-semibold tracking-tight text-stone-900 dark:text-white">Current weather conditions</span>
+            <span class="flex items-center gap-3">
+                <img id="wx-mini-icon" src="../vendor/meteocons/clear-day.svg" alt="" width="40" height="40" class="shrink-0"/>
+                <span id="wx-mini-temp" class="text-base md:text-lg font-semibold tabular-nums text-stone-900 dark:text-white"></span>
+                <svg class="h-5 w-5 shrink-0 text-brand-600 dark:text-brand-400 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/>
+                    <path d="m12 5 7 7-7 7"/>
+                </svg>
+            </span>
+        </span>
+    </a>
 
     <!-- About Naarden — intro block (text content to be added later) -->
     <section
@@ -351,6 +285,8 @@
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>
+        <a href="/naarden/weather/">Weather</a>
+        <span class="sep">·</span>
         <a href="/jottings/">Jottings</a>
     </nav>
     <p>&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
@@ -400,8 +336,9 @@
     lightbox.init();
 </script>
 
-<!-- Live weather tile: fetches the HA-pushed gist and populates #weather. See weather.js. -->
-<script src="weather.js"></script>
+<!-- Live-weather teaser box (#wx-mini): weather.js fetches the gist, fills the condition
+     icon + temperature, and reveals the box only when there's data. -->
+<script src="weather/weather.js"></script>
 
 <!-- Umami Outbound links tracking -->
 <script type="text/javascript">

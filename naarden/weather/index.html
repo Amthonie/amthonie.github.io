@@ -3,15 +3,26 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Naarden weather</title>
+    <title>Amthonie | Weather in Naarden</title>
     <link rel="canonical" href="https://amthonie.nl/naarden/weather/">
     <link rel="icon" href="../../favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="../../images/a.png"/>
+    <meta name="description"
+          content="Live weather for Naarden — current conditions, an hourly and three-day forecast, sun and moon times, and a plain-language outlook."/>
     <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
-    <!-- Unlisted for now: canonical URL + JSON-LD in place, but kept out of the
-         index and the sitemap until it graduates from a checking page. -->
-    <meta name="robots" content="noindex,nofollow"/>
+    <meta name="robots" content="index,follow"/>
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://amthonie.nl/naarden/weather/"/>
+    <meta property="og:title" content="Amthonie | Weather in Naarden"/>
+    <meta property="og:description" content="Live weather for Naarden — current conditions, an hourly and three-day forecast, sun and moon times, and a plain-language outlook."/>
+    <meta property="og:image" content="https://amthonie.nl/naarden/og-image.jpg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="Aerial view of the star-shaped fortress town of Naarden"/>
+    <meta property="og:site_name" content="Amthonie"/>
+    <meta property="og:locale" content="en_GB"/>
 
     <script type="application/ld+json">
         {
@@ -21,10 +32,19 @@
                     "@type": "WebPage",
                     "@id": "https://amthonie.nl/naarden/weather/#webpage",
                     "url": "https://amthonie.nl/naarden/weather/",
-                    "name": "Naarden weather",
-                    "description": "Live weather and a plain-language forecast for Naarden, sourced from Amthonie's home Home Assistant instance.",
+                    "name": "Weather in Naarden",
+                    "description": "Live weather for Naarden — current conditions, an hourly and three-day forecast, sun and moon times, and a plain-language outlook, sourced from a home Home Assistant instance.",
+                    "primaryImageOfPage": {
+                        "@type": "ImageObject",
+                        "url": "https://amthonie.nl/naarden/og-image.jpg",
+                        "width": 1200,
+                        "height": 630
+                    },
                     "isPartOf": {
                         "@id": "https://amthonie.nl/#website"
+                    },
+                    "author": {
+                        "@id": "https://amthonie.nl/#person"
                     },
                     "about": {
                         "@id": "https://amthonie.nl/naarden/#place"
@@ -60,9 +80,9 @@
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../../styles.css"/>
 
-    <!-- Weather-card styling — see ../weather.css, shared with the main Naarden
-         page (scoped .wx-*, palette from src/input.css, dark via prefers-color-scheme). -->
-    <link rel="stylesheet" href="../weather.css"/>
+    <!-- Weather-card styling (scoped .wx-*, palette from src/input.css, dark via
+         prefers-color-scheme). -->
+    <link rel="stylesheet" href="weather.css"/>
 
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="weather"></script>
@@ -111,14 +131,14 @@
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Forecast in words for Naarden. A plain-text paragraph pushed to the same
-         GitHub gist as the weather card by Home Assistant, fetched client-side
-         (see the <script> near </body>). Hidden until it loads; stays hidden on
-         failure so a bad fetch leaves no empty box. -->
-    <section id="wx-forecast-text" hidden aria-label="Weather forecast for Naarden, in words"
+    <!-- Page title box: the H1 followed by the plain-language forecast. The prose is
+         pushed to a GitHub gist by Home Assistant and fetched client-side (see the
+         <script> near </body>); the paragraph stays hidden until it loads, so a failed
+         or empty fetch just leaves the heading — never a dangling empty paragraph. -->
+    <section aria-labelledby="wx-title"
              class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <h2 class="text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-white">The weather in Naarden</h2>
-        <p id="wx-forecast-text-body" class="mt-2 text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
+        <h1 id="wx-title" class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">The weather in Naarden</h1>
+        <p id="wx-forecast-text-body" hidden class="mt-2 text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
     </section>
 
     <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
@@ -205,6 +225,8 @@
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>
+        <a href="/naarden/weather/">Weather</a>
+        <span class="sep">·</span>
         <a href="/jottings/">Jottings</a>
     </nav>
     <p>&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
@@ -215,7 +237,7 @@
 </script>
 
 <!-- Live weather tile + forecast-in-words box: both fetched by weather.js. -->
-<script src="../weather.js"></script>
+<script src="weather.js"></script>
 
 </body>
 </html>
