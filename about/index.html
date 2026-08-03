@@ -131,10 +131,14 @@
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+<a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- Header: banner image + branded band merged into one box (matches the home page).
-         The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
+<!-- Site banner: branding + back-home links. A real <header> (the page's
+     "banner" landmark), kept outside <main> so assistive tech — and the skip
+     link above — can jump straight past it to the content. -->
+<header class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12">
+    <!-- banner image + branded band merged into one box (matches the home page).
+         The Amthonie wordmark sits in the band with a back-home button. -->
     <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
         <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
             <img
@@ -165,17 +169,9 @@
             </a>
         </div>
     </div>
+</header>
 
-    <!-- Colophon: a short note about the site itself, above the personal story.
-         Prose sits in .update-body so the Umami link picks up the site's standard
-         brand-coloured underlined link style (compiled CSS, immune to Tailwind lag). -->
-    <section
-            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <h2 class="text-xl font-bold tracking-tight text-stone-900 dark:text-white">About this page</h2>
-        <div class="update-body mt-3 text-sm">
-            <p>This website is built to be lightweight, transparent, and fully under my control. It uses no cookies, no tracking, and only minimal, privacy‑friendly analytics via <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Cloud</a>. Every page is hand‑crafted in HTML, CSS and a little vanilla JavaScript — styled with Tailwind and compiled to static CSS, with no client‑side frameworks. The full source is <a href="https://github.com/Amthonie/amthonie.github.io" target="_blank" rel="noopener">public on GitHub</a>. All photographs are my own unless noted otherwise, and illustrations are created with assistance from AI‑generated artwork.</p>
-        </div>
-    </section>
+<main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
     <!-- About -->
     <section
@@ -275,6 +271,18 @@
 
     </section>
 
+    <!-- Colophon: a short note about the site itself, below the personal story
+         so the page leads with its <h1>. Linked from the footer's "About this
+         site". Prose sits in .update-body for the standard brand-coloured link
+         style. External links carry an sr-only "opens in a new tab" cue. -->
+    <section id="about-this-site"
+            class="scroll-mt-6 mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
+        <h2 class="text-xl font-bold tracking-tight text-stone-900 dark:text-white">About this site</h2>
+        <div class="update-body mt-3 text-sm">
+            <p>This website is built to be lightweight, transparent, and fully under my control. It uses no cookies, no tracking, and only minimal, privacy‑friendly analytics via <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Cloud<span class="sr-only"> (opens in a new tab)</span></a>. Every page is hand‑crafted in HTML, CSS and a little vanilla JavaScript — styled with Tailwind and compiled to static CSS, with no client‑side frameworks. The full source is <a href="https://github.com/Amthonie/amthonie.github.io" target="_blank" rel="noopener">public on GitHub<span class="sr-only"> (opens in a new tab)</span></a>. All photographs are my own unless noted otherwise, and illustrations are created with assistance from AI‑generated artwork.</p>
+        </div>
+    </section>
+
     <!-- A little 90s-web flourish: a looping avatar, tucked below the story -->
     <!-- temporarily disabled
     <div class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px]">
@@ -294,6 +302,8 @@
         <a href="/">Home</a>
         <span class="sep">·</span>
         <a href="/about/">About me</a>
+        <span class="sep">·</span>
+        <a href="/about/#about-this-site">About this site</a>
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>

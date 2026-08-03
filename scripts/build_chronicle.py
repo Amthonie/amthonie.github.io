@@ -381,6 +381,7 @@ def render_page(
     og_description: str,
     og_image: str,
     jsonld: str,
+    header: str,
     body: str,
     umami_tag: str,
     robots: str = "index,follow",
@@ -433,7 +434,14 @@ def render_page(
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- Site banner: the masthead lives in a real <header> (banner landmark),
+     outside <main> so the skip link and assistive tech can bypass it. -->
+<header class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12">
+{header}</header>
+
+<main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
 {body}
 </main>
@@ -560,9 +568,10 @@ def build_landing_page(posts: list[dict]) -> None:
     index_cards = render_index_cards(posts)
     jsonld = build_landing_jsonld(posts)
 
-    body = f"""    <!-- Real site title as the page's <h1>, kept sr-only: the banner image below
+    header = f"""    <!-- Real site title as the page's <h1>, kept sr-only: the banner image below
          carries it visually (and it lives in <title>, og:title and the JSON-LD),
-         so this gives crawlers and screen readers a genuine text <h1>. -->
+         so this gives crawlers and screen readers a genuine text <h1> that leads
+         the document (before the tagline <h2> in the band). -->
     <h1 class="sr-only">{TITLE}</h1>
 
     <!-- Header: banner image + branded slogan band merged into one box (matches the site).
@@ -590,8 +599,9 @@ def build_landing_page(posts: list[dict]) -> None:
             </a>
         </div>
     </div>
+"""
 
-    <!-- Masthead strip: a short promo blurb in the Chronicle's dark-grey promo colour, separating the header box from the index below. -->
+    body = f"""    <!-- Masthead strip: a short promo blurb in the Chronicle's dark-grey promo colour, separating the header box from the index below. -->
     <div class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-stone-700 bg-stone-700 dark:border-stone-600 dark:bg-stone-600 px-4 py-4 md:px-8 md:py-6 shadow-xl">
         <p class="leading-relaxed text-stone-300 dark:text-stone-200">
             Because reality isn’t ridiculous enough: a satirical outlet reporting boldly, inaccurately and with great enthusiasm on the state of the cosmos.<span class="hidden lg:inline"> Its mission is to document interplanetary and local affairs with maximum drama, minimal fact‑checking and a level of confidence wholly disproportionate to its sources.</span>
@@ -618,6 +628,7 @@ def build_landing_page(posts: list[dict]) -> None:
         ),
         og_image=f"{SITE}/chronicle/header.webp",
         jsonld=jsonld,
+        header=header,
         body=body,
         umami_tag="chronicle",
         has_lightbox=False,
@@ -771,8 +782,7 @@ def build_article_page(post: dict) -> None:
     </div>
 """
 
-    body = f"""{header}
-    <!-- Article -->
+    body = f"""    <!-- Article -->
     <section class="{SECTION_BOX}">
         <article>
             <time datetime="{post['date']:%Y-%m-%d}"
@@ -802,6 +812,7 @@ def build_article_page(post: dict) -> None:
         og_description=post["summary"],
         og_image=og_image,
         jsonld=build_article_jsonld(post),
+        header=header,
         body=body,
         umami_tag="chronicle-article",
         # The Chronicle landing is the single search entry point; individual

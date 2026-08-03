@@ -135,11 +135,15 @@
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+<a href="#main" class="skip-link">Skip to content</a>
 
+<!-- Site banner: the masthead lives in a real <header> (banner landmark),
+     outside <main> so the skip link and assistive tech can bypass it. -->
+<header class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12">
     <!-- Real site title as the page's <h1>, kept sr-only: the banner image below
          carries it visually (and it lives in <title>, og:title and the JSON-LD),
-         so this gives crawlers and screen readers a genuine text <h1>. -->
+         so this gives crawlers and screen readers a genuine text <h1> that leads
+         the document (before the tagline <h2> in the band). -->
     <h1 class="sr-only">The Interplanetary Chronicle</h1>
 
     <!-- Header: banner image + branded slogan band merged into one box (matches the site).
@@ -167,6 +171,9 @@
             </a>
         </div>
     </div>
+</header>
+
+<main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
     <!-- Masthead strip: a short promo blurb in the Chronicle's dark-grey promo colour, separating the header box from the index below. -->
     <div class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-stone-700 bg-stone-700 dark:border-stone-600 dark:bg-stone-600 px-4 py-4 md:px-8 md:py-6 shadow-xl">

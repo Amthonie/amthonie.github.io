@@ -600,7 +600,11 @@ def build_jottings_page(posts: list[dict]) -> None:
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- Site banner: the branding box lives in a real <header> (banner landmark),
+     outside <main> so the skip link and assistive tech can bypass it. -->
+<header class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12">
 
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
@@ -634,6 +638,9 @@ def build_jottings_page(posts: list[dict]) -> None:
             </a>
         </div>
     </div>
+</header>
+
+<main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
     <!-- Jottings: intro + index -->
     <section
@@ -656,6 +663,8 @@ def build_jottings_page(posts: list[dict]) -> None:
         <a href="/">Home</a>
         <span class="sep">·</span>
         <a href="/about/">About me</a>
+        <span class="sep">·</span>
+        <a href="/about/#about-this-site">About this site</a>
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>

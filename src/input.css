@@ -126,6 +126,68 @@
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Accessibility: reduced motion, visible keyboard focus, skip link.  */
+/* ------------------------------------------------------------------ */
+
+/* Respect the visitor's "reduce motion" OS/browser setting: neutralise
+   the hover zooms, smooth scrolling and transitions used across the site
+   for anyone who asks for less movement (vestibular comfort). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* A clear, consistent focus ring for keyboard users only (:focus-visible,
+   never on a mouse click). outline isn't clipped by overflow-hidden and
+   follows the element's border-radius, so it works on the rounded cards
+   and the header banner alike. */
+:focus-visible {
+  outline: 3px solid #4a7a2c; /* brand-600 */
+  outline-offset: 2px;
+}
+/* On the brand-coloured header/footer bands a brand ring would vanish, so
+   switch those inner controls to a light ring. */
+.bg-brand-600 :focus-visible,
+.bg-brand-700 :focus-visible {
+  outline-color: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: #9ccc66; /* brand-400 */
+  }
+}
+
+/* Skip-to-content link: visually hidden until focused, then it drops into
+   the top-left corner so a keyboard user can jump straight past the header
+   to the page's <main>. */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3.5rem;
+  z-index: 50;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  background: #4a7a2c; /* brand-600 */
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
 /* Footer site-nav (Home / About / Naarden / Jottings), shared across pages. */
 .site-nav {
   display: flex;

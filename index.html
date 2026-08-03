@@ -150,7 +150,11 @@
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
-<main class="flex min-h-screen flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- Site banner: the branding box lives in a real <header> (banner landmark),
+     outside <main> so the skip link and assistive tech can bypass it. -->
+<header class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12">
 
     <!-- Header: banner image + branded title band merged into one box, shown on all
          screens. The Amthonie title (page h1) lives in the band; social buttons sit in
@@ -215,6 +219,9 @@
             </div>
         </div>
     </div>
+</header>
+
+<main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
     <!-- Profile + motto -->
     <div class="mt-3 md:mt-6 flex w-full md:w-4/5 max-w-[1280px] flex-col gap-2.5 md:gap-5 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-6">
@@ -576,6 +583,8 @@
         <a href="/">Home</a>
         <span class="sep">·</span>
         <a href="/about/">About me</a>
+        <span class="sep">·</span>
+        <a href="/about/#about-this-site">About this site</a>
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>
