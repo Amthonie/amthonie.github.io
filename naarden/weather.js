@@ -103,25 +103,31 @@
     }
     function set(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
     function fcell(cls, txt) { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = txt; return s; }
-    // Renders one forecast row into the grid. Daily rows carry a real Tmin/Tmax and show
-    // both (hi / lo). Hourly rows have no meaningful minimum — the gist sends 999 as p[2] —
-    // so `singleTemp` renders just the single temperature (p[3]) and drops the "/ lo".
+    // Renders one forecast row as four even cells: day/time · (icon + temp) · precip · wind.
+    // The condition icon lives inside the temperature cell (fixed 28px, so it reserves a
+    // predictable slice). Daily rows carry a real Tmin/Tmax and show both (hi / lo); hourly
+    // rows have no meaningful minimum — the gist sends 999 as p[2] — so `singleTemp` renders
+    // just the single temperature (p[3]) and drops the "/ lo".
     function addForecast(box, label, str, singleTemp) {
         const p = String(str).split("|");           // label | condition | Tmin | Tmax | precip mm | wind bearing | beaufort
         if (p.length < 7) return;
         box.appendChild(fcell("wx-fc-day", label || p[0])); // empty label → use the piped label (day name, or hour for hourly)
+        const cond = document.createElement("span");
+        cond.className = "wx-fc-cond";
         const im = document.createElement("img");
         im.className = "wx-fc-icon"; im.width = 28; im.height = 28;
         im.src = ICONS + iconFor(p[1], false) + ".svg"; im.alt = LABEL[p[1]] || p[1] || "";
-        box.appendChild(im);
+        cond.appendChild(im);
         const t = document.createElement("span");
+        t.className = "wx-fc-temp";
         t.appendChild(fcell("wx-fc-hi", Math.round(parseFloat(p[3])) + "°"));
         if (!singleTemp) {                           // daily only: append the low; hourly has no real minimum (999)
-            t.appendChild(document.createTextNode(" / "));
+            t.appendChild(document.createTextNode("/")); // no-space slash keeps icon+hi/lo inside the 25% cell
             t.appendChild(fcell("wx-fc-lo", Math.round(parseFloat(p[2])) + "°"));
         }
-        box.appendChild(t);
-        box.appendChild(fcell("wx-fc-sub", (Math.round(parseFloat(p[4]) * 10) / 10) + " mm"));
+        cond.appendChild(t);
+        box.appendChild(cond);
+        box.appendChild(fcell("wx-fc-sub", Math.round(parseFloat(p[4])) + " mm")); // whole mm: keeps the column a regular width; sub-mm precision is noise here
         box.appendChild(fcell("wx-fc-sub", dir8(parseFloat(p[5])) + " " + p[6] + " Bft"));
     }
     // Build the secondary-data marquee from whichever ticker fields the gist carries.

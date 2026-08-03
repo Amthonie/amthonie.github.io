@@ -163,26 +163,28 @@
                     </div>
                 </div>
             </div>
-            <!-- Block 3: sun times -->
-            <div id="wx-sun" class="wx-sub wx-sun" hidden>
-                <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
-                <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
-            </div>
-            <!-- Block 4: moon phase -->
-            <div id="wx-moon-card" class="wx-sub wx-moon" hidden>
-                <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
-            </div>
             <!-- Separator between the current-conditions blocks and the forecast blocks -->
             <div class="wx-div" aria-hidden="true"></div>
-            <!-- Block 5: hourly forecast -->
+            <!-- Block 3: hourly forecast -->
             <div id="wx-hourly-block" class="wx-sub wx-fc-group" hidden>
                 <div class="wx-fc-head">Hourly forecast</div>
                 <div id="wx-hourly" class="wx-fc"></div>
             </div>
-            <!-- Block 6: daily forecast -->
+            <!-- Block 4: daily forecast -->
             <div id="wx-daily-block" class="wx-sub wx-fc-group" hidden>
                 <div class="wx-fc-head">Daily forecast</div>
                 <div id="wx-forecast" class="wx-fc"></div>
+            </div>
+            <!-- Separator between the forecast blocks and the sun/moon blocks -->
+            <div class="wx-div" aria-hidden="true"></div>
+            <!-- Block 5: sun times -->
+            <div id="wx-sun" class="wx-sub wx-sun" hidden>
+                <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
+                <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
+            </div>
+            <!-- Block 6: moon phase -->
+            <div id="wx-moon-card" class="wx-sub wx-moon" hidden>
+                <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
             </div>
         </div>
         <!-- Source attribution + freshness. weather.js only rewrites #wx-updated,

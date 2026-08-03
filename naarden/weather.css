@@ -28,10 +28,17 @@
 #weather .wx-foot-place { font-weight:600; }
 /* Forecast block heading ("Hourly forecast" / "Daily forecast"). */
 #weather .wx-fc-head { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#57534e; margin-bottom:.45rem; }
-/* Forecast rows: one CSS grid per block so the columns line up across its rows. */
-#weather .wx-fc { display:grid; grid-template-columns:max-content 28px max-content max-content max-content; align-items:center; gap:.5rem .9rem; font-size:.8rem; }
+/* Forecast rows: four columns filling the block width — day/time · (icon +
+   temp) · precip · wind — so the hourly and daily grids line up identically
+   whatever the label length ("18:00" vs "Wednesday"). Split 25/30/20/25: the
+   icon+temp cell gets a little extra (it carries the fixed 28px icon plus a
+   hi/lo pair, incl. winter double-negatives), taken from the now-tidy whole-mm
+   precip column. minmax(0,·) keeps the tracks strictly proportional. */
+#weather .wx-fc { display:grid; grid-template-columns:minmax(0,25fr) minmax(0,30fr) minmax(0,20fr) minmax(0,25fr); align-items:center; gap:.5rem; font-size:.8rem; }
+#weather .wx-fc > * { min-width:0; white-space:nowrap; }
+#weather .wx-fc-cond { display:inline-flex; align-items:center; gap:.35rem; }
+#weather .wx-fc-icon { width:28px; height:28px; flex:none; }
 #weather .wx-fc-day { font-weight:700; color:#1c1917; }
-#weather .wx-fc-icon { width:28px; height:28px; }
 #weather .wx-fc-hi { font-weight:700; color:#1c1917; }
 #weather .wx-fc-lo { color:#44403c; }
 #weather .wx-fc-sub { color:#44403c; }
