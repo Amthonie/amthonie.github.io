@@ -223,6 +223,18 @@ the live condition icon + temperature, linking through to the weather page. The
 box is revealed only when the gist has data, so a failed/empty fetch just leaves
 it hidden — nothing to click through to.
 
+**Weather maps.** Below the card, a collapsible board shows KNMI forecast maps
+(`cdn.knmi.nl`), picked by time of day (Europe/Amsterdam): before 18:00 → current
++ today + tonight + tomorrow; from 18:00 → current + tonight + tomorrow +
+tomorrow-night. It's **collapsed by default behind a Show/Hide toggle** and the
+maps — third-party images — are fetched only on first expand, so no request
+reaches KNMI (and no visitor IP is exposed) until the visitor opts in. How many
+show tracks the column count (1–2 columns → 2 maps, 3 → 3, 4 → 4); the extra
+slots are `lazy`, so narrow screens don't fetch them. The maps carry their own
+"Bron: KNMI" label and link to KNMI's forecast page, with a "Maps source:
+knmi.nl" credit under the heading. The title and credit stay visible whether the
+board is open or closed.
+
 The behaviour is deliberately forgiving: missing fields are skipped, and if the
 fetch fails the card, forecast paragraph and teaser simply stay hidden rather
 than rendering broken. Icon paths are root-absolute (`/vendor/meteocons/…`), so

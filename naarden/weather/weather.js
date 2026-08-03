@@ -253,7 +253,46 @@
             .catch(function () { /* leave the paragraph hidden on any error */ });
     }
 
-    function refresh() { loadCard(); loadForecast(); }
+    // KNMI weather maps (425×467 GIFs). Fill the four #wx-map-N slots and pick which maps
+    // to show by the time of day in the Netherlands (the maps' locale, not the visitor's TZ):
+    // before 18:00 → current + today + tonight + tomorrow; from 18:00 → current + tonight +
+    // tomorrow + tomorrow-night. No-op where the maps box isn't on the page (e.g. /naarden/).
+    // Each already carries the KNMI source label, so no separate attribution. A slot hides
+    // itself if its image fails to load; no cache-bust — the CDN's own caching governs it.
+    function loadMaps() {
+        const box = document.getElementById("wx-maps");
+        if (!box) return;
+        const B = "https://cdn.knmi.nl/knmi/map/";
+        const MAP = {
+            current:       [B + "general/weather-map.gif", "Current conditions"],
+            todayDay:      [B + "current/weather/forecast/kaart_verwachtingen_Vandaag_dag.gif", "Today"],
+            todayNight:    [B + "current/weather/forecast/kaart_verwachtingen_Vandaag_nacht.gif", "Tonight"],
+            tomorrowDay:   [B + "current/weather/forecast/kaart_verwachtingen_Morgen_dag.gif", "Tomorrow"],
+            tomorrowNight: [B + "current/weather/forecast/kaart_verwachtingen_Morgen_nacht.gif", "Tomorrow night"]
+        };
+        const hour = parseInt(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Amsterdam", hour: "2-digit", hourCycle: "h23" }).format(new Date()), 10);
+        const keys = hour < 18
+            ? ["current", "todayDay", "todayNight", "tomorrowDay"]
+            : ["current", "todayNight", "tomorrowDay", "tomorrowNight"];
+        keys.forEach(function (key, i) {
+            const n = i + 1, m = MAP[key];
+            const img = document.getElementById("wx-map-" + n);
+            const link = document.getElementById("wx-map-" + n + "-link");
+            const cap = document.getElementById("wx-map-" + n + "-cap");
+            if (link) link.style.display = "";                                    // restore responsive/default visibility before (re)load
+            if (img) {
+                img.onerror = function () { if (link) link.style.display = "none"; }; // drop a slot whose map fails (inline style beats the responsive class)
+                img.src = m[0];
+                img.alt = "KNMI weather map — " + m[1];
+            }
+            if (cap) cap.textContent = m[1];
+        });
+    }
+
+    function mapsShown() { const g = document.getElementById("wx-maps-grid"); return !!g && !g.hidden; }
+    // Maps are only refreshed while the disclosure is open — never fetch KNMI behind a
+    // collapsed panel.
+    function refresh() { loadCard(); loadForecast(); if (mapsShown()) loadMaps(); }
 
     // Keep an open tab current without a page reload — a reload would re-download assets,
     // flash, drop scroll/lightbox state and log a phantom Umami pageview. Instead re-fetch
@@ -265,4 +304,24 @@
     refresh();
     setInterval(function () { if (document.visibilityState === "visible") refresh(); }, 10 * 60 * 1000);
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
+
+    // Weather-maps disclosure. KNMI images are third-party, so the grid is collapsed by
+    // default and its maps are fetched only on first expand — no request to cdn.knmi.nl
+    // (no visitor IP exposure) until the visitor opts in. The title + source line stay
+    // visible regardless. Mirrors the homepage links toggle; no-op where absent (/naarden/).
+    (function () {
+        const toggle = document.getElementById("wx-maps-toggle");
+        const grid = document.getElementById("wx-maps-grid");
+        if (!toggle || !grid) return;
+        const label = toggle.querySelector("[data-maps-label]");
+        const chevron = toggle.querySelector("[data-maps-chevron]");
+        toggle.addEventListener("click", function () {
+            const show = grid.hidden;
+            grid.hidden = !show;
+            toggle.setAttribute("aria-expanded", String(show));
+            if (label) label.textContent = show ? "Hide" : "Show";
+            if (chevron) chevron.classList.toggle("rotate-180", show);
+            if (show) loadMaps();   // opt-in: fetch the KNMI maps only now
+        });
+    })();
 })();

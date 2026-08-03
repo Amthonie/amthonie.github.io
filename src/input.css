@@ -194,8 +194,16 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem 0.8rem;
+  /* Mobile: roomier gaps so the six items wrap in balance (not five crammed to the
+     edge with one orphan on line 2) and the wrapped lines have breathing room. */
+  gap: 0.55rem 1.1rem;
   font-size: 0.9rem;
+}
+/* From tablet up the whole strip fits on one line, so tighten it back. */
+@media (min-width: 640px) {
+  .site-nav {
+    gap: 0.4rem 0.8rem;
+  }
 }
 .site-nav.center {
   justify-content: center;
