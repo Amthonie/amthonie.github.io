@@ -83,13 +83,20 @@
         }
         return Math.max(0, Math.min(12, Math.round(v))); // already Beaufort
     }
-    function ago(iso) {
+    // Literal update time in Naarden's timezone (matches sunrise/sunset, which are
+    // already local HH:MM). A relative "x min ago" would be wrong here: the page never
+    // auto-reloads, so a relative stamp freezes at page-load and drifts out of date.
+    // Time-only when the reading is from today; a short date is prepended otherwise, so
+    // a tab left open overnight can't read a stale time as if it were current.
+    function stamp(iso) {
         const t = Date.parse(iso); if (isNaN(t)) return "";
-        const s = Math.max(0, (Date.now() - t) / 1000);
-        if (s < 90) return "just now";
-        const m = Math.round(s / 60); if (m < 60) return m + " min ago";
-        const h = Math.round(m / 60); if (h < 24) return h + (h === 1 ? " hour ago" : " hours ago");
-        const d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago");
+        const when = new Date(t);
+        const TZ = "Europe/Amsterdam";
+        // timeZoneName:"short" appends the correct abbreviation for the date — CEST in
+        // summer, CET in winter — so the DST switch needs no manual handling.
+        const time = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false, timeZoneName: "short" }).format(when);
+        const day = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "numeric", month: "short" });
+        return day.format(when) === day.format(new Date()) ? time : day.format(when) + ", " + time;
     }
     function set(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
     function fcell(cls, txt) { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = txt; return s; }
@@ -169,7 +176,7 @@
                 }
                 astro.hidden = !(d.sunrise || d.sunset || moon);
             }
-            set("wx-updated", "Updated " + ago(d.updated));
+            set("wx-updated", "Updated " + stamp(d.updated));
             document.getElementById("weather").hidden = false;
         })
         .catch(function () { /* leave the tile hidden on any error */ });
