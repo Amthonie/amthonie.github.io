@@ -335,7 +335,7 @@ def render_articles(posts: list[dict]) -> str:
         groups[-1][2].append(post)
 
     sections = []
-    for _year, _month, items in groups:
+    for year, month, items in groups:
         blocks = []
         for i, post in enumerate(items):
             divider = "" if i == 0 else (
@@ -368,8 +368,11 @@ def render_articles(posts: list[dict]) -> str:
                 </div>
             </article>"""
             )
+        # The month anchor (e.g. m-2026-07) lives on the month's article box, so
+        # the index's month permalink jumps here — not to the index entry itself.
+        anchor = f"m-{year}-{month:02d}"
         sections.append(
-            f'<section class="{SECTION_CLASS}">\n{"".join(blocks)}\n    </section>'
+            f'<section id="{anchor}" class="scroll-mt-28 {SECTION_CLASS}">\n{"".join(blocks)}\n    </section>'
         )
     return "\n".join(sections)
 
@@ -423,7 +426,7 @@ def render_index(posts: list[dict]) -> str:
         divider = '<hr class="my-4 border-black/10 dark:border-white/10"/>'
         blocks.append(
             f"""{divider}
-        <div id="{anchor}" class="scroll-mt-28">
+        <div>
             <a href="#{anchor}"
                class="text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
                 {label}
