@@ -4,6 +4,9 @@ date: 2026-07-26
 slug: eva-walks-update-2
 title: A modest push before the march
 summary: Eva's Swedish trek is three weeks away, halfway funded, and still accepting a bit of quiet enthusiasm.
+image: 7-eva-walks-update-2.webp
+image_alt: A comic-style illustration featuring a woman hiking through a snowy pine forest next to a large abacus spilling coins, while a man in a suit sits in a chair nearby drinking hot tea hooked up to a plasma donation machine.
+image_caption: Backing comes in many forms, including financial, biological, or lukewarm.
 ---
 
 My friend Eva is now three weeks away from setting off on her 450 km walk across Swedish Lapland, raising funds and awareness for rare blood conditions. As of today she has managed to raise €806 — neatly past the halfway mark towards her €1,500 target.
