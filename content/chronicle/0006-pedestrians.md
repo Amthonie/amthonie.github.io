@@ -4,6 +4,7 @@ slug: passum-magna-eradicates-pavements
 title: Passum Magna Eradicates Pavements to Bolster Bulk Car-Polish Sales
 summary: Pedestrians on Planet Ambulax face exile to distant retail parks after city council deems walking an unreasonable impediment to vehicular commerce.
 image: passum-magna-eradicates-pavements.webp
+image_alt: Retro-futuristic city scene showing workers demolishing sidewalks with a “Sidewalk Eradicator” machine, while confused pedestrians look on amid cars, flying vehicles, and billboards promoting car-only living.
 ---
 
 ### AN ABSOLUTE OUTRAGE ON FOUR WHEELS AS LOCAL AUTHORITIES RECLAIM THE TARMAC FROM RECKLESS FOOT-TRAVELLERS!

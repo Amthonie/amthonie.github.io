@@ -4,6 +4,7 @@ slug: naarden-for-mars
 title: Naarden’s Bold Mars Gambit Raises Eyebrows, Hopes, and One Very Confused Space Billionaire
 summary: A group of spectacularly self‑assured Naarders has stunned the region by announcing cosmically deranged plans to abandon Earth entirely and negotiate with space magnate Leon Sumk for their own hand‑picked Martian micro‑kingdom.
 image: mars-the-naarden-way.webp
+image_alt: Retro-futuristic poster showing officials planning a Martian colony called “Naarden,” with domed cities, rockets, and flying saucers over a red landscape.
 ---
 
 ### NAARDEN EYES THE RED PLANET IN A GRAND QUEST TO RESTORE NAERDINCKLANT — BECAUSE EARTH HAS BECOME FAR TOO COMPLICATED

@@ -108,7 +108,7 @@
         <a href="../" aria-label="Back to The Interplanetary Chronicle" class="group relative block aspect-[1024/217] overflow-hidden">
             <img
                     src="../header-articles.webp"
-                    alt="The Interplanetary Chronicle"
+                    alt="Stylised retro-futuristic banner showing planets, rockets, and UFOs around the title “The Interplanetary Chronicle” in bold lettering."
                     class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
                     draggable="false"
             />
@@ -141,7 +141,7 @@
                target="_blank" rel="noopener"
                class="pswp-hero group cursor-zoom-in transition hover:opacity-95 mt-4 block w-full md:float-right md:mt-1 md:mb-3 md:ml-6 md:w-1/2 md:max-w-md">
                 <img src="../images/tectonics-turn-sour-on-virgo-iv.webp"
-                     alt="Plagued by Plugs, Virga IV&#x27;s Tectonics Turn Sour"
+                     alt="Retro-futuristic disaster scene showing cork-sealed volcanoes forcing new eruptions in the foreground, with lava, flying saucers, and people fleeing the city."
                      class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"
                      width="1024" height="683" loading="lazy" decoding="async" draggable="false"/>
             </a>
@@ -182,7 +182,7 @@ Senior Interplanetary Correspondent</em></p>
         pswpModule: () => import('../../vendor/photoswipe/photoswipe.esm.min.js'),
     });
 
-    // Caption = the hero image's alt text (the article headline).
+    // Caption = the hero image's alt text (its image_alt frontmatter, if any).
     lightbox.on('uiRegister', () => {
         lightbox.pswp.ui.registerElement({
             name: 'caption',

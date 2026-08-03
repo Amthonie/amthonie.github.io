@@ -4,6 +4,7 @@ slug: tectonics-turn-sour-on-virgo-iv
 title: Plagued by Plugs, Virga IV's Tectonics Turn Sour
 summary: A diplomatic effort to cork active volcanoes backfires catastrophically, leaving the South Federation somewhat unexpectedly on fire.
 image: tectonics-turn-sour-on-virgo-iv.webp
+image_alt: Retro-futuristic disaster scene showing cork-sealed volcanoes forcing new eruptions in the foreground, with lava, flying saucers, and people fleeing the city.
 ---
 
 ### GEOLOGICAL DIPLOMACY REACHES BOILING POINT AFTER NORTHERN CORKING EXPERIMENT CAUSES DISASTROUS MAGMATIC DISPLACEMENT.

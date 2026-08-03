@@ -44,11 +44,15 @@ with a small frontmatter block:
     summary: One-line teaser for the index. Falls back to the first paragraph
              of the body when omitted.
     image: optional-hero.webp   # bare filename in chronicle/images/; omit = no hero
+    image_alt: Description of the hero for screen readers.  # optional
     ---
 
     Only `date` and `title` are required. `slug` is optional — it sets the
     article URL (chronicle/<slug>/); omit it and one is derived from the
-    filename. `summary` and `image` are optional too.
+    filename. `summary` and `image` are optional too. `image_alt` supplies the
+    hero/thumbnail alt text; omit it and the alt is left empty (`alt=""`), i.e.
+    the image is treated as decorative — the headline sits right beside it, so
+    an empty alt avoids a screen reader announcing the title twice.
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
 
@@ -109,6 +113,15 @@ DISCLAIMER = (
 # ../header-articles.webp. If the file is absent the article page falls back to
 # a plain text wordmark.
 ARTICLE_HEADER = "header-articles.webp"
+# Alt for that strip. It only surfaces as a load-failure fallback (the image
+# sits inside a link whose aria-label is the accessible name, so a screen reader
+# announces the link, not this alt) — but it's kept accurate to the cropped
+# artwork all the same. Describes the strip's contents, not the full landing
+# scene (the anchor/alien/cat are cropped out of this band).
+ARTICLE_HEADER_ALT = (
+    "Stylised retro-futuristic banner showing planets, rockets, and UFOs "
+    "around the title “The Interplanetary Chronicle” in bold lettering."
+)
 
 # The Chronicle's (fictional) house correspondent — used as the schema.org
 # author across articles.
@@ -164,7 +177,7 @@ def lightbox_js(prefix: str) -> str:
         pswpModule: () => import('{prefix}vendor/photoswipe/photoswipe.esm.min.js'),
     }});
 
-    // Caption = the hero image's alt text (the article headline).
+    // Caption = the hero image's alt text (its image_alt frontmatter, if any).
     lightbox.on('uiRegister', () => {{
         lightbox.pswp.ui.registerElement({{
             name: 'caption',
@@ -325,6 +338,10 @@ def parse_post(path: Path) -> dict:
         "body_html": body_html,
         "slug": slug,
         "image": image,
+        # Alt text for the hero/thumbnail. Optional: omitted → "" (decorative;
+        # the headline is right beside the image, so no alt avoids a duplicate
+        # announcement). Only used when `image` is set.
+        "image_alt": meta.get("image_alt", ""),
         "image_w": image_w,
         "image_h": image_h,
     }
@@ -463,7 +480,7 @@ def render_index_cards(posts: list[dict]) -> str:
             thumb = f"images/thumbs/{name}"
             src = thumb if (CHRONICLE_DIR / thumb).is_file() else post["image"]
             card_img = (
-                f'<img src="{src}" alt="{html.escape(post["title"])}"\n'
+                f'<img src="{src}" alt="{html.escape(post["image_alt"])}"\n'
                 '                     width="480" height="320" loading="lazy" decoding="async" draggable="false"\n'
                 '                     class="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-105"/>'
             )
@@ -637,14 +654,14 @@ def render_article_hero(post: dict) -> str:
             '               target="_blank" rel="noopener"\n'
             f'               class="pswp-hero group cursor-zoom-in transition hover:opacity-95 {box}">\n'
             f'                <img src="{src}"\n'
-            f'                     alt="{html.escape(post["title"])}"\n'
+            f'                     alt="{html.escape(post["image_alt"])}"\n'
             '                     class="block w-full rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10"\n'
             f'                     width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>\n'
             '            </a>'
         )
     return (  # unreadable dimensions → plain, non-clickable hero
         f'\n            <img src="{src}"\n'
-        f'                 alt="{html.escape(post["title"])}"\n'
+        f'                 alt="{html.escape(post["image_alt"])}"\n'
         f'                 class="rounded-xl shadow-md ring-1 ring-black/5 dark:ring-white/10 {box}"\n'
         f'                 width="{w}" height="{h}" loading="lazy" decoding="async" draggable="false"/>'
     )
@@ -662,7 +679,7 @@ def render_article_banner() -> str:
     return f"""        <a href="../" aria-label="Back to The Interplanetary Chronicle" class="group relative block aspect-[{aspect}] overflow-hidden">
             <img
                     src="../{ARTICLE_HEADER}"
-                    alt="{html.escape(TITLE)}"
+                    alt="{html.escape(ARTICLE_HEADER_ALT)}"
                     class="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
                     draggable="false"
             />

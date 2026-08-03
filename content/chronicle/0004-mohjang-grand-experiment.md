@@ -4,6 +4,7 @@ slug: mohjang-grand-experiment
 title: Mohjang’s Grand Experiment
 summary: Mohjang unveils a Venusian theme park that secretly mines a planet while visitors believe they’re merely enjoying themselves
 image: venus-venture.webp
+image_alt: Retro-futuristic poster showing cheerful astronauts mining glowing rocks on Venus, with lava fields, domed cities, and flying craft under a fiery sky.
 ---
 
 ### THE FIRST THEME PARK IN HUMAN HISTORY WHERE VISITORS ACCIDENTALLY TERRAFORM AN ENTIRE PLANET
