@@ -170,48 +170,55 @@
              prefers-reduced-motion (see weather.css), so motion-averse visitors get the
              clean core card. -->
         <div class="wx-ticker-wrap"><div class="wx-ticker-track" id="wx-ticker"></div></div>
+        <!-- Six uniform blocks in one grid: 1 column on small screens, 2 on wider ones. -->
         <div class="wx-cols">
-            <div class="wx-panel-current">
-                <div class="wx-r1">
-                    <div class="wx-sub">
-                        <div class="wx-group">
-                            <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
-                            <div>
-                                <div id="wx-condition" class="wx-val">—</div>
-                                <div class="wx-lbl">Naarden</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="wx-sub wx-tempwind">
-                        <div>
-                            <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
-                            <div class="wx-lbl"><span id="wx-feels"></span></div>
-                        </div>
-                        <div class="wx-group">
-                            <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
-                                <circle class="wx-ring" cx="50" cy="50" r="44"/>
-                                <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
-                                <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
-                            </svg>
-                            <div>
-                                <div class="wx-val"><span id="wx-bft">—</span><span id="wx-bft-gust"></span> <span class="u">Bft</span></div>
-                                <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="wx-astro" class="wx-astro" hidden>
-                    <div class="wx-sub wx-sun">
-                        <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
-                        <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
-                    </div>
-                    <div class="wx-sub wx-moon">
-                        <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
+            <!-- Block 1: current condition -->
+            <div class="wx-sub">
+                <div class="wx-group">
+                    <img id="wx-icon" class="wx-icon" src="../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
+                    <div>
+                        <div id="wx-condition" class="wx-val">—</div>
+                        <div class="wx-lbl">Naarden</div>
                     </div>
                 </div>
             </div>
-
-            <div id="weather-fc" class="wx-panel-fc" hidden>
+            <!-- Block 2: temperature + wind -->
+            <div class="wx-sub wx-tempwind">
+                <div>
+                    <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
+                    <div class="wx-lbl"><span id="wx-feels"></span></div>
+                </div>
+                <div class="wx-group">
+                    <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
+                        <circle class="wx-ring" cx="50" cy="50" r="44"/>
+                        <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
+                        <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
+                    </svg>
+                    <div>
+                        <div class="wx-val"><span id="wx-bft">—</span><span id="wx-bft-gust"></span> <span class="u">Bft</span></div>
+                        <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Block 3: sun times -->
+            <div id="wx-sun" class="wx-sub wx-sun" hidden>
+                <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
+                <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
+            </div>
+            <!-- Block 4: moon phase -->
+            <div id="wx-moon-card" class="wx-sub wx-moon" hidden>
+                <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
+            </div>
+            <!-- Separator between the current-conditions blocks and the forecast blocks -->
+            <div class="wx-div" aria-hidden="true"></div>
+            <!-- Block 5: hourly forecast -->
+            <div id="wx-hourly-block" class="wx-sub wx-fc-group" hidden>
+                <div class="wx-fc-head">Hourly forecast</div>
+                <div id="wx-hourly" class="wx-fc"></div>
+            </div>
+            <!-- Block 6: daily forecast -->
+            <div id="wx-daily-block" class="wx-sub wx-fc-group" hidden>
+                <div class="wx-fc-head">Daily forecast</div>
                 <div id="wx-forecast" class="wx-fc"></div>
             </div>
         </div>

@@ -27,6 +27,9 @@
      * @property {string} [forecast_day_1]
      * @property {string} [forecast_day_2]
      * @property {string} [forecast_day_3]
+     * @property {string} [forecast_hour_1]
+     * @property {string} [forecast_hour_2]
+     * @property {string} [forecast_hour_3]
      * @property {string} [updated]
      */
     const GIST = "https://gist.githubusercontent.com/Amthonie/6e1d57a913650f780d441db67d8d0ca6/raw/weather-naarden.json";
@@ -100,18 +103,23 @@
     }
     function set(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
     function fcell(cls, txt) { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = txt; return s; }
-    function addForecast(box, label, str) {
-        const p = String(str).split("|");           // day | condition | Tmin | Tmax | precip mm | wind bearing | beaufort
+    // Renders one forecast row into the grid. Daily rows carry a real Tmin/Tmax and show
+    // both (hi / lo). Hourly rows have no meaningful minimum — the gist sends 999 as p[2] —
+    // so `singleTemp` renders just the single temperature (p[3]) and drops the "/ lo".
+    function addForecast(box, label, str, singleTemp) {
+        const p = String(str).split("|");           // label | condition | Tmin | Tmax | precip mm | wind bearing | beaufort
         if (p.length < 7) return;
-        box.appendChild(fcell("wx-fc-day", label || p[0])); // empty label → use the day name from the piped string
+        box.appendChild(fcell("wx-fc-day", label || p[0])); // empty label → use the piped label (day name, or hour for hourly)
         const im = document.createElement("img");
         im.className = "wx-fc-icon"; im.width = 28; im.height = 28;
         im.src = ICONS + iconFor(p[1], false) + ".svg"; im.alt = LABEL[p[1]] || p[1] || "";
         box.appendChild(im);
         const t = document.createElement("span");
         t.appendChild(fcell("wx-fc-hi", Math.round(parseFloat(p[3])) + "°"));
-        t.appendChild(document.createTextNode(" / "));
-        t.appendChild(fcell("wx-fc-lo", Math.round(parseFloat(p[2])) + "°"));
+        if (!singleTemp) {                           // daily only: append the low; hourly has no real minimum (999)
+            t.appendChild(document.createTextNode(" / "));
+            t.appendChild(fcell("wx-fc-lo", Math.round(parseFloat(p[2])) + "°"));
+        }
         box.appendChild(t);
         box.appendChild(fcell("wx-fc-sub", (Math.round(parseFloat(p[4]) * 10) / 10) + " mm"));
         box.appendChild(fcell("wx-fc-sub", dir8(parseFloat(p[5])) + " " + p[6] + " Bft"));
@@ -157,28 +165,46 @@
                 set("wx-bft-gust", gusty ? " - " + gust : "");             // gust upper bound in the #wx-bft-gust span; "" hides it
                 // Label tracks the sustained wind; " with gusts" appended (in the muted label tone) when a gust shows.
                 set("wx-beaufort", bft != null && BFT[bft] ? BFT[bft] + (gusty ? " with gusts" : "") : "");
+                // Hourly forecast: same pipe format as the daily rows, but the label is the
+                // absolute hour (p[0], e.g. "18:00") and the minimum temp is a 999 sentinel,
+                // so render single-temp. Its own block, shown only when the fields are present.
+                const hr = document.getElementById("wx-hourly");
+                if (hr) {
+                    hr.innerHTML = "";
+                    if (d.forecast_hour_1) addForecast(hr, "", d.forecast_hour_1, true);
+                    if (d.forecast_hour_2) addForecast(hr, "", d.forecast_hour_2, true);
+                    if (d.forecast_hour_3) addForecast(hr, "", d.forecast_hour_3, true);
+                    const hrBlock = document.getElementById("wx-hourly-block");
+                    if (hrBlock) hrBlock.hidden = hr.childElementCount === 0;
+                }
                 const fc = document.getElementById("wx-forecast");
                 if (fc) {
                     fc.innerHTML = "";
                     if (d.forecast_day_1) addForecast(fc, "Today", d.forecast_day_1);
                     if (d.forecast_day_2) addForecast(fc, "Tomorrow", d.forecast_day_2);
                     if (d.forecast_day_3) addForecast(fc, "", d.forecast_day_3);
-                    const fcCard = document.getElementById("weather-fc");
-                    if (fcCard) fcCard.hidden = fc.childElementCount === 0;
+                    const dayBlock = document.getElementById("wx-daily-block");
+                    if (dayBlock) dayBlock.hidden = fc.childElementCount === 0;
                 }
-                const astro = document.getElementById("wx-astro");
-                if (astro) {
+                // Sun block: sunrise + sunset. Each item hides individually; the whole
+                // block hides when neither time is present.
+                const sun = document.getElementById("wx-sun");
+                if (sun) {
                     const showItem = function (id, ok) { const el = document.getElementById(id); if (el) el.style.display = ok ? "" : "none"; };
                     showItem("wx-astro-sunrise", !!d.sunrise); if (d.sunrise) set("wx-sunrise", d.sunrise);
                     showItem("wx-astro-sunset", !!d.sunset); if (d.sunset) set("wx-sunset", d.sunset);
+                    sun.hidden = !(d.sunrise || d.sunset);
+                }
+                // Moon block: phase icon + name. Hidden when the phase is missing/unknown.
+                const moonCard = document.getElementById("wx-moon-card");
+                if (moonCard) {
                     const moon = d.moon_fase && MOON[d.moon_fase];
-                    showItem("wx-astro-moon", !!moon);
+                    moonCard.hidden = !moon;
                     if (moon) {
                         const mi = document.getElementById("wx-moon-icon");
                         if (mi) { mi.src = ICONS + moon[0] + ".svg"; mi.alt = moon[1]; }
                         set("wx-moon", moon[1]);
                     }
-                    astro.hidden = !(d.sunrise || d.sunset || moon);
                 }
                 set("wx-updated", "Updated " + stamp(d.updated));
                 document.getElementById("weather").hidden = false;
