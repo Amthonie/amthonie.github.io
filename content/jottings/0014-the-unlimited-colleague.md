@@ -5,6 +5,9 @@ tags: [ai, web-dev]
 slug: the-unlimited-colleague
 title: The Unlimited Colleague
 summary: On the subtle social benefit of letting a software tool endure a relentless stream of minor questions.
+image: 14-the-unlimited-colleague.webp
+image_alt: A split-scene retro 1950s style magazine illustration contrasting working with an AI assistant at home versus a busy office environment. On the left, a smiling man sits happily at a bright desk with a friendly retro robot helper standing on a stack of books. On the right, exasperated office workers sigh and walk away from a stressed colleague sitting at his desk.
+image_caption: The only coworker who never sighs.
 ---
 
 Someone asked me recently whether writing software alongside an AI assistant didn't make the whole process rather tedious.
