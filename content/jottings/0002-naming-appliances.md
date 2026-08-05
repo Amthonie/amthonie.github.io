@@ -2,6 +2,7 @@
 id: 2
 date: 2026-07-10
 slug: naming-appliances
+tags: [smart-home, ai, humour]
 title: The Art of Naming Appliances
 summary: Why giving smart home devices a little personality makes domestic automation feel far more human.
 image: 2-naming-appliances.webp
