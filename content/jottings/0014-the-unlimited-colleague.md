@@ -1,8 +1,8 @@
 ---
 id: 14
 date: 2026-08-05
-tags: [ai, web-dev]
 slug: the-unlimited-colleague
+tags: [ai, remote-work, reflection]
 title: The Unlimited Colleague
 summary: On the subtle social benefit of letting a software tool endure a relentless stream of minor questions.
 image: 14-the-unlimited-colleague.webp

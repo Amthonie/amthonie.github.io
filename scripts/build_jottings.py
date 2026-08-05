@@ -22,6 +22,12 @@ with a small frontmatter block:
     An image can be floated beside a jotting (see render_figure) via optional
     `image` / `image_alt` / `image_caption` / `image_side` fields.
 
+    A `tags: [a, b]` list may also be present. These are **intentionally
+    collected but not consumed yet** — reserved for a future client-side
+    tag-filter UI (pills) on the jottings page, deferred until the collection is
+    large enough to be worth it. They are NOT dead metadata: leave them in place.
+    (Full plan lives in the repo-local, gitignored CLAUDE.md.)
+
     The body is plain **markdown**: [links](https://example.com), lists, etc.
 
 Outputs (all committed as build artifacts, exactly like styles.css):
