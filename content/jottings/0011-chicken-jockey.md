@@ -2,6 +2,7 @@
 id: 11
 date: 2026-08-01
 slug: play-is-mandatory
+tags: [lego, hobbies]
 title: Play Is Mandatory
 summary: A brief note on why some displays demand immediate adult intervention.
 image: 11-chicken-jocky.webp
