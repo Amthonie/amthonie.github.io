@@ -2,6 +2,7 @@
 id: 6
 date: 2026-07-25
 slug: bone-of-contention
+tags: [wildlife, humour]
 title: Bone of Contention
 summary: The local avian community appears to be running a surprisingly efficient recycling scheme right outside my window.
 image: 6-bone-of-contention.webp

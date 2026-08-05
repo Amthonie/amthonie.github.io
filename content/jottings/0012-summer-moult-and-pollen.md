@@ -2,6 +2,7 @@
 id: 12
 date: 2026-08-02
 slug: summer-moult-and-pollen
+tags: [walking, wildlife]
 title: A Midsummer Walk with Beginners’ Mistakes
 summary: A quiet stroll past an abandoned swimming pool, a few scruffy birds, and the inescapable return of local pollen.
 image: 12-summer-moult-and-pollen.webp

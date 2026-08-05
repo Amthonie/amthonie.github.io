@@ -2,6 +2,7 @@
 id: 9
 date: 2026-07-29
 slug: berlin-news-that-stayed-with-me
+tags: [lgbtq, reflection]
 title: On Hair Types, Zealots, and the News from Berlin
 summary: A personal reflection on the Berlin Pride attack, the persistence of fanaticism, and the quiet sadness of realising how fragile our old optimism was.
 ---

@@ -2,6 +2,7 @@
 id: 7
 date: 2026-07-26
 slug: eva-walks-update-2
+tags: [charity, friendship]
 title: A modest push before the march
 summary: Eva's Swedish trek is three weeks away, halfway funded, and still accepting a bit of quiet enthusiasm.
 image: 7-eva-walks-update-2.webp

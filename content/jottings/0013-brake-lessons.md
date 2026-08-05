@@ -2,6 +2,7 @@
 id: 13
 date: 2026-08-02
 slug: brake-lessons
+tags: [local-life, humour, traffic]
 title: Brake Lessons on the Terrace
 summary: A masterclass in fleet maintenance and single-lever stop logistics overheard over coffee.
 image: 13-brake-lessons.webp
