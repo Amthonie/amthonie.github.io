@@ -401,7 +401,7 @@ def render_articles(posts: list[dict]) -> str:
 
 # Disclosure chevron for the foldable month index and the filter box. Inherits
 # currentColor; rotates 90° when its <details> is open (see FEATURE_CSS).
-CHEV_SVG = ('<svg class="jot-chev h-3 w-3 shrink-0" viewBox="0 0 20 20" '
+CHEV_SVG = ('<svg class="jot-chev h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" '
             'fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>')
 
 
