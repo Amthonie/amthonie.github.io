@@ -2,7 +2,7 @@
 id: 10
 date: 2026-07-30
 slug: switching-to-umami
-tags: [web-dev, privacy]
+tags: [coding, privacy]
 title: A somewhat quieter way to count visitors
 summary: Trading Google Analytics for a privacy-friendly alternative that finally fits on a phone screen.
 image: 10-switching-to-umami.webp
