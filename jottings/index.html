@@ -69,6 +69,25 @@
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
 
+    <style>
+        /* Foldable month index + filter box (build_jottings.py). */
+        .jot-fold > summary { list-style: none; }
+        .jot-fold > summary::-webkit-details-marker { display: none; }
+        .jot-fold > summary .jot-chev { transition: transform .2s ease; }
+        .jot-fold[open] > summary .jot-chev { transform: rotate(90deg); }
+        /* A closed <details> hides its content via a UA `display:none` rule, but a
+           Tailwind display utility (flex/block) on that content is author CSS and
+           overrides it — so re-assert the hide for the closed state here. */
+        .jot-fold:not([open]) > :not(summary) { display: none; }
+        /* Dotted separators between index entries, drawn on each entry so a
+           filtered-out entry takes its bullet with it; the script clears the
+           trailing dot off the last visible entry (.jot-idx-last). */
+        .jot-idx::after { content: "\2022"; margin: 0 .45rem; font-weight: 700; color: var(--color-brand-600); }
+        .jot-idx-last::after { content: none; }
+        @media (prefers-color-scheme: dark) { .jot-idx::after { color: var(--color-brand-400); } }
+    </style>
+
+
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="jottings"></script>
 </head>
@@ -124,33 +143,47 @@
 
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">A small collection of passing thoughts, brief notes, and the occasional observation that seemed worth writing down — nothing grand, just the quiet debris of daily life that lingered long enough to be captured.</p>
 
-        <nav aria-label="All jottings" class="mt-5 md:mt-8">
+        <div class="jot-filter mt-5 md:mt-8" hidden>
         <hr class="my-4 border-black/10 dark:border-white/10"/>
-        <div>
-            <a href="#m-2026-08"
-               class="text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                August 2026
-            </a>
+        <details class="jot-fold">
+            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-300">
+                <svg class="jot-chev h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>Filter by tag
+            </summary>
+            <div class="mt-3" role="group" aria-label="Filter jottings by tag">
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" data-jot-all class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-transparent text-stone-500 hover:bg-black/5 dark:border-white/15 dark:text-stone-400 dark:hover:bg-white/10">Show all</button><button type="button" data-jot-tag="ai" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">ai<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="humour" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">humour<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="charity" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">charity<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="coding" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">coding<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="friendship" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">friendship<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="hobbies" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">hobbies<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="lego" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">lego<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="reflection" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">reflection<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="traffic" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">traffic<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="wildlife" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">wildlife<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="ethics" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">ethics<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="hiking" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">hiking<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="lgbtq" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">lgbtq<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="local-life" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">local-life<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="nostalgia" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">nostalgia<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="privacy" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">privacy<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="remote-work" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">remote-work<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="smart-home" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">smart-home<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="urban-planning" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">urban-planning<span class="ml-1 text-xs opacity-70">1</span></button>
+                </div>
+                <p class="mt-3 text-xs text-stone-500 dark:text-stone-400" aria-live="polite" data-jot-count></p>
+            </div>
+        </details>
+        <hr class="my-4 border-black/10 dark:border-white/10"/>
+    </div>
+
+        <nav aria-label="All jottings" class="mt-5 md:mt-8">
+        
+        <details class="jot-fold jot-month mt-3 first:mt-0" open>
+            <summary class="flex cursor-pointer items-center gap-2 text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                <svg class="jot-chev h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>August 2026
+            </summary>
             <p class="mt-2 text-sm leading-relaxed">
-                <a href="#14-the-unlimited-colleague" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Unlimited Colleague</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#13-brake-lessons" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Brake Lessons on the Terrace</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#12-summer-moult-and-pollen" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A Midsummer Walk with Beginners’ Mistakes</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#11-play-is-mandatory" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Play Is Mandatory</a>
+                <span class="jot-idx" data-tags="ai,remote-work,reflection"><a href="#14-the-unlimited-colleague" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Unlimited Colleague</a></span><span class="jot-idx" data-tags="local-life,humour,traffic"><a href="#13-brake-lessons" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Brake Lessons on the Terrace</a></span><span class="jot-idx" data-tags="hiking,wildlife"><a href="#12-summer-moult-and-pollen" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A Midsummer Walk with Beginners’ Mistakes</a></span><span class="jot-idx" data-tags="lego,hobbies"><a href="#11-play-is-mandatory" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Play Is Mandatory</a></span>
             </p>
-        </div><hr class="my-4 border-black/10 dark:border-white/10"/>
-        <div>
-            <a href="#m-2026-07"
-               class="text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                July 2026
-            </a>
+        </details>
+        <details class="jot-fold jot-month mt-3 first:mt-0">
+            <summary class="flex cursor-pointer items-center gap-2 text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                <svg class="jot-chev h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>July 2026
+            </summary>
             <p class="mt-2 text-sm leading-relaxed">
-                <a href="#10-switching-to-umami" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A somewhat quieter way to count visitors</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#9-berlin-news-that-stayed-with-me" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">On Hair Types, Zealots, and the News from Berlin</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#8-azimov-and-ai" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Asimov, Automations, and Unintended Audits</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#7-eva-walks-update-2" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A modest push before the march</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#6-bone-of-contention" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Bone of Contention</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#5-zebra-crossing-decline" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Vanishing Zebra and Other Urban Optimisations</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#4-the-blocky-renaissance" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Blocky Renaissance</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#3-eva-walks-update-1" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Eva’s 450 km charity walk — €764 raised so far</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#2-naming-appliances" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Art of Naming Appliances</a> <span aria-hidden="true" class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> <a href="#1-rediscovering-html" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Rediscovering the simple joy of raw HTML</a>
+                <span class="jot-idx" data-tags="coding,privacy"><a href="#10-switching-to-umami" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A somewhat quieter way to count visitors</a></span><span class="jot-idx" data-tags="lgbtq,reflection"><a href="#9-berlin-news-that-stayed-with-me" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">On Hair Types, Zealots, and the News from Berlin</a></span><span class="jot-idx" data-tags="ai,ethics"><a href="#8-azimov-and-ai" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Asimov, Automations, and Unintended Audits</a></span><span class="jot-idx" data-tags="charity,friendship"><a href="#7-eva-walks-update-2" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">A modest push before the march</a></span><span class="jot-idx" data-tags="wildlife,humour"><a href="#6-bone-of-contention" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Bone of Contention</a></span><span class="jot-idx" data-tags="urban-planning,traffic"><a href="#5-zebra-crossing-decline" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Vanishing Zebra and Other Urban Optimisations</a></span><span class="jot-idx" data-tags="lego,hobbies"><a href="#4-the-blocky-renaissance" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Blocky Renaissance</a></span><span class="jot-idx" data-tags="charity,friendship"><a href="#3-eva-walks-update-1" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Eva’s 450 km charity walk — €764 raised so far</a></span><span class="jot-idx" data-tags="smart-home,ai,humour"><a href="#2-naming-appliances" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">The Art of Naming Appliances</a></span><span class="jot-idx" data-tags="coding,nostalgia"><a href="#1-rediscovering-html" class="text-stone-800 dark:text-stone-100 transition hover:text-brand-600 dark:hover:text-brand-400">Rediscovering the simple joy of raw HTML</a></span>
             </p>
-        </div>
+        </details>
     </nav>
     </section>
 
     <!-- Jottings: the entries themselves, one box per month -->
     <section id="m-2026-08" class="scroll-mt-28 mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
 
-            <article id="14-the-unlimited-colleague" class="scroll-mt-28">
+            <article id="14-the-unlimited-colleague" class="scroll-mt-28" data-tags="ai,remote-work,reflection">
                 <time datetime="2026-08-05"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     5 August 2026
@@ -175,7 +208,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="13-brake-lessons" class="scroll-mt-28">
+            <article id="13-brake-lessons" class="scroll-mt-28" data-tags="local-life,humour,traffic">
                 <time datetime="2026-08-02"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     2 August 2026
@@ -203,7 +236,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="12-summer-moult-and-pollen" class="scroll-mt-28">
+            <article id="12-summer-moult-and-pollen" class="scroll-mt-28" data-tags="hiking,wildlife">
                 <time datetime="2026-08-02"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     2 August 2026
@@ -229,7 +262,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="11-play-is-mandatory" class="scroll-mt-28">
+            <article id="11-play-is-mandatory" class="scroll-mt-28" data-tags="lego,hobbies">
                 <time datetime="2026-08-01"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     1 August 2026
@@ -257,7 +290,7 @@
     </section>
 <section id="m-2026-07" class="scroll-mt-28 mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
 
-            <article id="10-switching-to-umami" class="scroll-mt-28">
+            <article id="10-switching-to-umami" class="scroll-mt-28" data-tags="coding,privacy">
                 <time datetime="2026-07-30"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     30 July 2026
@@ -282,7 +315,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="9-berlin-news-that-stayed-with-me" class="scroll-mt-28">
+            <article id="9-berlin-news-that-stayed-with-me" class="scroll-mt-28" data-tags="lgbtq,reflection">
                 <time datetime="2026-07-29"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     29 July 2026
@@ -300,7 +333,7 @@
 <p>It leaves me feeling terribly sad, really. Sad that after all these decades, the same old fear and hatred still find a way to bleed into the streets. But if there is any cold comfort to be drawn from the quiet defiance that followed, it is that hatred—for all the noise and damage it makes—is ultimately a very small, bitter thing. It doesn't get to dictate how the rest of us live.</p>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="8-azimov-and-ai" class="scroll-mt-28">
+            <article id="8-azimov-and-ai" class="scroll-mt-28" data-tags="ai,ethics">
                 <time datetime="2026-07-27"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     27 July 2026
@@ -326,7 +359,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="7-eva-walks-update-2" class="scroll-mt-28">
+            <article id="7-eva-walks-update-2" class="scroll-mt-28" data-tags="charity,friendship">
                 <time datetime="2026-07-26"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     26 July 2026
@@ -352,7 +385,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="6-bone-of-contention" class="scroll-mt-28">
+            <article id="6-bone-of-contention" class="scroll-mt-28" data-tags="wildlife,humour">
                 <time datetime="2026-07-25"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     25 July 2026
@@ -377,7 +410,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="5-zebra-crossing-decline" class="scroll-mt-28">
+            <article id="5-zebra-crossing-decline" class="scroll-mt-28" data-tags="urban-planning,traffic">
                 <time datetime="2026-07-22"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     22 July 2026
@@ -402,7 +435,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="4-the-blocky-renaissance" class="scroll-mt-28">
+            <article id="4-the-blocky-renaissance" class="scroll-mt-28" data-tags="lego,hobbies">
                 <time datetime="2026-07-18"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     18 July 2026
@@ -427,7 +460,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="3-eva-walks-update-1" class="scroll-mt-28">
+            <article id="3-eva-walks-update-1" class="scroll-mt-28" data-tags="charity,friendship">
                 <time datetime="2026-07-16"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     16 July 2026
@@ -453,7 +486,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="2-naming-appliances" class="scroll-mt-28">
+            <article id="2-naming-appliances" class="scroll-mt-28" data-tags="smart-home,ai,humour">
                 <time datetime="2026-07-10"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     10 July 2026
@@ -490,7 +523,7 @@
                 </div>
                 </div>
             </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="1-rediscovering-html" class="scroll-mt-28">
+            <article id="1-rediscovering-html" class="scroll-mt-28" data-tags="coding,nostalgia">
                 <time datetime="2026-07-09"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     9 July 2026
@@ -543,6 +576,111 @@
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+
+<!-- Jottings tag filter (progressive enhancement — hidden until this runs). -->
+<script>
+(() => {
+    const filter = document.querySelector('.jot-filter');
+    if (!filter) return;
+    filter.hidden = false;
+
+    const articles = [...document.querySelectorAll('main article[data-tags]')];
+    const sections = [...document.querySelectorAll('main section[id^="m-"]')];
+    const months   = [...document.querySelectorAll('nav[aria-label="All jottings"] details.jot-month')];
+    const pills    = [...filter.querySelectorAll('[data-jot-tag]')];
+    const allBtn   = filter.querySelector('[data-jot-all]');
+    const count    = filter.querySelector('[data-jot-count]');
+    const active   = new Set();
+
+    months.forEach(m => { m.dataset.defaultOpen = m.open; });
+    const tagsOf = el => (el.getAttribute('data-tags') || '').split(',').filter(Boolean);
+    const show = (el, on) => { el.style.display = on ? '' : 'none'; };
+
+    function trimSeparators() {
+        months.forEach(m => {
+            let last = null;
+            m.querySelectorAll('.jot-idx').forEach(e => {
+                e.classList.remove('jot-idx-last');
+                if (e.style.display !== 'none') last = e;
+            });
+            if (last) last.classList.add('jot-idx-last');
+        });
+    }
+
+    // The <hr> dividers between articles are siblings, not children of the
+    // articles, so a hidden article would otherwise leave its rule behind. Show
+    // a divider only before a visible article that has a visible predecessor —
+    // so the first visible article never gets a rule above it and hidden ones
+    // take their rule with them.
+    function trimArticleDividers() {
+        sections.forEach(s => {
+            let seen = false;
+            [...s.children].forEach(node => {
+                if (node.matches && node.matches('article[data-tags]')) {
+                    const vis = node.style.display !== 'none';
+                    const hr = node.previousElementSibling;
+                    if (hr && hr.tagName === 'HR') show(hr, vis && seen);
+                    if (vis) seen = true;
+                }
+            });
+        });
+    }
+
+    function apply() {
+        const on = [...active];
+        const match = el => on.length === 0 || tagsOf(el).some(t => on.includes(t));
+
+        articles.forEach(a => show(a, match(a)));
+        filter.ownerDocument.querySelectorAll('.jot-idx').forEach(e => show(e, match(e)));
+
+        // Hide an article box that has no visible article (no empty boxes).
+        sections.forEach(s => {
+            const any = [...s.querySelectorAll('article[data-tags]')].some(a => a.style.display !== 'none');
+            show(s, any);
+        });
+
+        // Index months: while filtering, open months with a match and hide (with
+        // their leading rule) the ones with none; when cleared, restore defaults.
+        months.forEach(m => {
+            const hr = m.previousElementSibling;
+            const hasHr = hr && hr.tagName === 'HR';
+            if (on.length) {
+                const any = [...m.querySelectorAll('.jot-idx')].some(e => e.style.display !== 'none');
+                show(m, any);
+                if (hasHr) show(hr, any);
+                if (any) m.open = true;
+            } else {
+                show(m, true);
+                if (hasHr) show(hr, true);
+                m.open = m.dataset.defaultOpen === 'true';
+            }
+        });
+
+        if (on.length) {
+            const shown = articles.filter(a => a.style.display !== 'none').length;
+            count.textContent = `Showing ${shown} of ${articles.length} jottings`;
+        } else {
+            count.textContent = '';
+        }
+        trimSeparators();
+        trimArticleDividers();
+    }
+
+    pills.forEach(p => p.addEventListener('click', () => {
+        const t = p.getAttribute('data-jot-tag');
+        const now = !active.has(t);
+        now ? active.add(t) : active.delete(t);
+        p.setAttribute('aria-pressed', String(now));
+        apply();
+    }));
+    if (allBtn) allBtn.addEventListener('click', () => {
+        active.clear();
+        pills.forEach(p => p.setAttribute('aria-pressed', 'false'));
+        apply();
+    });
+})();
+</script>
+
 
 <!-- PhotoSwipe: a per-jotting single-image lightbox (self-hosted; see naarden). -->
 <script type="module">
