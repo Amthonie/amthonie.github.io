@@ -286,6 +286,11 @@ def parse_post(path: Path) -> dict:
         "id": jotting_id,
         "slug": slug,
         "anchor": anchor,
+        # Raw image fields (not just the built figure_html) so the homepage
+        # teaser can show its own small thumbnail. None when the jotting has no
+        # image yet — the teaser then falls back to a text-only card.
+        "image": meta.get("image"),
+        "image_alt": meta.get("image_alt", meta["title"]),
     }
 
 
@@ -458,19 +463,54 @@ def render_teasers(posts: list[dict]) -> str:
     cards = []
     for post in posts[:TEASERS_ON_HOME]:
         summary = html.escape(post["summary"])
+
+        # Text block (time + title + summary) — identical whether or not the
+        # card carries a thumbnail.
+        text_block = f"""<div class="flex min-w-0 flex-col">
+                    <time datetime="{post['date']:%Y-%m-%d}"
+                          class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                        {human_date(post['date'])}
+                    </time>
+                    <h3 class="mt-1 font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                        {html.escape(post['title'])}
+                    </h3>
+                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                        {summary}
+                    </p>
+                </div>"""
+
+        # Optional thumbnail, ~1/3 width, filling the card height so rows stay
+        # tidy. It rides inside the card's own <a>, so a click just follows the
+        # link (no lightbox — unlike the article figures). Falls back to the
+        # full image if the thumb is missing; text-only when there's no image.
+        thumb_html = ""
+        layout_cls = "flex flex-col"
+        if post["image"]:
+            name = post["image"]
+            thumb_path = JOTTINGS_IMAGES / "thumbnails" / name
+            thumb_rel = (
+                f"jottings/images/thumbnails/{name}"
+                if thumb_path.is_file()
+                else f"jottings/images/{name}"
+            )
+            dims = webp_size(thumb_path if thumb_path.is_file() else JOTTINGS_IMAGES / name)
+            dim_attrs = f' width="{dims[0]}" height="{dims[1]}"' if dims else ""
+            alt = html.escape(post["image_alt"])
+            # items-start (not stretch) so the thumbnail keeps its fixed 3:2 box
+            # rather than growing to the text height. aspect-[3/2] + object-cover
+            # centre-crops every image to the same landscape ratio, so a portrait
+            # source is cropped tidily instead of ballooning the card height.
+            layout_cls = "flex flex-row items-start gap-3 md:gap-4"
+            thumb_html = f"""<div class="w-1/3 shrink-0 aspect-[3/2] overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+                    <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
+                         class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+                </div>
+                """
+
         cards.append(
             f"""<a href="jottings/#{post['anchor']}"
-               class="group flex flex-col rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
-                <time datetime="{post['date']:%Y-%m-%d}"
-                      class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                    {human_date(post['date'])}
-                </time>
-                <h3 class="mt-1 font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
-                    {html.escape(post['title'])}
-                </h3>
-                <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                    {summary}
-                </p>
+               class="group {layout_cls} rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+                {thumb_html}{text_block}
             </a>"""
         )
     return "\n".join(cards)
