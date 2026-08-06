@@ -277,6 +277,16 @@ def parse_post(path: Path) -> dict:
     # Optional floated image (see render_figure). Only built when `image:` is set.
     figure_html = render_figure(meta, path.name) if meta.get("image") else ""
 
+    # Tags: the frontmatter is parsed line-by-line (not YAML), so `tags` arrives
+    # as the raw string "[hiking, wildlife]". Turn it into a real list here — the
+    # jottings-page tag filter needs it as data, and everything downstream
+    # (all_tags aggregation, the per-article/per-index `data-tags`) keys off it.
+    tags = [
+        t.strip()
+        for t in meta.get("tags", "").strip().strip("[]").split(",")
+        if t.strip()
+    ]
+
     return {
         "date": date,
         "title": meta["title"],
@@ -286,6 +296,7 @@ def parse_post(path: Path) -> dict:
         "id": jotting_id,
         "slug": slug,
         "anchor": anchor,
+        "tags": tags,
         # Raw image fields (not just the built figure_html) so the homepage
         # teaser can show its own small thumbnail. None when the jotting has no
         # image yet — the teaser then falls back to a text-only card.
@@ -366,7 +377,7 @@ def render_articles(posts: list[dict]) -> str:
                 body = post["body_html"]
             blocks.append(
                 f"""{divider}
-            <article id="{post['anchor']}" class="scroll-mt-28">
+            <article id="{post['anchor']}" class="scroll-mt-28" data-tags="{','.join(post['tags'])}">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
@@ -386,6 +397,12 @@ def render_articles(posts: list[dict]) -> str:
             f'<section id="{anchor}" class="scroll-mt-28 {SECTION_CLASS}">\n{"".join(blocks)}\n    </section>'
         )
     return "\n".join(sections)
+
+
+# Disclosure chevron for the foldable month index and the filter box. Inherits
+# currentColor; rotates 90° when its <details> is open (see FEATURE_CSS).
+CHEV_SVG = ('<svg class="jot-chev h-3 w-3 shrink-0" viewBox="0 0 20 20" '
+            'fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>')
 
 
 def render_index(posts: list[dict]) -> str:
@@ -409,48 +426,102 @@ def render_index(posts: list[dict]) -> str:
             groups.append((year, month, []))
         groups[-1][2].append(post)
 
-    # Literal spaces around the dot (not a Tailwind mx-* utility): the fractional
-    # margin classes aren't in the committed styles.css, so a class-based gap
-    # renders as zero on the preview and on mobile.
-    # A bold brand-coloured dot at the text's own size, so it stays aligned with
-    # the titles and never makes a wrapped line taller than a dot-free one.
-    separator = (
-        ' <span aria-hidden="true" '
-        'class="font-bold text-brand-600 dark:text-brand-400">&bull;</span> '
-    )
-
     blocks = []
-    for year, month, items in groups:
+    for gi, (year, month, items) in enumerate(groups):
         anchor = f"m-{year}-{month:02d}"
         label = f"{MONTHS[month - 1]} {year}"
-        links = separator.join(
+        # Each title is a hide-together unit (span) carrying its own (invisible)
+        # data-tags, so the tag filter can drop an entry cleanly. The dotted
+        # separator is drawn by CSS (.jot-idx::after) so it hides with its entry;
+        # the filter script trims the trailing dot off the last visible one.
+        entries = "".join(
+            f'<span class="jot-idx" data-tags="{",".join(post["tags"])}">'
             f'<a href="#{post["anchor"]}" '
             f'class="text-stone-800 dark:text-stone-100 transition '
             f'hover:text-brand-600 dark:hover:text-brand-400">'
-            f'{html.escape(post["title"])}</a>'
+            f'{html.escape(post["title"])}</a></span>'
             for post in items
         )
-        # A thin rule above every month — including the first, so it also
-        # separates the intro text from the index. Plain blocks inside the one
-        # first-level box, rather than a box per month, to avoid the boxy
-        # nested-card look.
-        divider = '<hr class="my-4 border-black/10 dark:border-white/10"/>'
+        # No rules between months — the folds separate by their own spacing; the
+        # only rules in this area bracket the filter box above. Each month is a
+        # native <details> fold: the newest month (gi == 0) opens by default,
+        # older months stay collapsed so the index stays short. (The month name
+        # is a disclosure toggle now, not a jump link — the jump-to-month
+        # permalink lived here before.)
+        open_attr = " open" if gi == 0 else ""
         blocks.append(
-            f"""{divider}
-        <div>
-            <a href="#{anchor}"
-               class="text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                {label}
-            </a>
+            f"""
+        <details class="jot-fold jot-month mt-3 first:mt-0"{open_attr}>
+            <summary class="flex cursor-pointer items-center gap-2 text-base font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                {CHEV_SVG}{label}
+            </summary>
             <p class="mt-2 text-sm leading-relaxed">
-                {links}
+                {entries}
             </p>
-        </div>"""
+        </details>"""
         )
 
-    return f"""<nav aria-label="All jottings" class="mt-5 md:mt-8">
+    return f"""<nav aria-label="All jottings" class="mt-4">
         {"".join(blocks)}
     </nav>"""
+
+
+def render_filter(posts: list[dict]) -> str:
+    """The jottings tag-filter control.
+
+    A collapsed-by-default <details> of tag pills with a **muted** (non-brand)
+    header, so the brand-green month headings keep the visual focus. Wrapped in a
+    `hidden` container that the filter script reveals — a no-JS visitor never sees
+    a dead control (the pills only do anything with JS), and every jotting stays
+    in the HTML regardless. Returns "" when no jotting carries a tag.
+    """
+    counts: dict[str, int] = {}
+    for post in posts:
+        for tag in post["tags"]:
+            counts[tag] = counts.get(tag, 0) + 1
+    if not counts:
+        return ""
+    tags = sorted(counts, key=lambda t: (-counts[t], t))  # frequency desc, then name
+
+    # Active styling is driven by the aria-pressed attribute the script toggles
+    # (Tailwind's aria-pressed: variant), so JS never touches classes. The count
+    # badge uses text-current/opacity so it reads on both the muted and the
+    # brand-filled (active) pill without a second colour rule.
+    pill = ("inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm "
+            "font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 "
+            "dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 "
+            "aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white "
+            "dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white")
+    # Brand-outlined (not muted grey) so "Show all" reads as an action, not a
+    # disabled pill — outline-brand for the reset vs filled-brand for a selected tag.
+    reset = ("inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium "
+             "transition border-brand-600 bg-transparent text-brand-600 hover:bg-brand-600/10 "
+             "dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-400/10")
+
+    buttons = [f'<button type="button" data-jot-all class="{reset}">Show all</button>']
+    for tag in tags:
+        buttons.append(
+            f'<button type="button" data-jot-tag="{tag}" aria-pressed="false" class="{pill}">'
+            f'{tag}<span class="ml-1 text-xs opacity-70">{counts[tag]}</span></button>'
+        )
+
+    # Its own box, but transparent + borderless (no card chrome, no rules) — just
+    # width-aligned to the surrounding cards (same md:w-4/5 + px-4 md:px-8) so the
+    # pills line up with the card content. Sits in the gutter between the title
+    # card and the index card, lighter than a slab.
+    return f"""<section class="jot-filter mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8" hidden>
+        <details class="jot-fold">
+            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-300">
+                {CHEV_SVG}Filter by tag
+            </summary>
+            <div class="mt-3" role="group" aria-label="Filter jottings by tag">
+                <div class="flex flex-wrap gap-2">
+                    {"".join(buttons)}
+                </div>
+                <p class="mt-3 text-xs text-stone-500 dark:text-stone-400" aria-live="polite" data-jot-count></p>
+            </div>
+        </details>
+    </section>"""
 
 
 def render_teasers(posts: list[dict]) -> str:
@@ -603,10 +674,163 @@ PHOTOSWIPE_SCRIPT = """<!-- PhotoSwipe: a per-jotting single-image lightbox (sel
 """
 
 
+# Feature CSS for the tag filter + foldable index. Kept in a <style> block (not
+# styles.css) so it's self-contained and immune to Tailwind rebuild lag — the
+# same reasoning as the Naarden weather page's scoped CSS. Injected only when
+# there are tags to filter.
+FEATURE_CSS = """    <style>
+        /* Foldable month index + filter box (build_jottings.py). */
+        .jot-fold > summary { list-style: none; }
+        .jot-fold > summary::-webkit-details-marker { display: none; }
+        .jot-fold > summary .jot-chev { transition: transform .2s ease; }
+        .jot-fold[open] > summary .jot-chev { transform: rotate(90deg); }
+        /* A closed <details> hides its content via a UA `display:none` rule, but a
+           Tailwind display utility (flex/block) on that content is author CSS and
+           overrides it — so re-assert the hide for the closed state here. */
+        .jot-fold:not([open]) > :not(summary) { display: none; }
+        /* Dotted separators between index entries, drawn on each entry so a
+           filtered-out entry takes its bullet with it; the script clears the
+           trailing dot off the last visible entry (.jot-idx-last). */
+        .jot-idx::after { content: "\\2022"; margin: 0 .45rem; font-weight: 700; color: var(--color-brand-600); }
+        .jot-idx-last::after { content: none; }
+        @media (prefers-color-scheme: dark) { .jot-idx::after { color: var(--color-brand-400); } }
+    </style>
+"""
+
+# Progressive enhancement: the filter box ships `hidden`; this reveals it, so a
+# no-JS visitor never meets a dead control and every jotting stays in the HTML.
+# OR logic across pressed pills; no pressed pill = show everything. Keeps the
+# index and the article boxes in sync, opens matching months and hides emptied
+# ones (index + article box), and announces the count via an aria-live region.
+FILTER_SCRIPT = """<!-- Jottings tag filter (progressive enhancement — hidden until this runs). -->
+<script>
+(() => {
+    const filter = document.querySelector('.jot-filter');
+    if (!filter) return;
+    filter.hidden = false;
+
+    const articles = [...document.querySelectorAll('main article[data-tags]')];
+    const sections = [...document.querySelectorAll('main section[id^="m-"]')];
+    const months   = [...document.querySelectorAll('nav[aria-label="All jottings"] details.jot-month')];
+    const pills    = [...filter.querySelectorAll('[data-jot-tag]')];
+    const allBtn   = filter.querySelector('[data-jot-all]');
+    const count    = filter.querySelector('[data-jot-count]');
+    const active   = new Set();
+
+    months.forEach(m => { m.dataset.defaultOpen = m.open; });
+    const tagsOf = el => (el.getAttribute('data-tags') || '').split(',').filter(Boolean);
+    const show = (el, on) => { el.style.display = on ? '' : 'none'; };
+
+    function trimSeparators() {
+        months.forEach(m => {
+            let last = null;
+            m.querySelectorAll('.jot-idx').forEach(e => {
+                e.classList.remove('jot-idx-last');
+                if (e.style.display !== 'none') last = e;
+            });
+            if (last) last.classList.add('jot-idx-last');
+        });
+    }
+
+    // The <hr> dividers between articles are siblings, not children of the
+    // articles, so a hidden article would otherwise leave its rule behind. Show
+    // a divider only before a visible article that has a visible predecessor —
+    // so the first visible article never gets a rule above it and hidden ones
+    // take their rule with them.
+    function trimArticleDividers() {
+        sections.forEach(s => {
+            let seen = false;
+            [...s.children].forEach(node => {
+                if (node.matches && node.matches('article[data-tags]')) {
+                    const vis = node.style.display !== 'none';
+                    const hr = node.previousElementSibling;
+                    if (hr && hr.tagName === 'HR') show(hr, vis && seen);
+                    if (vis) seen = true;
+                }
+            });
+        });
+    }
+
+    function apply() {
+        const on = [...active];
+        const match = el => on.length === 0 || tagsOf(el).some(t => on.includes(t));
+
+        articles.forEach(a => show(a, match(a)));
+        filter.ownerDocument.querySelectorAll('.jot-idx').forEach(e => show(e, match(e)));
+
+        // Hide an article box that has no visible article (no empty boxes).
+        sections.forEach(s => {
+            const any = [...s.querySelectorAll('article[data-tags]')].some(a => a.style.display !== 'none');
+            show(s, any);
+        });
+
+        // Index months: while filtering, open months with a match and hide (with
+        // their leading rule) the ones with none; when cleared, restore defaults.
+        months.forEach(m => {
+            const hr = m.previousElementSibling;
+            const hasHr = hr && hr.tagName === 'HR';
+            if (on.length) {
+                const any = [...m.querySelectorAll('.jot-idx')].some(e => e.style.display !== 'none');
+                show(m, any);
+                if (hasHr) show(hr, any);
+                if (any) m.open = true;
+            } else {
+                show(m, true);
+                if (hasHr) show(hr, true);
+                m.open = m.dataset.defaultOpen === 'true';
+            }
+        });
+
+        if (on.length) {
+            const shown = articles.filter(a => a.style.display !== 'none').length;
+            count.textContent = `Showing ${shown} of ${articles.length} jottings`;
+        } else {
+            count.textContent = '';
+        }
+        trimSeparators();
+        trimArticleDividers();
+    }
+
+    pills.forEach(p => p.addEventListener('click', () => {
+        const t = p.getAttribute('data-jot-tag');
+        const now = !active.has(t);
+        now ? active.add(t) : active.delete(t);
+        p.setAttribute('aria-pressed', String(now));
+        apply();
+    }));
+    if (allBtn) allBtn.addEventListener('click', () => {
+        active.clear();
+        pills.forEach(p => p.setAttribute('aria-pressed', 'false'));
+        apply();
+    });
+})();
+</script>
+"""
+
+
 def build_jottings_page(posts: list[dict]) -> None:
     articles = render_articles(posts)
     index = render_index(posts)
+    filter_html = render_filter(posts)
     jsonld = build_jsonld()
+
+    # The filter CSS/JS ride along only when there are tags to filter (otherwise
+    # render_filter returns "" and the page is exactly as before).
+    feature_css = f"{FEATURE_CSS}\n" if filter_html else ""
+    filter_script = f"\n{FILTER_SCRIPT}" if filter_html else ""
+
+    # The month index lives in its own card under a plain (non-brand) "Index"
+    # heading — a step smaller than the h1 so it reads as a section label. Only
+    # emitted when there's an index to show (render_index returns "" for <2 posts).
+    index_box = (
+        f"""
+    <!-- Jottings: the month index -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index</h2>
+        {index}
+    </section>"""
+        if index else ""
+    )
 
     # PhotoSwipe assets only when a jotting on the page has an image (keeps an
     # image-free listing exactly as it was — no vendor CSS/JS, no behaviour).
@@ -646,6 +870,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 {pswp_css}    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
 
+{feature_css}
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="jottings"></script>
 </head>
@@ -693,16 +918,14 @@ def build_jottings_page(posts: list[dict]) -> None:
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Jottings: intro + index -->
-    <section
-            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-
+    <!-- Jottings: title + tagline -->
+    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
-
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
-
-        {index}
     </section>
+
+    {filter_html}
+{index_box}
 
     <!-- Jottings: the entries themselves, one box per month -->
     {articles}
@@ -729,6 +952,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+{filter_script}
 {pswp_script}
 <!-- Umami Outbound links tracking -->
 <script type="text/javascript">
