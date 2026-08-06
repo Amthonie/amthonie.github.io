@@ -496,14 +496,16 @@ def render_teasers(posts: list[dict]) -> str:
             dims = webp_size(thumb_path if thumb_path.is_file() else JOTTINGS_IMAGES / name)
             dim_attrs = f' width="{dims[0]}" height="{dims[1]}"' if dims else ""
             alt = html.escape(post["image_alt"])
-            # items-start (not stretch) so the thumbnail keeps its fixed 3:2 box
-            # rather than growing to the text height. aspect-[3/2] + object-cover
-            # centre-crops every image to the same landscape ratio, so a portrait
-            # source is cropped tidily instead of ballooning the card height.
-            layout_cls = "flex flex-row items-start gap-3 md:gap-4"
-            thumb_html = f"""<div class="w-1/3 shrink-0 aspect-[3/2] overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+            # Full-height strip: the ~1/3-width column stretches to the card
+            # height (items-stretch), and the image is absolutely positioned to
+            # fill it (inset-0 + object-cover). Being out of flow, the image can
+            # never drive the card height, so a portrait source is centre-cropped
+            # into the strip instead of ballooning the card — and there's no
+            # empty space below it, whatever the text length.
+            layout_cls = "flex flex-row items-stretch gap-3 md:gap-4"
+            thumb_html = f"""<div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
                     <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
-                         class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+                         class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
                 </div>
                 """
 
