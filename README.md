@@ -106,6 +106,7 @@ date: 2026-07-16
 slug: a-short-headline
 title: A short headline
 summary: Optional one-line teaser for the homepage (defaults to the first paragraph).
+tags: [hobbies, lego]
 image: 12-a-photo.webp
 image_alt: What the photo shows (optional; defaults to the title)
 image_caption: Optional caption shown under the image
@@ -140,6 +141,16 @@ keys, all optional: `image_alt` (defaults to the title),
 `image_caption` (omit for none) and `image_side` (`right` — the default — or
 `left`).
 
+**Optional tags:** add a `tags` list (`tags: [hiking, wildlife]`) to group
+jottings by theme. Tags are never shown on the page — they drive a client-side
+**tag filter** on `/jottings/`: a collapsed pill box (frequency-ordered, with
+per-tag counts and a brand-outlined "Show all" reset) that shows only the
+jottings matching any pressed tag and keeps the month index in sync (a month
+with no match is hidden). Omit the key for an untagged jotting — it simply won't
+match any pill. The filter is progressive enhancement: it appears only with
+JavaScript, and every jotting is in the HTML regardless, so nothing is hidden
+from crawlers or no-JS visitors.
+
 **Body links:** links in the markdown body that point off-site (an
 `http(s)://` URL) are rewritten to open in a new tab (`target="_blank"
 rel="noopener"`), matching the curated links on the home page; relative links
@@ -148,7 +159,8 @@ and Chronicle article bodies — nothing to set per link.
 
 `scripts/build_jottings.py` turns those into:
 
-- `jottings/index.html` — the full list, newest first, served at `/jottings/`;
+- `jottings/index.html` — the full list, newest first, served at `/jottings/`
+  (with the tag filter and a foldable, per-month index — newest month open);
 - the teaser cards on the home page (between the `<!-- JOTTINGS:START -->` /
   `<!-- JOTTINGS:END -->` markers in `index.html`);
 - the `/jottings/` entry in `sitemap.xml` (its `lastmod` tracks the newest post).
