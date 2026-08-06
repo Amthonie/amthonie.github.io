@@ -461,7 +461,7 @@ def render_index(posts: list[dict]) -> str:
         </details>"""
         )
 
-    return f"""<nav aria-label="All jottings" class="mt-5 md:mt-8">
+    return f"""<nav aria-label="All jottings" class="mt-4">
         {"".join(blocks)}
     </nav>"""
 
@@ -492,9 +492,11 @@ def render_filter(posts: list[dict]) -> str:
             "dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 "
             "aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white "
             "dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white")
+    # Brand-outlined (not muted grey) so "Show all" reads as an action, not a
+    # disabled pill — outline-brand for the reset vs filled-brand for a selected tag.
     reset = ("inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium "
-             "transition border-black/10 bg-transparent text-stone-500 hover:bg-black/5 "
-             "dark:border-white/15 dark:text-stone-400 dark:hover:bg-white/10")
+             "transition border-brand-600 bg-transparent text-brand-600 hover:bg-brand-600/10 "
+             "dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-400/10")
 
     buttons = [f'<button type="button" data-jot-all class="{reset}">Show all</button>']
     for tag in tags:
@@ -503,10 +505,11 @@ def render_filter(posts: list[dict]) -> str:
             f'{tag}<span class="ml-1 text-xs opacity-70">{counts[tag]}</span></button>'
         )
 
-    # Bracketed with light <hr>s above and below — the only rules in this area —
-    # so the filter reads as its own control, set apart from the (rule-free) index.
-    return f"""<div class="jot-filter mt-5 md:mt-8" hidden>
-        <hr class="my-4 border-black/10 dark:border-white/10"/>
+    # Its own box, but transparent + borderless (no card chrome, no rules) — just
+    # width-aligned to the surrounding cards (same md:w-4/5 + px-4 md:px-8) so the
+    # pills line up with the card content. Sits in the gutter between the title
+    # card and the index card, lighter than a slab.
+    return f"""<section class="jot-filter mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8" hidden>
         <details class="jot-fold">
             <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-300">
                 {CHEV_SVG}Filter by tag
@@ -518,8 +521,7 @@ def render_filter(posts: list[dict]) -> str:
                 <p class="mt-3 text-xs text-stone-500 dark:text-stone-400" aria-live="polite" data-jot-count></p>
             </div>
         </details>
-        <hr class="my-4 border-black/10 dark:border-white/10"/>
-    </div>"""
+    </section>"""
 
 
 def render_teasers(posts: list[dict]) -> str:
@@ -817,6 +819,19 @@ def build_jottings_page(posts: list[dict]) -> None:
     feature_css = f"{FEATURE_CSS}\n" if filter_html else ""
     filter_script = f"\n{FILTER_SCRIPT}" if filter_html else ""
 
+    # The month index lives in its own card under a plain (non-brand) "Index"
+    # heading — a step smaller than the h1 so it reads as a section label. Only
+    # emitted when there's an index to show (render_index returns "" for <2 posts).
+    index_box = (
+        f"""
+    <!-- Jottings: the month index -->
+    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index</h2>
+        {index}
+    </section>"""
+        if index else ""
+    )
+
     # PhotoSwipe assets only when a jotting on the page has an image (keeps an
     # image-free listing exactly as it was — no vendor CSS/JS, no behaviour).
     has_image = any(post["figure_html"] for post in posts)
@@ -903,18 +918,14 @@ def build_jottings_page(posts: list[dict]) -> None:
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Jottings: intro + index -->
-    <section
-            class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-
+    <!-- Jottings: title + tagline -->
+    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
-
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
-
-        {filter_html}
-
-        {index}
     </section>
+
+    {filter_html}
+{index_box}
 
     <!-- Jottings: the entries themselves, one box per month -->
     {articles}
