@@ -2,7 +2,7 @@
 id: 15
 date: 2026-08-07
 slug: piezo-bach-and-pacman
-tags: [nostalgia,smart-home,hobbies,reflection,humour]
+tags: [nostalgia,smart-home,reflection,music]
 title: Buzzers, Bach, and 8-Bit Nostalgia
 summary: Transcribing Bach for a piezo buzzer, forty years on.
 ---
