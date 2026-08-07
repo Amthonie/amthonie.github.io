@@ -723,6 +723,9 @@ FILTER_SCRIPT = """<!-- Jottings tag filter (progressive enhancement — hidden 
     const pills    = [...filter.querySelectorAll('[data-jot-tag]')];
     const allBtn   = filter.querySelector('[data-jot-all]');
     const count    = filter.querySelector('[data-jot-count]');
+    // Lives on the (always-visible) Index heading, so an active filter is still
+    // signalled when the pill box is collapsed.
+    const activeFlag = document.querySelector('[data-jot-active]');
     const active   = new Set();
 
     months.forEach(m => { m.dataset.defaultOpen = m.open; });
@@ -795,6 +798,7 @@ FILTER_SCRIPT = """<!-- Jottings tag filter (progressive enhancement — hidden 
         } else {
             count.textContent = '';
         }
+        if (activeFlag) activeFlag.hidden = on.length === 0;
         trimSeparators();
         trimArticleDividers();
     }
@@ -834,7 +838,7 @@ def build_jottings_page(posts: list[dict]) -> None:
         f"""
     <!-- Jottings: the month index -->
     <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index</h2>
+        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
         {index}
     </section>"""
         if index else ""
