@@ -582,6 +582,7 @@ def render_teasers(posts: list[dict]) -> str:
 
         cards.append(
             f"""<a href="jottings/#{post['anchor']}"
+               data-umami-event="jotting-teaser-click"
                class="group {layout_cls} rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 {thumb_html}{text_block}
             </a>"""
