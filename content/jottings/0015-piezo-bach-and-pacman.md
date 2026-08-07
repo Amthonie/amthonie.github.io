@@ -17,8 +17,6 @@ It now plays Bach on the hour and the Pac‑Man intro when the front door opens.
 
 ---
 
-'''
-inventio_8:d=16,o=5,b=160:f,p,a,p,f,p,c6,p,a,p,f6,p,e6,d6,c6,d6,c6,a#,a,a#,a,g,8f,p
-'''
+> inventio_8:d=16,o=5,b=160:f,p,a,p,f,p,c6,p,a,p,f6,p,e6,d6,c6,d6,c6,a#,a,a#,a,g,8f,p
 
 *For those interested, this little code plays my hour chime, you can play it in your browser [here](https://adamonsoon.github.io/rtttl-play/)*
