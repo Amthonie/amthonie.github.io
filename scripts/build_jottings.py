@@ -401,7 +401,7 @@ def render_articles(posts: list[dict]) -> str:
 
 # Disclosure chevron for the foldable month index and the filter box. Inherits
 # currentColor; rotates 90° when its <details> is open (see FEATURE_CSS).
-CHEV_SVG = ('<svg class="jot-chev h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" '
+CHEV_SVG = ('<svg class="jot-chev h-4 w-4 shrink-0" viewBox="0 0 20 20" '
             'fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>')
 
 
@@ -682,8 +682,16 @@ FEATURE_CSS = """    <style>
         /* Foldable month index + filter box (build_jottings.py). */
         .jot-fold > summary { list-style: none; }
         .jot-fold > summary::-webkit-details-marker { display: none; }
-        .jot-fold > summary .jot-chev { transition: transform .2s ease; }
-        .jot-fold[open] > summary .jot-chev { transform: rotate(90deg); }
+        /* Colour is the primary open/closed cue (rotation alone is hard to read
+           on mobile): closed = muted grey (recedes), open = brand (the active
+           section). Overrides the colour the chevron would inherit from the
+           summary text. */
+        .jot-fold > summary .jot-chev { transition: transform .2s ease, color .2s ease; color: var(--color-stone-500); }
+        .jot-fold[open] > summary .jot-chev { transform: rotate(90deg); color: var(--color-brand-600); }
+        @media (prefers-color-scheme: dark) {
+          .jot-fold > summary .jot-chev { color: var(--color-stone-300); }
+          .jot-fold[open] > summary .jot-chev { color: var(--color-brand-400); }
+        }
         /* A closed <details> hides its content via a UA `display:none` rule, but a
            Tailwind display utility (flex/block) on that content is author CSS and
            overrides it — so re-assert the hide for the closed state here. */
