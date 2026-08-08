@@ -5,6 +5,7 @@ slug: piezo-bach-and-pacman
 tags: [nostalgia,smart-home,reflection,music]
 title: Buzzers, Bach, and 8-Bit Nostalgia
 summary: Transcribing Bach for a piezo buzzer, forty years on.
+image: 15-piezo-bach-and-pacman.webp
 image_alt: Man at a desk wiring a small buzzer, with pixelated musical notes of Bach and Pac‑Man floating toward an open door marked "Home".
 image_caption: Fine‑tuning Bach and Pac‑Man
 ---
