@@ -17,3 +17,5 @@ Decades later, under the guise of setting up a sensible hourly chime for a home 
 The immediate sense of deja vu was almost physical. Forty years have dissolved, yet here I am, still sitting in front of a screen, fine-tuning sequence timings to get a tiny electronic beeper to sound marginally less offensive.
 
 It now plays Bach on the hour and the Pac‑Man intro when the front door opens. I give it three days before the nostalgia wears off and the quiet becomes appealing again.
+
+***Update:** In the spirit of seeing these things through, the whole episode led to a small side project: an [RTTTL Melodies page](/melodies/) where I’ve collected the Bach fragment, the Pac‑Man intro, and a few other beeps that have resurfaced from the eighties. A tidy archive of noises I didn’t realise I’d missed.*

@@ -202,7 +202,7 @@ TRY_IT_YOURSELF = f"""<!-- RTTTL: try your own -- reads live from the textarea r
          fixed data-rtttl attribute, so it gets its own listener below. -->
     <section class="{SECTION_CLASS}">
         <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Try it yourself</h2>
-        <p class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play.</p>
+        <p class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play. A brief disclaimer: experimenting with this may prove unexpectedly addictive and could test the patience of nearby housemates.</p>
         <label for="rtttl-input" class="sr-only">Your RTTTL string</label>
         <textarea id="rtttl-input" rows="6" spellcheck="false"
                   placeholder="name:d=4,o=5,b=125:notes"
