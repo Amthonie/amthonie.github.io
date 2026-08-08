@@ -29,6 +29,7 @@ with a small frontmatter block:
     (Full plan lives in the repo-local, gitignored CLAUDE.md.)
 
     The body is plain **markdown**: [links](https://example.com), lists, etc.
+    Fenced code blocks work with either ``` or ''' as the fence.
 
 Outputs (all committed as build artifacts, exactly like styles.css):
   - jottings/index.html  full list, newest first, served at /jottings/
@@ -113,6 +114,22 @@ def open_external_links_in_new_tab(html: str) -> str:
         return f'<a {attrs} target="_blank" rel="noopener">'
 
     return re.sub(r"<a ([^>]*?)>", add_target, html)
+
+
+_QUOTE_FENCE_RE = re.compile(r"^([ \t]*)'{3,}([\w#.+-]*)[ \t]*$", re.MULTILINE)
+
+
+def convert_quote_fences(text: str) -> str:
+    """Let jottings fence code blocks with ``'''`` as well as the standard
+    markdown ```` ``` ````` (see issue #101 — three backticks is an awkward
+    reach on some keyboards). Only whole fence lines — optionally followed by
+    a language hint, e.g. ``'''python`` — are rewritten to backticks before
+    handing the body to markdown.extensions.fenced_code; apostrophes inside
+    prose (e.g. "Bach's") never occupy a whole line by themselves, so they're
+    untouched. Opening and closing fences both become plain ``` so they still
+    match each other regardless of how many quotes were typed.
+    """
+    return _QUOTE_FENCE_RE.sub(lambda m: f"{m.group(1)}```{m.group(2)}", text)
 
 
 def webp_size(path: Path) -> tuple[int, int] | None:
@@ -252,7 +269,7 @@ def parse_post(path: Path) -> dict:
     except ValueError:
         raise SystemExit(f"{path.name}: date '{meta['date']}' must be YYYY-MM-DD")
 
-    body = body.strip()
+    body = convert_quote_fences(body.strip())
     body_html = open_external_links_in_new_tab(
         markdown.markdown(body, extensions=["extra", "sane_lists"])
     )
