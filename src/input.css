@@ -6,6 +6,7 @@
 @source "../naarden/index.html";
 @source "../naarden/weather/index.html";
 @source "../jottings/index.html";
+@source "../melodies/index.html";
 @source "../chronicle/index.html";
 @source "../chronicle/*/index.html";
 @source "../404.html";
@@ -106,6 +107,11 @@
   border-radius: 0.75rem;
   padding: 1rem;
   overflow-x: auto;
+  /* Wrap long lines instead of relying on horizontal scroll -- RTTTL strings
+     (see /melodies/) are one long comma-separated run with no whitespace, so
+     overflow-wrap alone won't break it; anywhere lets it wrap mid-run. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .update-body pre code {
   background: none;

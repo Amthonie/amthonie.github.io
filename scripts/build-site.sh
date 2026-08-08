@@ -101,6 +101,7 @@ fi
 .venv/bin/pip install --quiet markdown
 .venv/bin/python scripts/build_jottings.py
 .venv/bin/python scripts/build_chronicle.py
+.venv/bin/python scripts/build_melodies.py
 
 echo "==> 2/3  Assemble _site/ (working tree, minus build inputs & gitignored files)"
 rm -rf _site

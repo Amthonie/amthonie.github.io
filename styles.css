@@ -281,6 +281,9 @@
   .my-4 {
     margin-block: calc(var(--spacing) * 4);
   }
+  .my-6 {
+    margin-block: calc(var(--spacing) * 6);
+  }
   .my-10 {
     margin-block: calc(var(--spacing) * 10);
   }
@@ -377,6 +380,9 @@
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
   .h-\[55\%\] {
     height: 55%;
   }
@@ -403,6 +409,9 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
+  }
+  .w-9 {
+    width: calc(var(--spacing) * 9);
   }
   .w-\[50vw\] {
     width: 50vw;
@@ -624,6 +633,12 @@
       background-color: color-mix(in oklab, var(--color-white) 15%, transparent);
     }
   }
+  .bg-white\/60 {
+    background-color: color-mix(in srgb, #fff 60%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-white) 60%, transparent);
+    }
+  }
   .object-cover {
     object-fit: cover;
   }
@@ -644,6 +659,9 @@
   }
   .p-2\.5 {
     padding: calc(var(--spacing) * 2.5);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
   }
   .px-2\.5 {
     padding-inline: calc(var(--spacing) * 2.5);
@@ -707,6 +725,9 @@
   }
   .align-middle {
     vertical-align: middle;
+  }
+  .font-mono {
+    font-family: var(--font-mono);
   }
   .font-serif {
     font-family: var(--font-serif);
@@ -823,6 +844,10 @@
   }
   .opacity-70 {
     opacity: 70%;
+  }
+  .shadow-inner {
+    --tw-shadow: inset 0 2px 4px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-md {
     --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
@@ -1028,6 +1053,31 @@
       @media (hover: hover) {
         opacity: 95%;
       }
+    }
+  }
+  .focus\:border-brand-600 {
+    &:focus {
+      border-color: var(--color-brand-600);
+    }
+  }
+  .focus\:ring-2 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-brand-600\/30 {
+    &:focus {
+      --tw-ring-color: color-mix(in srgb, #4a7a2c 30%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--color-brand-600) 30%, transparent);
+      }
+    }
+  }
+  .focus\:outline-none {
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
     }
   }
   .aria-pressed\:border-brand-600 {
@@ -1432,6 +1482,14 @@
       background-color: var(--color-stone-900);
     }
   }
+  .dark\:bg-stone-900\/40 {
+    @media (prefers-color-scheme: dark) {
+      background-color: color-mix(in srgb, oklch(21.6% 0.006 56.043) 40%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-stone-900) 40%, transparent);
+      }
+    }
+  }
   .dark\:bg-white\/5 {
     @media (prefers-color-scheme: dark) {
       background-color: color-mix(in srgb, #fff 5%, transparent);
@@ -1528,6 +1586,15 @@
       }
     }
   }
+  .dark\:hover\:bg-brand-400 {
+    @media (prefers-color-scheme: dark) {
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-brand-400);
+        }
+      }
+    }
+  }
   .dark\:hover\:bg-brand-400\/10 {
     @media (prefers-color-scheme: dark) {
       &:hover {
@@ -1599,6 +1666,23 @@
       &:hover {
         @media (hover: hover) {
           color: var(--color-brand-400);
+        }
+      }
+    }
+  }
+  .dark\:focus\:border-brand-400 {
+    @media (prefers-color-scheme: dark) {
+      &:focus {
+        border-color: var(--color-brand-400);
+      }
+    }
+  }
+  .dark\:focus\:ring-brand-400\/30 {
+    @media (prefers-color-scheme: dark) {
+      &:focus {
+        --tw-ring-color: color-mix(in srgb, #9ccc66 30%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
+          --tw-ring-color: color-mix(in oklab, var(--color-brand-400) 30%, transparent);
         }
       }
     }
@@ -1684,6 +1768,8 @@
   border-radius: 0.75rem;
   padding: 1rem;
   overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .update-body pre code {
   background: none;

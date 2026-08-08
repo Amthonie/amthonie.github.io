@@ -32,10 +32,12 @@ jobs:
           #   build_jottings.py  -> jottings/index.html, homepage teasers,
           #                         sitemap /jottings/ + home lastmod
           #   build_chronicle.py -> chronicle/index.html, sitemap /chronicle/
+          #   build_melodies.py  -> melodies/index.html, sitemap /melodies/
           python3 -m venv .venv
           .venv/bin/pip install --quiet markdown
           .venv/bin/python scripts/build_jottings.py
           .venv/bin/python scripts/build_chronicle.py
+          .venv/bin/python scripts/build_melodies.py
 
       - name: Assemble site (static files + built Tailwind CSS)
         run: |
@@ -62,7 +64,7 @@ jobs:
           # Rebuild when the HTML, the Tailwind input, or the jottings content/
           # generator change (the last two can alter the generated jottings page).
           if ! git rev-parse HEAD^ >/dev/null 2>&1 || \
-             git diff --name-only HEAD^ HEAD | grep -qE '\.html$|^src/input\.css$|^content/jottings/|^scripts/build_jottings\.py$|^content/chronicle/|^scripts/build_chronicle\.py$'; then
+             git diff --name-only HEAD^ HEAD | grep -qE '\.html$|^src/input\.css$|^content/jottings/|^scripts/build_jottings\.py$|^content/chronicle/|^scripts/build_chronicle\.py$|^content/rtttl/|^scripts/build_melodies\.py$'; then
             echo "HTML/input.css/jottings changed — rebuilding Tailwind CSS"
             # Standalone Tailwind v4 CLI — self-contained (bundles the tailwindcss
             # package), so no Node/node_modules and no module-resolution issues.

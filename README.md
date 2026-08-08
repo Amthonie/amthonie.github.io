@@ -19,8 +19,13 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
   fetched client-side; icons are [Meteocons](https://bas.dev/work/meteocons)
   (MIT), self-hosted under `vendor/meteocons/`. The Naarden page links to it with
   a compact live teaser (condition icon + temperature). See [Weather](#weather).
-- `/jottings/` and `/chronicle/` are generated from markdown sources at build time
-  (see [Generated pages](#generated-pages)).
+- `/jottings/`, `/chronicle/` and `/melodies/` are generated from markdown
+  sources at build time (see [Generated pages](#generated-pages)).
+- `/melodies/` ("RTTTL Melodies") — a small reference page of
+  [RTTTL](https://esphome.io/components/rtttl.html) ringtone strings I use as
+  chimes on my ESPHome devices, with an in-browser player
+  ([rtttl-play](https://github.com/adamonsoon/rtttl-play), MIT, self-hosted
+  under `vendor/rtttl-play/`) and a "try your own" input box.
 - A custom `404.html` and `sitemap.xml`, plus JSON-LD structured data and Open Graph
   tags on every page.
 - Deployed automatically via GitHub Actions on every push to `main`.
@@ -43,7 +48,8 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 │   └── thumbnails/     # grid thumbnails (~640px wide)
 ├── vendor/
 │   ├── photoswipe/     # self-hosted PhotoSwipe lightbox (shared: naarden + chronicle)
-│   └── meteocons/      # self-hosted Meteocons weather icons (MIT)
+│   ├── meteocons/      # self-hosted Meteocons weather icons (MIT)
+│   └── rtttl-play/     # self-hosted RTTTL player (MIT) — see /melodies/
 ├── jottings/
 │   └── index.html      # jottings page (served at /jottings/) — GENERATED
 ├── chronicle/
@@ -54,12 +60,16 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 │   ├── icon.png            # the Chronicle's own favicon (navy TIC monogram)
 │   ├── favicon.ico         # multi-resolution favicon (16/32/48)
 │   └── images/         # per-article heroes (+ thumbs/ for the index cards)
+├── melodies/
+│   └── index.html      # RTTTL Melodies reference page (served at /melodies/) — GENERATED
 ├── content/
 │   ├── jottings/       # markdown sources for jottings (one file per jotting)
-│   └── chronicle/      # markdown sources for chronicle articles
+│   ├── chronicle/      # markdown sources for chronicle articles
+│   └── rtttl/          # markdown sources for the Melodies page (one file per tune)
 ├── scripts/
 │   ├── build_jottings.py   # generates the jottings page + homepage teasers
-│   └── build_chronicle.py  # generates the chronicle front page + per-article pages
+│   ├── build_chronicle.py  # generates the chronicle front page + per-article pages
+│   └── build_melodies.py   # generates the /melodies/ page
 ├── src/input.css       # Tailwind entry point (source)
 ├── styles.css          # compiled stylesheet (committed)
 ├── images/             # shared static assets
@@ -89,10 +99,10 @@ export at ~1280×720 — still only tens of KB as WebP.
 
 ## Generated pages
 
-Two sections are generated from markdown at build time by sibling scripts in
-`scripts/`, sharing the same frontmatter format: **Jottings** (`/jottings/`) and
-**The Interplanetary Chronicle** (`/chronicle/`, a satirical, entirely fictional
-outlet).
+Three sections are generated from markdown at build time by sibling scripts in
+`scripts/`: **Jottings** (`/jottings/`) and **The Interplanetary Chronicle**
+(`/chronicle/`, a satirical, entirely fictional outlet) share the same
+frontmatter format; **RTTTL Melodies** (`/melodies/`) uses its own, simpler one (see below).
 
 ### Jottings
 
@@ -203,6 +213,43 @@ same way: `python3 scripts/build_chronicle.py`.
 `content/` and `scripts/` are build inputs and are excluded from the published
 site. The markdown content itself is never served raw.
 
+### RTTTL Melodies
+
+`/melodies/` (page title "RTTTL Melodies") is a small reference page for
+[RTTTL](https://esphome.io/components/rtttl.html) (Ring Tone Text Transfer
+Language) strings — the chimes I play on ESPHome devices through a piezo
+buzzer. Its entries live in `content/rtttl/*.md`, one file per tune, with a
+smaller frontmatter than jottings/chronicle (no date — there's no natural
+chronology for a reference list). The content directory, generator filename,
+and internal class names all stay `rtttl*` (that's the underlying format);
+only the public-facing URL, title, and copy use the friendlier "Melodies"
+name:
+
+```markdown
+---
+name: Bach, Inventio 8
+rtttl: inventio_8:d=16,o=5,b=160:f,p,a,p,f,p,c6,p,a,p,f6,p,e6,d6,c6,d6,c6,a#,a,a#,a,g,8f,p;
+---
+
+A short markdown description shown under the code block. Optional — omit the
+body for no caption.
+```
+
+Both `name` and `rtttl` are required. Entries are ordered **alphabetically by
+`name`** (not filename or date). `scripts/build_melodies.py` turns those into
+`melodies/index.html` — served at `/melodies/`, with a matching `sitemap.xml`
+entry (its `lastmod` is the build date: there's no per-tune date to derive it
+from).
+
+The page also carries two static, hand-authored sections that aren't sourced
+from markdown — a **"Try it yourself"** playbox (a textarea plus Play/Stop
+buttons that read its live value) and a **"The format"** syntax primer, both
+page furniture rather than per-tune data. Playback runs entirely client-side
+through [rtttl-play](https://github.com/adamonsoon/rtttl-play) (MIT),
+self-hosted under `vendor/rtttl-play/` — it exposes
+`window.rtttlPlay.play(str)` / `.stop()`, wired up to every Play/Stop button
+(including the playbox's) by a small inline script.
+
 ## Weather
 
 A dedicated **live weather page** at `/naarden/weather/` shows current
@@ -276,8 +323,8 @@ Tailwind CLI against the input file and output to `styles.css`.
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
 `naarden/index.html`, `naarden/weather/index.html`, `jottings/index.html`,
-`chronicle/index.html`, the `chronicle/*/index.html` article pages and
-`404.html` are listed) — otherwise
+`melodies/index.html`, `chronicle/index.html`, the `chronicle/*/index.html`
+article pages and `404.html` are listed) — otherwise
 its utility classes are dropped from the build.
 
 ### Production-parity preview

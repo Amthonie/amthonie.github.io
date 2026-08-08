@@ -976,6 +976,8 @@ def build_jottings_page(posts: list[dict]) -> None:
         <a href="/naarden/weather/">Weather</a>
         <span class="sep">·</span>
         <a href="/jottings/">Jottings</a>
+        <span class="sep">·</span>
+        <a href="/melodies/">Melodies</a>
     </nav>
     <p>&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
 </footer>
