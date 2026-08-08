@@ -481,7 +481,7 @@ def render_filter(posts: list[dict]) -> str:
             counts[tag] = counts.get(tag, 0) + 1
     if not counts:
         return ""
-    tags = sorted(counts, key=lambda t: (-counts[t], t))  # frequency desc, then name
+    tags = sorted(counts)  # alphabetical
 
     # Active styling is driven by the aria-pressed attribute the script toggles
     # (Tailwind's aria-pressed: variant), so JS never touches classes. The count
