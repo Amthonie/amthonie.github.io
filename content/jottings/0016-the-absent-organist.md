@@ -6,7 +6,7 @@ tags: [music,local-life]
 title: The Absent Organist
 summary: On carrying Bach across continents and missing a neighbour two streets away.
 image: 16-the-absent-organist.webp
-image_alt: A triptych mid-century magazine illustration showing three surreal organ pipe scenes: Alpine mountains with a massive pipe organ and a hiker, a New Orleans skyline built of brass organ pipes, and a tropical beach where palm fronds are made of gleaming silver pipes.
+image_alt: A triptych mid-century magazine illustration showing three surreal organ pipe scenes - Alpine mountains with a massive pipe organ and a hiker, a New Orleans skyline built of brass organ pipes, and a tropical beach where palm fronds are made of gleaming silver pipes.
 image_caption: Bach for every occasion
 ---
 
