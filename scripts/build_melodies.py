@@ -54,14 +54,25 @@ MELODIES_PAGE = ROOT / "melodies" / "index.html"
 SITEMAP = ROOT / "sitemap.xml"
 
 SITE = "https://amthonie.nl"
-# Full intro — used for the visible tagline and the (uncapped) JSON-LD description.
-DESCRIPTION = (
-    "Ring Tone Text Transfer Language — a compact plain‑text format for "
-    "simple melodies — is used here to drive a piezo‑buzzer emulator in your "
-    "browser. The examples below show a few of my own RTTTL concoctions, and "
-    "you can try your own in the playbox. A short syntax guide follows for "
+# Full intro — two paragraphs rendered as the visible tagline; joined with a
+# space for the (uncapped) JSON-LD description, which takes a single string.
+DESCRIPTION_P1 = (
+    "Ring Tone Text Transfer Language — a compact plain‑text format from the "
+    "feature‑phone era, once responsible for those impressive, popular, and "
+    "occasionally rather annoying ringtones — is used here to drive a "
+    "piezo‑buzzer emulator in your browser. Below is a small collection of "
+    "my own miniatures, ranging from Bach to early arcade themes. You can "
+    "try your own in the playbox, and a short syntax guide follows for "
     "anyone curious about how these strings work."
 )
+DESCRIPTION_P2 = (
+    "I use the format to give my reTerminal’s e‑paper display — running "
+    "ESPHome — something more interesting to do than emit a single, dutiful "
+    "beep. These little fragments make it play brief, occasionally "
+    "irritating tunes as hourly chimes or when events occur, such as the "
+    "front door opening."
+)
+DESCRIPTION = f"{DESCRIPTION_P1} {DESCRIPTION_P2}"
 # Shorter form for <meta name="description"> / og:description.
 META_DESCRIPTION = (
     "RTTTL ringtone snippets I use on my ESPHome buzzer, with an in-browser player."
@@ -369,7 +380,8 @@ def build_melodies_page(posts: list[dict]) -> None:
     <!-- RTTTL: title + tagline -->
     <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">RTTTL Melodies</h1>
-        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
+        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P1}</p>
+        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P2}</p>
     </section>
 
     <!-- RTTTL: the tunes themselves. One top-level box, one item per

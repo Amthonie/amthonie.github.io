@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 2 # need the previous commit to diff against
 
-      - name: Build jottings & chronicle pages from markdown
+      - name: Build jottings, chronicle & melodies pages from markdown
         run: |
           # Regenerate the generated pages from their markdown sources so the
           # published output always reflects the latest content, even if the

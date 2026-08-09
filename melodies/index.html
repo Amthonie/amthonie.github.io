@@ -37,7 +37,7 @@
                     },
                     "url": "https://amthonie.nl/melodies/",
                     "name": "RTTTL Melodies",
-                    "description": "Ring Tone Text Transfer Language — a compact plain‑text format for simple melodies — is used here to drive a piezo‑buzzer emulator in your browser. The examples below show a few of my own RTTTL concoctions, and you can try your own in the playbox. A short syntax guide follows for anyone curious about how these strings work.",
+                    "description": "Ring Tone Text Transfer Language — a compact plain‑text format from the feature‑phone era, once responsible for those impressive, popular, and occasionally rather annoying ringtones — is used here to drive a piezo‑buzzer emulator in your browser. Below is a small collection of my own miniatures, ranging from Bach to early arcade themes. You can try your own in the playbox, and a short syntax guide follows for anyone curious about how these strings work. I use the format to give my reTerminal’s e‑paper display — running ESPHome — something more interesting to do than emit a single, dutiful beep. These little fragments make it play brief, occasionally irritating tunes as hourly chimes or when events occur, such as the front door opening.",
                     "isPartOf": {
                         "@id": "https://amthonie.nl/#website"
                     }
@@ -116,12 +116,36 @@
     <!-- RTTTL: title + tagline -->
     <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">RTTTL Melodies</h1>
-        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">Ring Tone Text Transfer Language — a compact plain‑text format for simple melodies — is used here to drive a piezo‑buzzer emulator in your browser. The examples below show a few of my own RTTTL concoctions, and you can try your own in the playbox. A short syntax guide follows for anyone curious about how these strings work.</p>
+        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">Ring Tone Text Transfer Language — a compact plain‑text format from the feature‑phone era, once responsible for those impressive, popular, and occasionally rather annoying ringtones — is used here to drive a piezo‑buzzer emulator in your browser. Below is a small collection of my own miniatures, ranging from Bach to early arcade themes. You can try your own in the playbox, and a short syntax guide follows for anyone curious about how these strings work.</p>
+        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">I use the format to give my reTerminal’s e‑paper display — running ESPHome — something more interesting to do than emit a single, dutiful beep. These little fragments make it play brief, occasionally irritating tunes as hourly chimes or when events occur, such as the front door opening.</p>
     </section>
 
     <!-- RTTTL: the tunes themselves. One top-level box, one item per
          content/rtttl/*.md entry, divided by <hr>. -->
     <section class="rtttl-list mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+
+        <div class="rtttl-item" id="bach-fuga-d-moll">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Bach, Fuga d‑moll</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="fuga-d:d=16,o=5,b=120:a,g,a,f,a,e,a,d,a,c#,a,d,a,e,a,f,a,a4,a,b4,a,c#,a,d,a,c#,a,d,a,e,a,f,p;"
+                            aria-label="Play Bach, Fuga d‑moll">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>fuga-d:d=16,o=5,b=120:a,g,a,f,a,e,a,d,a,c#,a,d,a,e,a,f,a,a4,a,b4,a,c#,a,d,a,c#,a,d,a,e,a,f,p;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">A compact rendering of the exposition from Bach’s <em>Fugue in D minor</em>. The subject is reduced to its essential contour, yet retains the rhythmic drive and clarity of the original line.</p>
+        </div>
+
+        <hr class="my-6 border-black/10 dark:border-white/10"/>
 
         <div class="rtttl-item" id="bach-inventio-8">
             <div class="flex items-center justify-between gap-4">
@@ -141,7 +165,7 @@
             <div class="update-body mt-3">
                 <pre><code>inventio_8:d=16,o=5,b=160:p,f,p,a,p,f,p,c6,p,a,p,f6,p,e6,d6,c6,d6,c6,a#,a,a#,a,g,8f,p;</code></pre>
             </div>
-            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">A brief RTTTL rendering of the opening bars of Bach’s <em>Invention No. 8</em>, reduced to its essentials but still unmistakably Bach. I use this fragment as my hourly chime in Home Assistant, where a piezo buzzer does its best to honour the composer.</p>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The opening bars of Bach’s <em>Invention No. 8</em>, pared down to their core melodic shape and delivered with the bright insistence typical of piezo buzzers. I use this miniature as my hourly chime — a polite, slightly anachronistic reminder of the passing time.</p>
         </div>
 
         <hr class="my-6 border-black/10 dark:border-white/10"/>
@@ -164,7 +188,7 @@
             <div class="update-body mt-3">
                 <pre><code>pacman:d=4,o=5,b=112:p,32b,32p,32b6,32p,32f#6,32p,32d#6,32p,32b6,32f#6,16p,16d#6,16p,32c6,32p,32c7,32p,32g6,32p,32e6,32p,32c7,32g6,16p,16e6,16p,32b,32p,32b6,32p,32f#6,32p,32d#6,32p,32b6,32f#6,16p,16d#6,16p,32d#6,32e6,32f6,32p,32f6,32f#6,32g6,32p,32g6,32g#6,32a6,32p,32b6.,p;</code></pre>
             </div>
-            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The unmistakable opening motif from <em>Pac‑Man</em>, rendered here in RTTTL and cheerfully unapologetic in its 8‑bit origins. I use it as a door chime in Home Assistant, where the piezo buzzer delivers its burst of nostalgia with admirable enthusiasm.</p>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The unmistakable opening motif from <em>Pac‑Man</em>, rendered in compact form and unapologetically rooted in its 8‑bit origins. It announces itself each time my front door opens — a small burst of arcade cheerfulness at the threshold.</p>
         </div>
 
         <hr class="my-6 border-black/10 dark:border-white/10"/>
@@ -187,7 +211,30 @@
             <div class="update-body mt-3">
                 <pre><code>Pengo:d=4,o=5,b=180:p,16e6,16p,16d6,16p,16e6,16p,16b,16p,16g,16p,16b,16p,8e,8p,16e6,16p,16d6,16p,16e6,16p,16b,16p,16g,16p,16b,16p,8e,8p,16e6,16p,16f#6,16p,16g6,16p,32f#6,32p,16g6,8p,16e6,16p,16f#6,16p,32e6,32p,16f#6,8p,16d6,16p,16e6,16p,16c6,16p,16g,16p,16c6,16p,16e6,16p,p;</code></pre>
             </div>
-            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">This is the jaunty theme from <em>Pengo</em>, distilled into RTTTL and unmistakably rooted in early arcade sound. It’s a neat fragment of 1980s game music — simple, brisk, and oddly uplifting.</p>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The jaunty theme from <em>Pengo</em>, distilled into a brisk, buzzer‑friendly outline. Simple, bright, and unmistakably shaped by early arcade sound.</p>
+        </div>
+
+        <hr class="my-6 border-black/10 dark:border-white/10"/>
+
+        <div class="rtttl-item" id="small-ben">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Small Ben</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="small_ben:d=4,o=5,b=360:f,a,g,2c,p,f,g,a,2f,p,a,g,f,2c,p,c,g,a,2f,p,16f,16g,16a,16c6,16e6,16c6,16a,16g,16f,p;"
+                            aria-label="Play Small Ben">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>small_ben:d=4,o=5,b=360:f,a,g,2c,p,f,g,a,2f,p,a,g,f,2c,p,c,g,a,2f,p,16f,16g,16a,16c6,16e6,16c6,16a,16g,16f,p;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300"><em>Small Ben</em> is a compact RTTTL rendering of the Big Ben chimes — pared down, briskly paced, and with the unmistakable timbre of a piezo buzzer. It preserves the familiar Westminster contour while embracing the slightly metallic character that such hardware inevitably adds.</p>
         </div>
 
         <hr class="my-6 border-black/10 dark:border-white/10"/>
@@ -210,7 +257,7 @@
             <div class="update-body mt-3">
                 <pre><code>snoopy:d=4,o=5,b=220:8d,8d#,8e,c6,8e,c6,8e,2c6,8p,8c6,8d6,8d#6,8e6,8c6,8d6,e6,8b,d6,c6,p;</code></pre>
             </div>
-            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">It’s the lively opening strain of <em>The Entertainer</em>, best known to me from Radarsoft’s Snoopy game on the C64 rather than any ragtime piano.</p>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The lively opening strain of <em>The Entertainer</em>, known to me chiefly from Radarsoft’s <em>Snoopy</em> on the Commodore 64. A bright, compact fragment of ragtime refracted through early home‑computer sound.</p>
         </div>
 
     </section>
