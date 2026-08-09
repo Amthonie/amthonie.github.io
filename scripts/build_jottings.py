@@ -69,7 +69,7 @@ SITE = "https://amthonie.nl"
 DESCRIPTION = (
     "A small collection of passing thoughts, brief notes, and the occasional "
     "observation that seemed worth writing down — nothing grand, just the quiet "
-    "debris of daily life that lingered long enough to be captured."
+    "debris of daily life."
 )
 # Shorter form for the <meta name="description"> and og:description, kept near
 # the ~155-char length search engines display before truncating.
