@@ -5,6 +5,7 @@ slug: the-absent-organist
 tags: [music,local-life]
 title: The Absent Organist
 summary: On carrying Bach across continents and missing a neighbour two streets away.
+image: 16-the-absent-organist.webp
 ---
 
 My favourite recording of all time—setting aside the Easy Aloha’s Cashmere Cat album for another day—is the 1982 release of Bach’s six Trio Sonatas for organ, recorded for Archiv Production by Ton Koopman. I first heard it shortly after it came out, and it has followed me ever since.
