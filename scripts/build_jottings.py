@@ -960,12 +960,12 @@ def build_jottings_page(posts: list[dict]) -> None:
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
+    {filter_html}
+
     <!-- Jottings: intro (no title — the header band carries the page title) -->
     <section class="{SECTION_CLASS}">
         <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
     </section>
-
-    {filter_html}
 {index_box}
 
     <!-- Jottings: the entries themselves, one box per month -->

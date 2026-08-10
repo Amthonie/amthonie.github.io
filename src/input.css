@@ -315,6 +315,15 @@
    cards). No border — instead a distinct, stronger fill than the parent panel
    marks it as its own tile. Square like every panel; give the containing grid a
    small gap so the tiles don't merge. */
+/* A .site-nav rendered as a muted panel (the melodies in-page nav): links go
+   brand-400 to stay bright on the dark fill, separators lighten. */
+.site-nav.panel--muted a {
+  color: #9ccc66; /* brand-400 */
+}
+.site-nav.panel--muted .sep {
+  color: rgba(255, 255, 255, 0.35);
+}
+
 .panel-inset {
   border: 0;
   background: rgba(0, 0, 0, 0.1);

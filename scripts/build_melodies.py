@@ -185,11 +185,18 @@ def render_item(post: dict) -> str:
         </div>"""
 
 
-SECTION_CLASS = (
-    "mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border "
-    "border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 "
-    "md:px-8 md:py-8 shadow-xl"
-)
+# Standard content panel (see .panel in input.css): flush, square, 1px border,
+# no shadow. Padding/width stay as utilities.
+SECTION_CLASS = "w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8"
+
+
+def title_panel(text: str, anchor: str) -> str:
+    """A brand (green) section-title panel — the melodies equivalent of the
+    jottings month headers. The section's anchor id lives here so the in-page
+    nav jumps to the header; the content panel follows it, flush."""
+    return (f'<div id="{anchor}" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] '
+            f'panel panel--brand px-4 py-4 md:px-8 md:py-6">'
+            f'<h2 class="text-2xl font-bold tracking-tight text-white">{text}</h2></div>')
 
 
 def render_items(posts: list[dict]) -> str:
@@ -204,25 +211,21 @@ def render_items(posts: list[dict]) -> str:
                 blocks.append('<hr class="my-6 border-black/10 dark:border-white/10"/>')
             blocks.append(render_item(post))
         body = "\n\n        ".join(blocks)
-    heading = ('<h2 class="text-lg font-bold tracking-tight text-stone-900 '
-               'dark:text-white">My collection</h2>\n'
-               '        <hr class="title-divider"/>')
-    return (f'<section id="collection" class="rtttl-list {SECTION_CLASS}">\n\n'
-            f'        {heading}\n\n        {body}\n\n    </section>')
+    return (f'{title_panel("My collection", "collection")}\n'
+            f'    <section class="rtttl-list {SECTION_CLASS}">\n\n        {body}\n\n    </section>')
 
 
 # "Try it yourself" and "The format" are page furniture, not sourced from
 # content/rtttl/*.md — kept as static blocks here rather than generated.
-TRY_IT_YOURSELF = f"""<!-- RTTTL: try your own -- reads live from the textarea rather than a
+TRY_IT_YOURSELF = f"""{title_panel("Try it yourself", "try-it")}
+    <!-- RTTTL: try your own -- reads live from the textarea rather than a
          fixed data-rtttl attribute, so it gets its own listener below. -->
-    <section id="try-it" class="{SECTION_CLASS}">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Try it yourself</h2>
-        <hr class="title-divider"/>
-        <p class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play. A brief disclaimer: experimenting with this may prove unexpectedly addictive and could test the patience of nearby housemates.</p>
+    <section class="{SECTION_CLASS}">
+        <p class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play. A brief disclaimer: experimenting with this may prove unexpectedly addictive and could test the patience of nearby housemates.</p>
         <label for="rtttl-input" class="sr-only">Your RTTTL string</label>
         <textarea id="rtttl-input" rows="6" spellcheck="false"
                   placeholder="name:d=4,o=5,b=125:notes"
-                  class="mt-3 w-full rounded-xl border border-black/10 bg-white/60 p-3 font-mono text-sm text-stone-800 shadow-inner focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30 dark:border-white/15 dark:bg-stone-900/40 dark:text-stone-100 dark:focus:border-brand-400 dark:focus:ring-brand-400/30"></textarea>
+                  class="mt-3 w-full border border-black/10 bg-white/60 p-3 font-mono text-sm text-stone-800 shadow-inner focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30 dark:border-white/15 dark:bg-stone-900/40 dark:text-stone-100 dark:focus:border-brand-400 dark:focus:ring-brand-400/30"></textarea>
         <div class="mt-3 flex items-center gap-2">
             <button type="button" id="rtttl-input-play"
                     class="inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400">
@@ -248,11 +251,10 @@ TRY_IT_YOURSELF = f"""<!-- RTTTL: try your own -- reads live from the textarea r
         </label>
     </section>"""
 
-FORMAT_EXPLAINER = f"""<!-- RTTTL: a basic explanation of the syntax. -->
-    <section id="syntax" class="{SECTION_CLASS}">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">The syntax</h2>
-        <hr class="title-divider"/>
-        <div class="update-body mt-3">
+FORMAT_EXPLAINER = f"""{title_panel("The syntax", "syntax")}
+    <!-- RTTTL: a basic explanation of the syntax. -->
+    <section class="{SECTION_CLASS}">
+        <div class="update-body">
             <p>An RTTTL string packs a whole melody into one line of plain text: a name, a few default settings, then the notes themselves.</p>
             <pre><code>name:d=4,o=5,b=125:notes
       │   │    │
@@ -278,14 +280,13 @@ Examples:  8g#6 = eighth G# octave 6
     </section>"""
 
 
-# In-page section nav, shown under the intro. No box of its own — it reuses the
-# footer's .site-nav style (brand links + "·" separators) and just borrows the
-# content column's width/padding so the links align with the boxes. Anticipates
-# the page growing longer (an ESPHome how-to block is planned), so there's an
-# easy jump between sections. Anchors match the section ids: #collection /
-# #try-it / #syntax.
-PAGE_NAV = """<!-- RTTTL: in-page section nav (no box; aligned to the column). -->
-    <nav aria-label="On this page" class="site-nav mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8">
+# In-page section nav, shown under the intro. A muted panel (grey) reusing the
+# footer's .site-nav layout (links + "·" separators); on the dark fill the links
+# render brand-400 via `.site-nav.panel--muted` in input.css. Anchors match the
+# section title panels: #collection / #try-it / #syntax.
+PAGE_NAV = """<!-- RTTTL: in-page section nav, as a muted panel (links brand-400 on the
+         dark fill via .site-nav.panel--muted in input.css). -->
+    <nav aria-label="On this page" class="site-nav w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6">
         <a href="#collection">My collection</a>
         <span class="sep">·</span>
         <a href="#try-it">Try it yourself</a>
@@ -381,7 +382,7 @@ def build_melodies_page(posts: list[dict]) -> None:
 
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
-    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden">
         <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
             <img
                     src="../images/theme/nouveau/header.webp"
@@ -393,12 +394,12 @@ def build_melodies_page(posts: list[dict]) -> None:
             <img
                     src="../images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
-                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800"
                     draggable="false"
             />
         </a>
         <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
-            <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie <span class="font-normal text-white/70">|</span> Melodies</h1>
             <a href="../"
                aria-label="Back to home"
                class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
@@ -415,14 +416,13 @@ def build_melodies_page(posts: list[dict]) -> None:
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- RTTTL: title + tagline -->
-    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">RTTTL Melodies</h1>
-        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P1}</p>
+    {PAGE_NAV}
+
+    <!-- RTTTL: intro (no title — the header band carries the page title) -->
+    <section class="{SECTION_CLASS}">
+        <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P1}</p>
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P2}</p>
     </section>
-
-    {PAGE_NAV}
 
     <!-- RTTTL: the tunes themselves. One top-level box, one item per
          content/rtttl/*.md entry, divided by <hr>. -->
