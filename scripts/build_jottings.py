@@ -970,8 +970,6 @@ def build_jottings_page(posts: list[dict]) -> None:
         <span class="sep">·</span>
         <a href="/about/">About me</a>
         <span class="sep">·</span>
-        <a href="/about/#about-this-site">About this site</a>
-        <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>
         <a href="/naarden/weather/">Weather</a>

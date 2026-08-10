@@ -173,20 +173,11 @@
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Sub-header: in-page nav (muted panel), links light / brand-400 on hover -->
-    <nav aria-label="On this page" class="site-nav w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6">
-        <a href="#about-me">About me</a>
-        <span class="sep">·</span>
-        <a href="#about-this-site">About this site</a>
-    </nav>
-
-    <!-- About me: green title panel + the story in its own content panel -->
-    <div id="about-me" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-4 md:px-8 md:py-6">
-        <h2 class="text-2xl font-bold tracking-tight text-white">How I Got Here (and Where I Am)</h2>
-    </div>
+    <!-- About me: the story, with its title back inside the content panel -->
     <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">How I Got Here (and Where I Am)</h2>
 
-        <div class="update-body text-base">
+        <div class="update-body mt-4 text-base">
             <p><strong>A small warning before we begin:</strong> what follows is a surprisingly long account of how one person can move through life, cities, studies, jobs, and the occasional latex‑based parade. Proceed at your own discretion.</p>
 
             <a href="images/about_1.webp"
@@ -277,20 +268,6 @@
 
     </section>
 
-    <!-- Colophon: a short note about the site itself, below the personal story
-         so the page leads with its <h1>. Linked from the footer's "About this
-         site". Prose sits in .update-body for the standard brand-coloured link
-         style. External links carry an sr-only "opens in a new tab" cue. -->
-    <!-- About this site: green title panel (keeps the #about-this-site anchor) + content panel -->
-    <div id="about-this-site" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-4 md:px-8 md:py-6">
-        <h2 class="text-2xl font-bold tracking-tight text-white">About this site</h2>
-    </div>
-    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
-        <div class="update-body text-sm">
-            <p>This website is built to be lightweight, transparent, and fully under my control. It uses no tracking, and only minimal, privacy‑friendly analytics via <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Cloud<span class="sr-only"> (opens in a new tab)</span></a>. It sets no cookies either — with one optional exception: switch on “remember my tinkering” on the Melodies page and it keeps the melody you’re editing on your own device, nothing more. Every page is hand‑crafted in HTML, CSS and a little vanilla JavaScript — styled with Tailwind and compiled to static CSS, with no client‑side frameworks. The full source is <a href="https://github.com/Amthonie/amthonie.github.io" target="_blank" rel="noopener">public on GitHub<span class="sr-only"> (opens in a new tab)</span></a>. All photographs are my own unless noted otherwise, and all illustrations are created by me with the assistance of AI tools.</p>
-        </div>
-    </section>
-
     <!-- A little 90s-web flourish: a looping avatar, tucked below the story -->
     <!-- temporarily disabled
     <div class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px]">
@@ -310,8 +287,6 @@
         <a href="/">Home</a>
         <span class="sep">·</span>
         <a href="/about/">About me</a>
-        <span class="sep">·</span>
-        <a href="/about/#about-this-site">About this site</a>
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>

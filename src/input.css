@@ -296,6 +296,13 @@
   background: #44403c;
   color: #fff;
 }
+/* 4th type: a bare panel — no fill, no border. A slot in the flush stack that
+   reads as plain text on the page (e.g. the homepage "about this site"
+   colophon). Used with .panel, which it overrides. */
+.panel--bare {
+  border: 0;
+  background: transparent;
+}
 @media (prefers-color-scheme: dark) {
   .panel {
     border-color: rgba(255, 255, 255, 0.1);
