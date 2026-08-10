@@ -272,41 +272,33 @@ outlook. It's a pull-based design that keeps the site fully static:
 
 - A home-automation server (Home Assistant) pushes a small JSON snapshot to a
   **GitHub gist** on a schedule — nothing runs server-side here.
-- `naarden/weather/weather.js` fetches that gist client-side and populates the
-  `#weather` card in `naarden/weather/index.html`; `naarden/weather/weather.css`
-  styles it (scoped to `#weather`, light/dark via `prefers-color-scheme`).
-- The card body is one grid of six blocks — condition, temp+wind, hourly
-  forecast, daily forecast, sun times, moon phase — one column on small screens,
-  two from 1020px up, with a full-width rule between the current / forecast /
-  astro pairs.
+- `naarden/weather/weather.js` fetches that gist client-side and fills the live
+  weather; `naarden/weather/weather.css` styles it (scoped to `#weather`,
+  light/dark via `prefers-color-scheme`).
+- Since the flat-panel redesign, `#weather` is a transparent grouping wrapper
+  holding three stacked panels: a **marquee** (secondary-data ticker), the **six
+  weather blocks** (condition, temp+wind, hourly, daily, sun, moon — one column
+  on small screens, two from 1020px up, a `.wx-div` rule between the row groups),
+  and a **bare, right-aligned footer** ("Sourced from my Home Assistant" + the
+  JS-driven "Updated …" stamp).
 - Weather icons are [Meteocons](https://bas.dev/work/meteocons) (MIT),
   self-hosted under `vendor/meteocons/` — no third-party CDN.
-- The card's footer carries a **source note** ("Sourced from my Home Assistant")
-  beside the JS-driven "Updated …" freshness stamp.
 
-**Forecast in words.** The page's title box leads with a plain-language forecast
-paragraph beneath the `<h1>`. The text is a second file (`forecast_naarden.txt`)
-in the **same gist**; `weather.js` fetches it independently of the JSON card (so
-one failing doesn't hide the other) and drops it in with `textContent`. The
-heading is always shown; the paragraph appears only once the text loads.
+**Forecast in words.** A plain-language forecast paragraph sits in its own panel
+above the weather blocks (the page `<h1>` lives in the header band). The text is a
+second file (`forecast_naarden.txt`) in the **same gist**; `weather.js` fetches it
+independently of the JSON (so one failing doesn't hide the other) and drops it in
+with `textContent`; the panel is revealed only once the text loads. If the card
+fetch fails outright, a **"No weather data available"** placeholder panel shows
+instead.
 
-**Teaser on the Naarden page.** `/naarden/` doesn't embed the card — it shows a
-compact link box (driven by the same `weather.js`, via a guarded code path) with
-the live condition icon + temperature, linking through to the weather page. The
-box is revealed only when the gist has data, so a failed/empty fetch just leaves
-it hidden — nothing to click through to.
+**Teaser on the Naarden page.** `/naarden/` shows the current conditions in a
+panel of its own — an `<h2>`, the live condition icon + temperature, and the same
+plain-language forecast text (all via the shared `weather.js`), linking through to
+the weather page. Revealed only when the gist has data.
 
-**Weather maps.** Below the card, a collapsible board shows KNMI forecast maps
-(`cdn.knmi.nl`), picked by time of day (Europe/Amsterdam): before 18:00 → current
-+ today + tonight + tomorrow; from 18:00 → current + tonight + tomorrow +
-tomorrow-night. It's **collapsed by default behind a Show/Hide toggle** and the
-maps — third-party images — are fetched only on first expand, so no request
-reaches KNMI (and no visitor IP is exposed) until the visitor opts in. How many
-show tracks the column count (1–2 columns → 2 maps, 3 → 3, 4 → 4); the extra
-slots are `lazy`, so narrow screens don't fetch them. The maps carry their own
-"Bron: KNMI" label and link to KNMI's forecast page, with a "Maps source:
-knmi.nl" credit under the heading. The title and credit stay visible whether the
-board is open or closed.
+(The old KNMI weather-maps board was dropped in the flat-panel redesign — the
+third-party maps clashed with the site's look.)
 
 The behaviour is deliberately forgiving: missing fields are skipped, and if the
 fetch fails the card, forecast paragraph and teaser simply stay hidden rather
