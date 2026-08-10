@@ -24,7 +24,7 @@
 #weather .wx-ring { fill:none; stroke:rgba(0,0,0,.15); stroke-width:3; }
 #weather .wx-marker { fill:#4a7a2c; }
 #weather .wx-dir { fill:#1c1917; font-size:24px; font-weight:800; }
-#weather .wx-foot { margin-top:.85rem; padding-top:.55rem; border-top:1px solid rgba(0,0,0,.05); text-align:center; font-size:.72rem; color:#57534e; }
+#weather .wx-foot { text-align:center; font-size:.72rem; color:#57534e; }
 #weather .wx-foot-place { font-weight:600; }
 /* Forecast block heading ("Hourly forecast" / "Daily forecast"). */
 #weather .wx-fc-head { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#57534e; margin-bottom:.45rem; }
@@ -50,13 +50,12 @@
    padding (negative margins), so the divider spans the full card width and the text sits
    with a symmetric .5rem above and below — evenly divided, like the ticker's band up top.
    Horizontal padding re-insets the right-aligned "Updated" so it never touches the edge. */
-#weather .wx-foot-right { text-align:right; margin:1rem -1rem -1rem; padding:.5rem 1rem; }
-@media (min-width:768px) { #weather .wx-foot-right { margin:1.25rem -2rem -1.5rem; padding:.5rem 2rem; } }
+#weather .wx-foot-right { text-align:right; }
 @media (prefers-color-scheme: dark) {
     #weather .wx-val { color:#fff; }
     #weather .wx-dir { fill:#fff; }
     #weather .wx-lbl { color:#d6d3d1; }
-    #weather .wx-foot { color:#d6d3d1; border-top-color:rgba(255,255,255,.1); }
+    #weather .wx-foot { color:#d6d3d1; }
     #weather .wx-fc-head { color:#a8a29e; }
     #weather .wx-fc-day, #weather .wx-fc-hi { color:#fff; }
     #weather .wx-fc-lo { color:#d6d3d1; }
@@ -76,12 +75,12 @@
    content is doubled so the loop is seamless. */
 #weather .wx-ticker-wrap {
     overflow:hidden; white-space:nowrap; position:relative;
-    margin:-1rem -1rem 1rem;                                  /* bleed to the card's padded edges, sit above .wx-cols */
-    padding:.5rem 0; border-bottom:1px solid rgba(0,0,0,.06);
+    margin:-1rem;                                             /* bleed to fill its own panel edge-to-edge */
+    padding:.5rem 0;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
             mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent); /* fade the scroll in/out at the edges */
 }
-@media (min-width:768px) { #weather .wx-ticker-wrap { margin:-1.5rem -2rem 1.25rem; } }
+@media (min-width:768px) { #weather .wx-ticker-wrap { margin:-1.5rem -2rem; } }
 #weather .wx-ticker-track { display:inline-flex; align-items:center; animation:wx-ticker-scroll 34s linear infinite; will-change:transform; }
 #weather .wx-ticker-wrap:hover .wx-ticker-track { animation-play-state:paused; }   /* hover to read */
 @keyframes wx-ticker-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
@@ -95,5 +94,4 @@
     #weather .wx-ticker-item svg { stroke:#9ccc66; }
     #weather .wx-ticker-item .v { color:#fff; }
     #weather .wx-ticker-sep { color:#57534e; }
-    #weather .wx-ticker-wrap { border-bottom-color:rgba(255,255,255,.1); }
 }

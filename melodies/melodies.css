@@ -7,10 +7,6 @@
  * Palette is hard-coded to the brand tokens: brand-600 #4a7a2c, brand-500 #5f9e3a,
  * brand-400 #9ccc66 (see src/input.css) — keep in step if those ever change.
  */
-/* The branded title divider (.title-divider) is now a shared style-book element
-   in src/input.css → styles.css, used under the section titles here (My
-   collection / Try it yourself / The syntax) and on About, Naarden and Jottings. */
-
 /* A little breathing room when the in-page nav jumps to an anchored section,
    so it doesn't butt against the very top of the viewport. */
 #collection,

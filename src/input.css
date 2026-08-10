@@ -90,7 +90,7 @@
   margin-top: 0.6rem;
 }
 .update-body img {
-  border-radius: 0.75rem;
+  border-radius: 0; /* squared for the flat panel redesign (was 0.75rem) */
 }
 .update-body code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -256,17 +256,82 @@
   }
 }
 
-/* Branded divider under a section title — a small style-book accent placed
-   directly under a heading (Melodies, About, Naarden, Jottings). Brand-600 in
-   light, brand-400 in dark (matching the link colours); deliberately distinct
-   from the neutral content <hr>s used between items. */
-.title-divider {
-  margin: 0.6rem 0 1rem;
+/* ── Flat panel system (site-wide redesign) ─────────────────────────────────
+   Column-width boxes stacked flush (no gaps), square corners, a simple 1px
+   border, no shadow. `.panel` carries only the border + fill + text colour;
+   padding / width / positioning stay as Tailwind utilities on the element
+   (they vary per layout). Three variants:
+     .panel            → light content box (black/5)
+     .panel--brand     → green title box   (brand-600/700, white text)
+     .panel--muted     → grey utility box  (stone-700/600, white text)
+   Hard-coded palette so it's immune to Tailwind rebuild lag (like .site-nav).
+   This replaces the old boxed look; `.title-divider` is retired as pages move
+   over to `.panel--brand` title boxes. */
+.panel {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.05);
+}
+.panel--brand {
+  border-color: #4a7a2c; /* brand-600 */
+  background: #4a7a2c;
+  color: #fff;
+}
+.panel--muted {
+  border-color: #44403c; /* stone-700 */
+  background: #44403c;
+  color: #fff;
+}
+/* 4th type: a bare panel — no fill, no border. A slot in the flush stack that
+   reads as plain text on the page (e.g. the homepage "about this site"
+   colophon). Used with .panel, which it overrides. */
+.panel--bare {
   border: 0;
-  border-top: 1px solid #4a7a2c; /* brand-600 */
+  background: transparent;
 }
 @media (prefers-color-scheme: dark) {
-  .title-divider {
-    border-top-color: #9ccc66; /* brand-400 */
+  .panel {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .panel--brand {
+    border-color: #3a5f22; /* brand-700 */
+    background: #3a5f22;
+  }
+  .panel--muted {
+    border-color: #57534e; /* stone-600 */
+    background: #57534e;
+  }
+}
+
+/* A panel nested inside another panel (e.g. the homepage "Worth a Click" link
+   cards). No border — instead a distinct, stronger fill than the parent panel
+   marks it as its own tile. Square like every panel; give the containing grid a
+   small gap so the tiles don't merge. */
+/* A .site-nav rendered as a muted panel (the melodies in-page nav): links read
+   light on the dark fill and turn brand-400 on hover (like the Chronicle promo
+   link); separators lighten. */
+.site-nav.panel--muted a {
+  color: rgba(255, 255, 255, 0.85);
+}
+.site-nav.panel--muted a:hover {
+  color: #9ccc66; /* brand-400 */
+}
+.site-nav.panel--muted .sep {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.panel-inset {
+  border: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+.panel-inset:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
+@media (prefers-color-scheme: dark) {
+  .panel-inset {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .panel-inset:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 }

@@ -237,7 +237,7 @@ def render_figure(meta: dict, source_name: str) -> str:
 
     return f"""<figure class="{fig_cls}">
                     <a href="{full_rel}"{pswp_attrs}{caption_attr} target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>{caption}
@@ -344,11 +344,10 @@ def load_posts() -> list[dict]:
     return posts
 
 
-SECTION_CLASS = (
-    "mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border "
-    "border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 "
-    "md:px-8 md:py-8 shadow-xl"
-)
+# Standard top-level content panel: full column width, flush-stacked (no top
+# margin), square, 1px border, no shadow — see `.panel` in input.css. Used for
+# the intro, the index and each jotting.
+SECTION_CLASS = "w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8"
 
 
 def render_articles(posts: list[dict]) -> str:
@@ -376,10 +375,7 @@ def render_articles(posts: list[dict]) -> str:
     sections = []
     for year, month, items in groups:
         blocks = []
-        for i, post in enumerate(items):
-            divider = "" if i == 0 else (
-                '<hr class="my-10 border-black/10 dark:border-white/10"/>'
-            )
+        for post in items:
             # With an image, wrap the figure + body in a flow-root so the float
             # is contained inside the article (and the text top-aligns with the
             # image); without one, keep the body as the bare update-body content.
@@ -392,9 +388,10 @@ def render_articles(posts: list[dict]) -> str:
                 )
             else:
                 body = post["body_html"]
+            # Each jotting is its own `.panel`, full width of the month wrapper.
             blocks.append(
-                f"""{divider}
-            <article id="{post['anchor']}" class="scroll-mt-28" data-tags="{','.join(post['tags'])}">
+                f"""
+            <article id="{post['anchor']}" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="{','.join(post['tags'])}">
                 <time datetime="{post['date']:%Y-%m-%d}"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
@@ -407,21 +404,18 @@ def render_articles(posts: list[dict]) -> str:
                 </div>
             </article>"""
             )
-        # The month anchor (e.g. m-2026-07) lives on the month's article box, so
-        # the index's month permalink jumps here — not to the index entry itself.
         anchor = f"m-{year}-{month:02d}"
-        # Each month box opens with its own month/year title + the shared brand
-        # title divider (style-book element), matching the other content boxes.
-        # It's an <h2> with the articles below demoted to <h3> (page h1 → month
-        # h2 → article h3).
-        month_header = (
-            f'<h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">'
-            f"{MONTHS[month - 1]} {year}</h2>\n"
-            f'        <hr class="title-divider"/>\n'
+        # A month is a transparent grouping wrapper (no panel of its own): a brand
+        # title panel with the month name, then each jotting as its own `.panel`.
+        # The wrapper carries the anchor and lets the tag filter hide a whole
+        # month — brand title panel included — when nothing in it matches.
+        title_panel = (
+            '<div class="w-full panel panel--brand px-4 py-2 md:px-8 md:py-3">'
+            f'<h2 class="text-2xl font-bold tracking-tight text-white">{MONTHS[month - 1]} {year}</h2></div>'
         )
         sections.append(
-            f'<section id="{anchor}" class="scroll-mt-28 {SECTION_CLASS}">\n'
-            f'        {month_header}{"".join(blocks)}\n    </section>'
+            f'<section id="{anchor}" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px]">\n'
+            f'        {title_panel}{"".join(blocks)}\n    </section>'
         )
     return "\n".join(sections)
 
@@ -514,16 +508,17 @@ def render_filter(posts: list[dict]) -> str:
     # (Tailwind's aria-pressed: variant), so JS never touches classes. The count
     # badge uses text-current/opacity so it reads on both the muted and the
     # brand-filled (active) pill without a second colour rule.
+    # Pills sit on the muted (dark) panel, so they use light-on-dark chrome (not
+    # the old black/5 chips); the aria-pressed (active) state stays brand-filled.
     pill = ("inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm "
-            "font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 "
-            "dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 "
-            "aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white "
-            "dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white")
+            "font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 "
+            "aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white")
     # Brand-outlined (not muted grey) so "Show all" reads as an action, not a
     # disabled pill — outline-brand for the reset vs filled-brand for a selected tag.
+    # Brand-outlined so "Show all" reads as an action; brand-400 to stay bright
+    # on the muted panel (same reasoning as the filter chevron's open state).
     reset = ("inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium "
-             "transition border-brand-600 bg-transparent text-brand-600 hover:bg-brand-600/10 "
-             "dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-400/10")
+             "transition border-brand-400 bg-transparent text-brand-400 hover:bg-brand-400/10")
 
     buttons = [f'<button type="button" data-jot-all class="{reset}">Show all</button>']
     for tag in tags:
@@ -532,20 +527,19 @@ def render_filter(posts: list[dict]) -> str:
             f'{tag}<span class="ml-1 text-xs opacity-70">{counts[tag]}</span></button>'
         )
 
-    # Its own box, but transparent + borderless (no card chrome, no rules) — just
-    # width-aligned to the surrounding cards (same md:w-4/5 + px-4 md:px-8) so the
-    # pills line up with the card content. Sits in the gutter between the title
-    # card and the index card, lighter than a slab.
-    return f"""<section class="jot-filter mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8" hidden>
+    # A muted (grey) `.panel` — the utility box of the set, distinct from the
+    # green title panels and the light content panels. Light text/pills on the
+    # dark fill; flush-stacked like every other panel.
+    return f"""<section class="jot-filter w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6" hidden>
         <details class="jot-fold">
-            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-300">
-                {CHEV_SVG}Filter by tag
+            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">
+                {CHEV_SVG}Filter by tag<span data-jot-active class="text-xs font-normal normal-case text-brand-400" hidden>(filtered)</span>
             </summary>
             <div class="mt-3" role="group" aria-label="Filter jottings by tag">
                 <div class="flex flex-wrap gap-2">
                     {"".join(buttons)}
                 </div>
-                <p class="mt-3 text-xs text-stone-500 dark:text-stone-400" aria-live="polite" data-jot-count></p>
+                <p class="mt-3 text-xs text-white/70" aria-live="polite" data-jot-count></p>
             </div>
         </details>
     </section>"""
@@ -601,7 +595,7 @@ def render_teasers(posts: list[dict]) -> str:
             # into the strip instead of ballooning the card — and there's no
             # empty space below it, whatever the text length.
             layout_cls = "flex flex-row items-stretch gap-3 md:gap-4"
-            thumb_html = f"""<div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+            thumb_html = f"""<div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -611,7 +605,7 @@ def render_teasers(posts: list[dict]) -> str:
             f"""<a href="jottings/#{post['anchor']}"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="{position}"
-               class="group {layout_cls} rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+               class="group {layout_cls} panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 {thumb_html}{text_block}
             </a>"""
         )
@@ -721,6 +715,11 @@ FEATURE_CSS = """    <style>
           .jot-fold > summary .jot-chev { color: var(--color-stone-300); }
           .jot-fold[open] > summary .jot-chev { color: var(--color-brand-400); }
         }
+        /* The filter fold sits on the muted (dark) panel, so its chevron matches
+           the label when closed (inherit) and turns brand-400 when open — brighter,
+           so it reads on the dark fill. */
+        .jot-filter .jot-fold > summary .jot-chev { color: inherit; }
+        .jot-filter .jot-fold[open] > summary .jot-chev { color: var(--color-brand-400); }
         /* A closed <details> hides its content via a UA `display:none` rule, but a
            Tailwind display utility (flex/block) on that content is author CSS and
            overrides it — so re-assert the hide for the closed state here. */
@@ -862,19 +861,9 @@ def build_jottings_page(posts: list[dict]) -> None:
     feature_css = f"{FEATURE_CSS}\n" if filter_html else ""
     filter_script = f"\n{FILTER_SCRIPT}" if filter_html else ""
 
-    # The month index lives in its own card under a plain (non-brand) "Index"
-    # heading — a step smaller than the h1 so it reads as a section label. Only
-    # emitted when there's an index to show (render_index returns "" for <2 posts).
-    index_box = (
-        f"""
-    <!-- Jottings: the month index -->
-    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
-        <hr class="title-divider"/>
-        {index}
-    </section>"""
-        if index else ""
-    )
+    # The month index (render_index) now shares the intro panel — no separate
+    # "Index" card or heading. render_index returns "" for <2 posts, in which
+    # case the intro panel simply carries the tagline alone.
 
     # PhotoSwipe assets only when a jotting on the page has an image (keeps an
     # image-free listing exactly as it was — no vendor CSS/JS, no behaviour).
@@ -928,7 +917,7 @@ def build_jottings_page(posts: list[dict]) -> None:
 
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
-    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden">
         <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
             <img
                     src="../images/theme/nouveau/header.webp"
@@ -940,12 +929,12 @@ def build_jottings_page(posts: list[dict]) -> None:
             <img
                     src="../images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
-                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800"
                     draggable="false"
             />
         </a>
         <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
-            <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie <span class="font-normal text-white/70">|</span> Jottings</h1>
             <a href="../"
                aria-label="Back to home"
                class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
@@ -962,14 +951,13 @@ def build_jottings_page(posts: list[dict]) -> None:
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Jottings: title + tagline -->
-    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
-        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
-    </section>
-
     {filter_html}
-{index_box}
+
+    <!-- Jottings: intro tagline + month index, sharing one panel (no "Index" title) -->
+    <section class="{SECTION_CLASS}">
+        <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
+        {index}
+    </section>
 
     <!-- Jottings: the entries themselves, one box per month -->
     {articles}
@@ -981,8 +969,6 @@ def build_jottings_page(posts: list[dict]) -> None:
         <a href="/">Home</a>
         <span class="sep">·</span>
         <a href="/about/">About me</a>
-        <span class="sep">·</span>
-        <a href="/about/#about-this-site">About this site</a>
         <span class="sep">·</span>
         <a href="/naarden/">About Naarden</a>
         <span class="sep">·</span>
