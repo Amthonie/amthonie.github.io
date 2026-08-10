@@ -301,6 +301,10 @@
     border-color: #57534e; /* stone-600 */
     background: #57534e;
   }
+  /* Re-assert transparency: the dark .panel rule above would otherwise re-fill it. */
+  .panel--bare {
+    background: transparent;
+  }
 }
 
 /* A panel nested inside another panel (e.g. the homepage "Worth a Click" link
