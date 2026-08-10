@@ -151,7 +151,7 @@
     <section class="jot-filter w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6" hidden>
         <details class="jot-fold">
             <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">
-                <svg class="jot-chev h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>Filter by tag
+                <svg class="jot-chev h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>Filter by tag<span data-jot-active class="text-xs font-normal normal-case text-brand-400" hidden>(filtered)</span>
             </summary>
             <div class="mt-3" role="group" aria-label="Filter jottings by tag">
                 <div class="flex flex-wrap gap-2">
@@ -162,14 +162,9 @@
         </details>
     </section>
 
-    <!-- Jottings: intro (no title — the header band carries the page title) -->
+    <!-- Jottings: intro tagline + month index, sharing one panel (no "Index" title) -->
     <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
         <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">A small collection of passing thoughts, brief notes, and the occasional observation that seemed worth writing down — nothing grand, just the quiet debris of daily life.</p>
-    </section>
-
-    <!-- Jottings: the month index -->
-    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
         <nav aria-label="All jottings" class="mt-4">
         
         <details class="jot-fold jot-month mt-3 first:mt-0" open>

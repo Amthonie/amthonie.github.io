@@ -280,12 +280,13 @@ Examples:  8g#6 = eighth G# octave 6
     </section>"""
 
 
-# In-page section nav, shown under the intro. A muted panel (grey) reusing the
-# footer's .site-nav layout (links + "·" separators); on the dark fill the links
-# render brand-400 via `.site-nav.panel--muted` in input.css. Anchors match the
-# section title panels: #collection / #try-it / #syntax.
-PAGE_NAV = """<!-- RTTTL: in-page section nav, as a muted panel (links brand-400 on the
-         dark fill via .site-nav.panel--muted in input.css). -->
+# In-page section nav, shown under the header as a sub-header. A muted panel
+# (grey) reusing the footer's .site-nav layout (links + "·" separators); on the
+# dark fill the links read light and turn brand-400 on hover, via
+# `.site-nav.panel--muted` in input.css. Anchors match the section title panels:
+# #collection / #try-it / #syntax.
+PAGE_NAV = """<!-- RTTTL: in-page section nav, a muted sub-header panel (light links,
+         brand-400 on hover; see .site-nav.panel--muted in input.css). -->
     <nav aria-label="On this page" class="site-nav w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6">
         <a href="#collection">My collection</a>
         <span class="sep">·</span>

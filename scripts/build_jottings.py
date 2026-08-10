@@ -533,7 +533,7 @@ def render_filter(posts: list[dict]) -> str:
     return f"""<section class="jot-filter w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6" hidden>
         <details class="jot-fold">
             <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">
-                {CHEV_SVG}Filter by tag
+                {CHEV_SVG}Filter by tag<span data-jot-active class="text-xs font-normal normal-case text-brand-400" hidden>(filtered)</span>
             </summary>
             <div class="mt-3" role="group" aria-label="Filter jottings by tag">
                 <div class="flex flex-wrap gap-2">
@@ -861,18 +861,9 @@ def build_jottings_page(posts: list[dict]) -> None:
     feature_css = f"{FEATURE_CSS}\n" if filter_html else ""
     filter_script = f"\n{FILTER_SCRIPT}" if filter_html else ""
 
-    # The month index lives in its own card under a plain (non-brand) "Index"
-    # heading — a step smaller than the h1 so it reads as a section label. Only
-    # emitted when there's an index to show (render_index returns "" for <2 posts).
-    index_box = (
-        f"""
-    <!-- Jottings: the month index -->
-    <section class="{SECTION_CLASS}">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
-        {index}
-    </section>"""
-        if index else ""
-    )
+    # The month index (render_index) now shares the intro panel — no separate
+    # "Index" card or heading. render_index returns "" for <2 posts, in which
+    # case the intro panel simply carries the tagline alone.
 
     # PhotoSwipe assets only when a jotting on the page has an image (keeps an
     # image-free listing exactly as it was — no vendor CSS/JS, no behaviour).
@@ -962,11 +953,11 @@ def build_jottings_page(posts: list[dict]) -> None:
 
     {filter_html}
 
-    <!-- Jottings: intro (no title — the header band carries the page title) -->
+    <!-- Jottings: intro tagline + month index, sharing one panel (no "Index" title) -->
     <section class="{SECTION_CLASS}">
         <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION}</p>
+        {index}
     </section>
-{index_box}
 
     <!-- Jottings: the entries themselves, one box per month -->
     {articles}
