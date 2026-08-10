@@ -204,15 +204,20 @@ def render_items(posts: list[dict]) -> str:
                 blocks.append('<hr class="my-6 border-black/10 dark:border-white/10"/>')
             blocks.append(render_item(post))
         body = "\n\n        ".join(blocks)
-    return f'<section class="rtttl-list {SECTION_CLASS}">\n\n        {body}\n\n    </section>'
+    heading = ('<h2 class="text-lg font-bold tracking-tight text-stone-900 '
+               'dark:text-white">My collection</h2>\n'
+               '        <hr class="title-divider"/>')
+    return (f'<section id="collection" class="rtttl-list {SECTION_CLASS}">\n\n'
+            f'        {heading}\n\n        {body}\n\n    </section>')
 
 
 # "Try it yourself" and "The format" are page furniture, not sourced from
 # content/rtttl/*.md — kept as static blocks here rather than generated.
 TRY_IT_YOURSELF = f"""<!-- RTTTL: try your own -- reads live from the textarea rather than a
          fixed data-rtttl attribute, so it gets its own listener below. -->
-    <section class="{SECTION_CLASS}">
+    <section id="try-it" class="{SECTION_CLASS}">
         <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Try it yourself</h2>
+        <hr class="title-divider"/>
         <p class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play. A brief disclaimer: experimenting with this may prove unexpectedly addictive and could test the patience of nearby housemates.</p>
         <label for="rtttl-input" class="sr-only">Your RTTTL string</label>
         <textarea id="rtttl-input" rows="6" spellcheck="false"
@@ -229,11 +234,24 @@ TRY_IT_YOURSELF = f"""<!-- RTTTL: try your own -- reads live from the textarea r
                 Stop
             </button>
         </div>
+        <!-- Opt-in "remember my tinkering" switch. The only cookies on the whole
+             site, and only if you turn this on: a boolean preference flag plus
+             the melody text, first-party, ~1 week, no tracking. The toggle's
+             visual lives in melodies.css and its wiring in melodies.js. -->
+        <label class="rtttl-remember">
+            <input type="checkbox" id="rtttl-remember"/>
+            <span class="rtttl-remember-track" aria-hidden="true"></span>
+            <span class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                <span class="font-medium text-stone-800 dark:text-stone-200">Remember my tinkering on this device</span>
+                <span class="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">Saves just the melody text above — and this switch’s state — in simple, anonymous first‑party cookies for about a week, so it’s still here when you come back. Nothing else, no tracking; switch it off to delete them.</span>
+            </span>
+        </label>
     </section>"""
 
-FORMAT_EXPLAINER = f"""<!-- RTTTL: a basic explanation of the format. -->
-    <section class="{SECTION_CLASS}">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">The format</h2>
+FORMAT_EXPLAINER = f"""<!-- RTTTL: a basic explanation of the syntax. -->
+    <section id="syntax" class="{SECTION_CLASS}">
+        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">The syntax</h2>
+        <hr class="title-divider"/>
         <div class="update-body mt-3">
             <p>An RTTTL string packs a whole melody into one line of plain text: a name, a few default settings, then the notes themselves.</p>
             <pre><code>name:d=4,o=5,b=125:notes
@@ -258,6 +276,22 @@ Examples:  8g#6 = eighth G# octave 6
             <p>For a detailed explanation of the format as implemented in ESPHome, see the <a href="https://esphome.io/components/rtttl.html" target="_blank" rel="noopener">RTTTL component documentation</a>.</p>
         </div>
     </section>"""
+
+
+# In-page section nav, shown under the intro. No box of its own — it reuses the
+# footer's .site-nav style (brand links + "·" separators) and just borrows the
+# content column's width/padding so the links align with the boxes. Anticipates
+# the page growing longer (an ESPHome how-to block is planned), so there's an
+# easy jump between sections. Anchors match the section ids: #collection /
+# #try-it / #syntax.
+PAGE_NAV = """<!-- RTTTL: in-page section nav (no box; aligned to the column). -->
+    <nav aria-label="On this page" class="site-nav mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8">
+        <a href="#collection">My collection</a>
+        <span class="sep">·</span>
+        <a href="#try-it">Try it yourself</a>
+        <span class="sep">·</span>
+        <a href="#syntax">The syntax</a>
+    </nav>"""
 
 
 def build_jsonld() -> str:
@@ -329,6 +363,10 @@ def build_melodies_page(posts: list[dict]) -> None:
 
     <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
     <link rel="stylesheet" href="../styles.css"/>
+    <!-- Hand-authored page styles (the "remember my tinkering" toggle). Static
+         file, not a scoped <style> here — keeps this generator lean and renders
+         in local preview without a Tailwind rebuild. -->
+    <link rel="stylesheet" href="melodies.css"/>
 
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="melodies"></script>
@@ -384,6 +422,8 @@ def build_melodies_page(posts: list[dict]) -> None:
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P2}</p>
     </section>
 
+    {PAGE_NAV}
+
     <!-- RTTTL: the tunes themselves. One top-level box, one item per
          content/rtttl/*.md entry, divided by <hr>. -->
     {items}
@@ -418,26 +458,11 @@ def build_melodies_page(posts: list[dict]) -> None:
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
-<!-- RTTTL player (self-hosted; see vendor/rtttl-play/LICENSE) -->
+<!-- RTTTL player (self-hosted; see vendor/rtttl-play/LICENSE) + page behaviour
+     (button wiring and the opt-in "remember my tinkering" cookies) in the
+     hand-authored melodies.js, loaded after the player so rtttlPlay exists. -->
 <script src="../vendor/rtttl-play/index.umd.min.js"></script>
-<script>
-(() => {{
-    document.querySelectorAll('.rtttl-play').forEach((btn) => {{
-        btn.addEventListener('click', () => rtttlPlay.play(btn.dataset.rtttl));
-    }});
-    document.querySelectorAll('.rtttl-stop').forEach((btn) => {{
-        btn.addEventListener('click', () => rtttlPlay.stop());
-    }});
-
-    // "Try it yourself" box -- plays the textarea's current value rather
-    // than a fixed data-rtttl attribute, so it needs its own listener.
-    const input = document.getElementById('rtttl-input');
-    const inputPlay = document.getElementById('rtttl-input-play');
-    if (input && inputPlay) {{
-        inputPlay.addEventListener('click', () => rtttlPlay.play(input.value));
-    }}
-}})();
-</script>
+<script src="melodies.js"></script>
 
 <!-- Umami Outbound links tracking -->
 <script type="text/javascript">

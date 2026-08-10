@@ -1,0 +1,87 @@
+/*
+ * Hand-authored companion styles for /melodies/ (like naarden/weather/weather.css).
+ * Only the "Remember my tinkering" toggle switch lives here — everything else on
+ * the page is Tailwind from ../styles.css. Kept as a static file (not a scoped
+ * <style> in scripts/build_melodies.py) so the generator stays lean and this
+ * renders correctly in local preview without waiting on a Tailwind rebuild.
+ * Palette is hard-coded to the brand tokens: brand-600 #4a7a2c, brand-500 #5f9e3a,
+ * brand-400 #9ccc66 (see src/input.css) — keep in step if those ever change.
+ */
+/* The branded title divider (.title-divider) is now a shared style-book element
+   in src/input.css → styles.css, used under the section titles here (My
+   collection / Try it yourself / The syntax) and on About, Naarden and Jottings. */
+
+/* A little breathing room when the in-page nav jumps to an anchored section,
+   so it doesn't butt against the very top of the viewport. */
+#collection,
+#try-it,
+#syntax {
+    scroll-margin-top: 1.5rem;
+}
+
+.rtttl-remember {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+/* Visually-hidden real checkbox — still focusable and screen-reader labelled. */
+.rtttl-remember input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.rtttl-remember-track {
+    position: relative;
+    flex: none;
+    margin-top: 0.15rem;
+    width: 2.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.18);
+    transition: background 0.2s;
+}
+
+.rtttl-remember-track::after {
+    content: "";
+    position: absolute;
+    top: 0.15rem;
+    left: 0.15rem;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.rtttl-remember input:checked + .rtttl-remember-track {
+    background: #4a7a2c;
+}
+
+.rtttl-remember input:checked + .rtttl-remember-track::after {
+    transform: translateX(1rem);
+}
+
+.rtttl-remember input:focus-visible + .rtttl-remember-track {
+    outline: 2px solid rgba(74, 122, 44, 0.55);
+    outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .rtttl-remember-track {
+        background: rgba(255, 255, 255, 0.22);
+    }
+
+    .rtttl-remember input:checked + .rtttl-remember-track {
+        background: #5f9e3a;
+    }
+
+    .rtttl-remember input:focus-visible + .rtttl-remember-track {
+        outline-color: rgba(156, 204, 102, 0.6);
+    }
+}

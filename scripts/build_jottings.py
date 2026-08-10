@@ -399,9 +399,9 @@ def render_articles(posts: list[dict]) -> str:
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     {human_date(post['date'])}
                 </time>
-                <h2 class="mt-1 text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+                <h3 class="mt-1 text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
                     {html.escape(post['title'])}
-                </h2>
+                </h3>
                 <div class="update-body mt-4">
                     {body}
                 </div>
@@ -410,8 +410,18 @@ def render_articles(posts: list[dict]) -> str:
         # The month anchor (e.g. m-2026-07) lives on the month's article box, so
         # the index's month permalink jumps here — not to the index entry itself.
         anchor = f"m-{year}-{month:02d}"
+        # Each month box opens with its own month/year title + the shared brand
+        # title divider (style-book element), matching the other content boxes.
+        # It's an <h2> with the articles below demoted to <h3> (page h1 → month
+        # h2 → article h3).
+        month_header = (
+            f'<h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">'
+            f"{MONTHS[month - 1]} {year}</h2>\n"
+            f'        <hr class="title-divider"/>\n'
+        )
         sections.append(
-            f'<section id="{anchor}" class="scroll-mt-28 {SECTION_CLASS}">\n{"".join(blocks)}\n    </section>'
+            f'<section id="{anchor}" class="scroll-mt-28 {SECTION_CLASS}">\n'
+            f'        {month_header}{"".join(blocks)}\n    </section>'
         )
     return "\n".join(sections)
 
@@ -774,7 +784,9 @@ FILTER_SCRIPT = """<!-- Jottings tag filter (progressive enhancement — hidden 
                 if (node.matches && node.matches('article[data-tags]')) {
                     const vis = node.style.display !== 'none';
                     const hr = node.previousElementSibling;
-                    if (hr && hr.tagName === 'HR') show(hr, vis && seen);
+                    // Only the between-article rules are trimmed; the month's
+                    // brand title-divider is left alone (it hides with the box).
+                    if (hr && hr.tagName === 'HR' && !hr.classList.contains('title-divider')) show(hr, vis && seen);
                     if (vis) seen = true;
                 }
             });
@@ -858,6 +870,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <!-- Jottings: the month index -->
     <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
         <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
+        <hr class="title-divider"/>
         {index}
     </section>"""
         if index else ""
