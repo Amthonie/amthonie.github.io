@@ -83,6 +83,11 @@
           .jot-fold > summary .jot-chev { color: var(--color-stone-300); }
           .jot-fold[open] > summary .jot-chev { color: var(--color-brand-400); }
         }
+        /* The filter fold sits on the muted (dark) panel, so its chevron matches
+           the label when closed (inherit) and turns brand-400 when open — brighter,
+           so it reads on the dark fill. */
+        .jot-filter .jot-fold > summary .jot-chev { color: inherit; }
+        .jot-filter .jot-fold[open] > summary .jot-chev { color: var(--color-brand-400); }
         /* A closed <details> hides its content via a UA `display:none` rule, but a
            Tailwind display utility (flex/block) on that content is author CSS and
            overrides it — so re-assert the hide for the closed state here. */
@@ -109,7 +114,7 @@
 
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
-    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden">
         <a href="../" aria-label="Back to home" class="group relative block aspect-[4/1] overflow-hidden">
             <img
                     src="../images/theme/nouveau/header.webp"
@@ -121,12 +126,12 @@
             <img
                     src="../images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
-                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800"
                     draggable="false"
             />
         </a>
         <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
-            <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie <span class="font-normal text-white/70">|</span> Jottings</h1>
             <a href="../"
                aria-label="Back to home"
                class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
@@ -143,30 +148,28 @@
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Jottings: title + tagline -->
-    <section class="mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h1 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Jottings</h1>
-        <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">A small collection of passing thoughts, brief notes, and the occasional observation that seemed worth writing down — nothing grand, just the quiet debris of daily life.</p>
+    <!-- Jottings: intro (no title — the header band carries the page title) -->
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <p class="text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">A small collection of passing thoughts, brief notes, and the occasional observation that seemed worth writing down — nothing grand, just the quiet debris of daily life.</p>
     </section>
 
-    <section class="jot-filter mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] px-4 md:px-8" hidden>
+    <section class="jot-filter w-full md:w-4/5 max-w-[1280px] panel panel--muted px-4 py-4 md:px-8 md:py-6" hidden>
         <details class="jot-fold">
-            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-300">
+            <summary class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">
                 <svg class="jot-chev h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4l7 6-7 6z"/></svg>Filter by tag
             </summary>
             <div class="mt-3" role="group" aria-label="Filter jottings by tag">
                 <div class="flex flex-wrap gap-2">
-                    <button type="button" data-jot-all class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition border-brand-600 bg-transparent text-brand-600 hover:bg-brand-600/10 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-400/10">Show all</button><button type="button" data-jot-tag="ai" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">ai<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="charity" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">charity<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="coding" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">coding<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="ethics" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">ethics<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="friendship" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">friendship<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="hiking" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">hiking<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="hobbies" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">hobbies<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="humour" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">humour<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="lego" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">lego<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="lgbtq" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">lgbtq<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="local-life" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">local-life<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="music" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">music<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="nostalgia" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">nostalgia<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="privacy" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">privacy<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="reflection" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">reflection<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="remote-work" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">remote-work<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="smart-home" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">smart-home<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="traffic" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">traffic<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="urban-planning" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">urban-planning<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="wildlife" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-black/10 bg-black/5 text-stone-700 hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white dark:aria-pressed:border-brand-400 dark:aria-pressed:bg-brand-500 dark:aria-pressed:text-white">wildlife<span class="ml-1 text-xs opacity-70">2</span></button>
+                    <button type="button" data-jot-all class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition border-brand-400 bg-transparent text-brand-400 hover:bg-brand-400/10">Show all</button><button type="button" data-jot-tag="ai" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">ai<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="charity" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">charity<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="coding" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">coding<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="ethics" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">ethics<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="friendship" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">friendship<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="hiking" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">hiking<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="hobbies" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">hobbies<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="humour" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">humour<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="lego" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">lego<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="lgbtq" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">lgbtq<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="local-life" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">local-life<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="music" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">music<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="nostalgia" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">nostalgia<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="privacy" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">privacy<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="reflection" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">reflection<span class="ml-1 text-xs opacity-70">3</span></button><button type="button" data-jot-tag="remote-work" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">remote-work<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="smart-home" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">smart-home<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="traffic" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">traffic<span class="ml-1 text-xs opacity-70">2</span></button><button type="button" data-jot-tag="urban-planning" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">urban-planning<span class="ml-1 text-xs opacity-70">1</span></button><button type="button" data-jot-tag="wildlife" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition border-white/25 bg-white/15 text-white hover:bg-white/25 aria-pressed:border-brand-400 aria-pressed:bg-brand-500 aria-pressed:text-white">wildlife<span class="ml-1 text-xs opacity-70">2</span></button>
                 </div>
-                <p class="mt-3 text-xs text-stone-500 dark:text-stone-400" aria-live="polite" data-jot-count></p>
+                <p class="mt-3 text-xs text-white/70" aria-live="polite" data-jot-count></p>
             </div>
         </details>
     </section>
 
     <!-- Jottings: the month index -->
-    <section class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
         <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">Index<span data-jot-active class="ml-2 align-middle text-sm font-normal text-brand-600 dark:text-brand-400" hidden>(filtered)</span></h2>
-        <hr class="title-divider"/>
         <nav aria-label="All jottings" class="mt-4">
         
         <details class="jot-fold jot-month mt-3 first:mt-0" open>
@@ -189,11 +192,9 @@
     </section>
 
     <!-- Jottings: the entries themselves, one box per month -->
-    <section id="m-2026-08" class="scroll-mt-28 mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">August 2026</h2>
-        <hr class="title-divider"/>
-
-            <article id="16-the-absent-organist" class="scroll-mt-28" data-tags="music,local-life">
+    <section id="m-2026-08" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px]">
+        <div class="w-full panel panel--brand px-4 py-4 md:px-8 md:py-6"><h2 class="text-2xl font-bold tracking-tight text-white">August 2026</h2></div>
+            <article id="16-the-absent-organist" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="music,local-life">
                 <time datetime="2026-08-09"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     9 August 2026
@@ -205,7 +206,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/16-the-absent-organist.webp" data-pswp-width="1536" data-pswp-height="1031" data-caption="Bach for every place" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/16-the-absent-organist.webp" alt="A triptych mid-century magazine illustration showing three surreal organ pipe scenes - Alpine mountains with a massive pipe organ and a hiker, a New Orleans skyline built of brass organ pipes, and a tropical beach where palm fronds are made of gleaming silver pipes." loading="lazy" width="640" height="430"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -217,8 +218,8 @@
 <p>I have never seen him. Not once. Small towns have depths that cities never quite manage.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="15-piezo-bach-and-pacman" class="scroll-mt-28" data-tags="nostalgia,smart-home,reflection,music">
+            </article>
+            <article id="15-piezo-bach-and-pacman" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="nostalgia,smart-home,reflection,music">
                 <time datetime="2026-08-07"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     7 August 2026
@@ -230,7 +231,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/15-piezo-bach-and-pacman.webp" data-pswp-width="1264" data-pswp-height="848" data-caption="Fine‑tuning Bach and Pac‑Man" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/15-piezo-bach-and-pacman.webp" alt="Man at a desk wiring a small buzzer, with pixelated musical notes of Bach and Pac‑Man floating toward an open door marked &quot;Home&quot;." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -243,8 +244,8 @@
 <p><em><strong>Update:</strong> In the spirit of seeing these things through, the whole episode led to a small side project: an <a href="/melodies/">RTTTL Melodies page</a> where I’ve collected the Bach fragment, the Pac‑Man intro, and a few other beeps that have resurfaced from the eighties. A tidy archive of noises I didn’t realise I’d missed.</em></p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="14-the-unlimited-colleague" class="scroll-mt-28" data-tags="ai,remote-work,reflection">
+            </article>
+            <article id="14-the-unlimited-colleague" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="ai,remote-work,reflection">
                 <time datetime="2026-08-05"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     5 August 2026
@@ -256,7 +257,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/14-the-unlimited-colleague.webp" data-pswp-width="1264" data-pswp-height="848" data-caption="The only coworker who never sighs." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/14-the-unlimited-colleague.webp" alt="A split-scene retro 1950s style magazine illustration contrasting working with an AI assistant at home versus a busy office environment. On the left, a smiling man sits happily at a bright desk with a friendly retro robot helper standing on a stack of books. On the right, exasperated office workers sigh and walk away from a stressed colleague sitting at his desk." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -268,8 +269,8 @@
 <p>The real advantage is largely social. Working mostly from home, there is a quiet comfort in having something on hand that never tires of micro-inquiries. If you turned to a human colleague every fifteen minutes to ask, “So, what do you reckon to this approach?”, you would very quickly find yourself sitting entirely alone in the office. The assistant, whatever its structural faults, never sighs or suddenly remembers a pressing meeting. It just answers.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="13-brake-lessons" class="scroll-mt-28" data-tags="local-life,humour,traffic">
+            </article>
+            <article id="13-brake-lessons" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="local-life,humour,traffic">
                 <time datetime="2026-08-02"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     2 August 2026
@@ -281,7 +282,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/13-brake-lessons.webp" data-pswp-width="1536" data-pswp-height="1030" data-caption="Redundancy is, after all, a matter of opinion." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/13-brake-lessons.webp" alt="A two-panel comic illustration showing a café owner in an apron dismissively gesturing at a bike handlebar while talking to a young delivery rider, followed by the anxious rider cycling down a steep cobblestone hill." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -296,8 +297,8 @@
 <p>I took another sip of coffee and decided against mentioning the basics of front‑versus‑rear deceleration, or the minor detail of emergency stops. Some lessons, evidently, are best learned at the bottom of a hill.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="12-summer-moult-and-pollen" class="scroll-mt-28" data-tags="hiking,wildlife">
+            </article>
+            <article id="12-summer-moult-and-pollen" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="hiking,wildlife">
                 <time datetime="2026-08-02"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     2 August 2026
@@ -309,7 +310,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/12-summer-moult-and-pollen.webp" data-pswp-width="1536" data-pswp-height="1157" data-caption="Late‑summer stillness at Zanderij Cruysbergen." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/12-summer-moult-and-pollen.webp" alt="Sunny summer view of Zanderij Cruysbergen with a dry sandy path curving through grassland and young shrubs, bordered by dense green forest under a clear blue sky." loading="lazy" width="640" height="482"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -322,8 +323,8 @@
 <p>Nature, it seems, always balances the books. Whatever airborne irritants were lurking in the woods paled in comparison to the local flora right outside my own front door. No sooner had I returned home than the sneezing fits began in earnest.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="11-play-is-mandatory" class="scroll-mt-28" data-tags="lego,hobbies">
+            </article>
+            <article id="11-play-is-mandatory" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="lego,hobbies">
                 <time datetime="2026-08-01"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     1 August 2026
@@ -335,7 +336,7 @@
                     <div class="flow-root">
                     <figure class="my-4 mx-auto w-[50vw] max-w-[240px] md:my-0 md:mb-3 md:float-right md:ml-6">
                     <a href="images/11-chicken-jocky.webp" data-pswp-width="969" data-pswp-height="1536" data-caption="Baby chick riding Chicken from the Jockey&#x27;s lap" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/11-chicken-jocky.webp" alt="The LEGO Minecraft Chicken Jockey set — the Jockey astride Chicken, with the baby chick riding along on the Jockey&#x27;s lap" loading="lazy" width="404" height="640"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -349,11 +350,9 @@
                 </div>
             </article>
     </section>
-<section id="m-2026-07" class="scroll-mt-28 mt-3 md:mt-6 lg:mt-10 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
-        <h2 class="text-lg font-bold tracking-tight text-stone-900 dark:text-white">July 2026</h2>
-        <hr class="title-divider"/>
-
-            <article id="10-switching-to-umami" class="scroll-mt-28" data-tags="coding,privacy">
+<section id="m-2026-07" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px]">
+        <div class="w-full panel panel--brand px-4 py-4 md:px-8 md:py-6"><h2 class="text-2xl font-bold tracking-tight text-white">July 2026</h2></div>
+            <article id="10-switching-to-umami" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="coding,privacy">
                 <time datetime="2026-07-30"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     30 July 2026
@@ -365,7 +364,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/10-switching-to-umami.webp" data-pswp-width="1536" data-pswp-height="838" data-caption="From harvesting funnels to a quiet bench" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/10-switching-to-umami.webp" alt="Cartoon comparing a complex data‑harvesting machine with a calm, privacy‑focused analytics setup" loading="lazy" width="640" height="349"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -377,8 +376,8 @@
 <p>This site may be young, but I’ve spent plenty of time wrestling with Google’s labyrinth elsewhere. Having an analytics dashboard that simply fits on a phone feels like an unexpectedly civilised upgrade.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="9-berlin-news-that-stayed-with-me" class="scroll-mt-28" data-tags="lgbtq,reflection">
+            </article>
+            <article id="9-berlin-news-that-stayed-with-me" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="lgbtq,reflection">
                 <time datetime="2026-07-29"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     29 July 2026
@@ -395,8 +394,8 @@
 <p>What leaves me utterly baffled is the urge to inflict harm on human beings for qualities they had no hand in selecting. The full spectrum of queer identities is not a lifestyle choice picked off a menu; it is simply the fabric of who a person is. It is no more optional than having curly hair, brown eyes, or being born left-handed. To harbour murderous malice toward someone over the fundamental architecture of their existence feels like declaring war on gravity, or throwing a brick through a window because the afternoon sky turned out to be blue.</p>
 <p>It leaves me feeling terribly sad, really. Sad that after all these decades, the same old fear and hatred still find a way to bleed into the streets. But if there is any cold comfort to be drawn from the quiet defiance that followed, it is that hatred—for all the noise and damage it makes—is ultimately a very small, bitter thing. It doesn't get to dictate how the rest of us live.</p>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="8-azimov-and-ai" class="scroll-mt-28" data-tags="ai,ethics">
+            </article>
+            <article id="8-azimov-and-ai" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="ai,ethics">
                 <time datetime="2026-07-27"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     27 July 2026
@@ -408,7 +407,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/8-azimov-and-ai.webp" data-pswp-width="1536" data-pswp-height="838" data-caption="The moment a helpful robot becomes… overly helpful" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/8-azimov-and-ai.webp" alt="Illustration of a robot emerging from a data‑centre tunnel toward a ‘System Access’ terminal while a technician operates a control lever" loading="lazy" width="640" height="349"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -421,8 +420,8 @@
 <p>It is a gentle reminder that for all their impressive capabilities, these systems lack the one thing we desperately need them to have: a healthy sense of British reserve and the good sense to ask, <em>"Are you quite sure you want me to do that?"</em></p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="7-eva-walks-update-2" class="scroll-mt-28" data-tags="charity,friendship">
+            </article>
+            <article id="7-eva-walks-update-2" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="charity,friendship">
                 <time datetime="2026-07-26"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     26 July 2026
@@ -434,7 +433,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/7-eva-walks-update-2.webp" data-pswp-width="1264" data-pswp-height="848" data-caption="Backing comes in many forms, including financial, biological, or lukewarm." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/7-eva-walks-update-2.webp" alt="A comic-style illustration featuring a woman hiking through a snowy pine forest next to a large abacus spilling coins, while a man in a suit sits in a chair nearby drinking hot tea hooked up to a plasma donation machine." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -447,8 +446,8 @@
 <p>Either way, every bit of backing — financial, biological, or simply passing the link along — makes a genuine difference.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="6-bone-of-contention" class="scroll-mt-28" data-tags="wildlife,humour">
+            </article>
+            <article id="6-bone-of-contention" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="wildlife,humour">
                 <time datetime="2026-07-25"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     25 July 2026
@@ -460,7 +459,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/6-bone-of-contention.webp" data-pswp-width="1264" data-pswp-height="848" data-caption="Considerably more reliable than council collection days." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/6-bone-of-contention.webp" alt="A comic-style illustration of a man looking out an open window at a dark bird perched on the sill carrying a bone. Below the windowsill, a charred rib bone rests on a metal grille, with apartment buildings and a street in the background." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -472,8 +471,8 @@
 <p>It’s reassuring to know that, even in the realm of discarded takeaway ribs, the local wildlife runs a far more efficient recycling scheme than most councils manage.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="5-zebra-crossing-decline" class="scroll-mt-28" data-tags="urban-planning,traffic">
+            </article>
+            <article id="5-zebra-crossing-decline" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="urban-planning,traffic">
                 <time datetime="2026-07-22"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     22 July 2026
@@ -485,7 +484,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/5-zebra-crossing-decline.webp" data-pswp-width="1536" data-pswp-height="838" data-caption="The modern sport of crossing the road" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/5-zebra-crossing-decline.webp" alt="Cartoon street junction with confused drivers and waiting pedestrians, illustrating unclear crossing rules" loading="lazy" width="1536" height="838"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -497,8 +496,8 @@
 <p>Perhaps it is time we gently reminded both motorists and planners that walking remains a valid, if somewhat unfashionable, form of transport. A brief touch on the brake pedal or the reinstatement of a few painted white stripes would do wonders. After all, relying on a pedestrian’s athletic prowess to avoid an accident seems a touch optimistic—especially given my own complete lack thereof.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="4-the-blocky-renaissance" class="scroll-mt-28" data-tags="lego,hobbies">
+            </article>
+            <article id="4-the-blocky-renaissance" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="lego,hobbies">
                 <time datetime="2026-07-18"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     18 July 2026
@@ -510,7 +509,7 @@
                     <div class="flow-root">
                     <figure class="my-4 mx-auto w-[50vw] max-w-[240px] md:my-0 md:mb-3 md:float-right md:ml-6">
                     <a href="images/4-the-blocky-renaissance.webp" data-pswp-width="802" data-pswp-height="1536" data-caption="Skeleton — with a mini fox, rabbit and bee added just for fun" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/4-the-blocky-renaissance.webp" alt="The LEGO Minecraft Skeleton with a mini fox, rabbit and bee added, which are not part of the official set, alongside a standard Steve minifigure" loading="lazy" width="334" height="640"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -522,8 +521,8 @@
 <p>I am already eagerly anticipating the next addition to the collection: the upcoming <strong>Chicken Jockey</strong> set, due for release on the 1st of August. A giant pixelated chicken with a baby zombie on its back is exactly the sort of brilliant, blocky absurdity that will look fantastic on display.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="3-eva-walks-update-1" class="scroll-mt-28" data-tags="charity,friendship">
+            </article>
+            <article id="3-eva-walks-update-1" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="charity,friendship">
                 <time datetime="2026-07-16"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     16 July 2026
@@ -535,7 +534,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/3-eva-walks-update-1.webp" data-pswp-width="1264" data-pswp-height="848" data-caption="Past the halfway mark, with just the remaining 450 kilometers left to go." target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/3-eva-walks-update-1.webp" alt="A comic-style illustration showing a woman walking through a snowy landscape with mountains and tents, alongside a ramp labeled &quot;50% Eva&#x27;s Walk&quot; where giant euro-like coins are being loaded into a rocket." loading="lazy" width="640" height="429"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -548,8 +547,8 @@
 <p>Thank you.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="2-naming-appliances" class="scroll-mt-28" data-tags="smart-home,ai,humour">
+            </article>
+            <article id="2-naming-appliances" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="smart-home,ai,humour">
                 <time datetime="2026-07-10"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     10 July 2026
@@ -561,7 +560,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/2-naming-appliances.webp" data-pswp-width="1536" data-pswp-height="838" data-caption="Where appliances earn their names" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/2-naming-appliances.webp" alt="Cartoon living room with a cheerful smart speaker and a dejected robot vacuum, highlighting the personalities of household devices" loading="lazy" width="1536" height="838"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>
@@ -585,8 +584,8 @@
 <p>Bestowing proper names turns standard automation into something far more engaging. It is no longer just about optimising a smart home; it is about bringing a bit of wit into the code.</p>
                 </div>
                 </div>
-            </article><hr class="my-10 border-black/10 dark:border-white/10"/>
-            <article id="1-rediscovering-html" class="scroll-mt-28" data-tags="coding,nostalgia">
+            </article>
+            <article id="1-rediscovering-html" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="coding,nostalgia">
                 <time datetime="2026-07-09"
                       class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
                     9 July 2026
@@ -598,7 +597,7 @@
                     <div class="flow-root">
                     <figure class="my-4 w-full md:my-0 md:mb-3 md:w-1/3 xl:w-1/4 md:float-right md:ml-6">
                     <a href="images/1-rediscovering-html.webp" data-pswp-width="1536" data-pswp-height="838" data-caption="Rediscovering the simple joy of raw HTML" target="_blank" rel="noopener"
-                       class="group block overflow-hidden rounded-xl bg-black/10 shadow-md ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                       class="group block overflow-hidden bg-black/10 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
                         <img src="images/thumbnails/1-rediscovering-html.webp" alt="Whimsical cartoon landscape contrasting automated modern web tools with older manual web‑development methods" loading="lazy" width="640" height="349"
                              class="block w-full transition duration-300 group-hover:scale-105"/>
                     </a>

@@ -90,7 +90,7 @@
   margin-top: 0.6rem;
 }
 .update-body img {
-  border-radius: 0.75rem;
+  border-radius: 0; /* squared for the flat panel redesign (was 0.75rem) */
 }
 .update-body code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -268,5 +268,45 @@
 @media (prefers-color-scheme: dark) {
   .title-divider {
     border-top-color: #9ccc66; /* brand-400 */
+  }
+}
+
+/* ── Flat panel system (site-wide redesign) ─────────────────────────────────
+   Column-width boxes stacked flush (no gaps), square corners, a simple 1px
+   border, no shadow. `.panel` carries only the border + fill + text colour;
+   padding / width / positioning stay as Tailwind utilities on the element
+   (they vary per layout). Three variants:
+     .panel            → light content box (black/5)
+     .panel--brand     → green title box   (brand-600/700, white text)
+     .panel--muted     → grey utility box  (stone-700/600, white text)
+   Hard-coded palette so it's immune to Tailwind rebuild lag (like .site-nav).
+   This replaces the old boxed look; `.title-divider` is retired as pages move
+   over to `.panel--brand` title boxes. */
+.panel {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.05);
+}
+.panel--brand {
+  border-color: #4a7a2c; /* brand-600 */
+  background: #4a7a2c;
+  color: #fff;
+}
+.panel--muted {
+  border-color: #44403c; /* stone-700 */
+  background: #44403c;
+  color: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  .panel {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .panel--brand {
+    border-color: #3a5f22; /* brand-700 */
+    background: #3a5f22;
+  }
+  .panel--muted {
+    border-color: #57534e; /* stone-600 */
+    background: #57534e;
   }
 }
