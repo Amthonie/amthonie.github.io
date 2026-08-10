@@ -255,3 +255,18 @@
     color: #57534e; /* stone-600 */
   }
 }
+
+/* Branded divider under a section title — a small style-book accent placed
+   directly under a heading (Melodies, About, Naarden, Jottings). Brand-600 in
+   light, brand-400 in dark (matching the link colours); deliberately distinct
+   from the neutral content <hr>s used between items. */
+.title-divider {
+  margin: 0.6rem 0 1rem;
+  border: 0;
+  border-top: 1px solid #4a7a2c; /* brand-600 */
+}
+@media (prefers-color-scheme: dark) {
+  .title-divider {
+    border-top-color: #9ccc66; /* brand-400 */
+  }
+}

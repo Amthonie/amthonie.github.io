@@ -61,7 +61,9 @@ A small personal website hosted with [GitHub Pages](https://pages.github.com/).
 │   ├── favicon.ico         # multi-resolution favicon (16/32/48)
 │   └── images/         # per-article heroes (+ thumbs/ for the index cards)
 ├── melodies/
-│   └── index.html      # RTTTL Melodies reference page (served at /melodies/) — GENERATED
+│   ├── index.html      # RTTTL Melodies reference page (served at /melodies/) — GENERATED
+│   ├── melodies.css    # toggle-switch styles (hand-authored, not compiled by Tailwind)
+│   └── melodies.js     # page behaviour (Play/Stop wiring + the opt-in "remember" cookies)
 ├── content/
 │   ├── jottings/       # markdown sources for jottings (one file per jotting)
 │   ├── chronicle/      # markdown sources for chronicle articles
@@ -248,7 +250,19 @@ page furniture rather than per-tune data. Playback runs entirely client-side
 through [rtttl-play](https://github.com/adamonsoon/rtttl-play) (MIT),
 self-hosted under `vendor/rtttl-play/` — it exposes
 `window.rtttlPlay.play(str)` / `.stop()`, wired up to every Play/Stop button
-(including the playbox's) by a small inline script.
+(including the playbox's) by `melodies/melodies.js`, the page's hand-authored
+behaviour file (loaded after the player). Its companion `melodies/melodies.css`
+holds the toggle-switch styles. Both are kept as static files (like the weather
+page's `weather.js` / `weather.css`) rather than inlined in the generator, so it
+stays lean and they render in local preview without a Tailwind rebuild.
+
+The playbox has an optional **"remember my tinkering"** switch — the site's
+**only** cookies, and only if you opt in. When on, it stores the playbox text
+and the switch state in two simple first-party cookies (`rtttl_tune`,
+`rtttl_remember`), scoped to `/melodies/`, `SameSite=Lax`, `Secure` over https,
+with a rolling one-week expiry, so an in-progress melody survives leaving the
+page. Switching it off deletes both. Nothing else is stored and it does no
+tracking.
 
 ## Weather
 
