@@ -195,7 +195,7 @@ def title_panel(text: str, anchor: str) -> str:
     jottings month headers. The section's anchor id lives here so the in-page
     nav jumps to the header; the content panel follows it, flush."""
     return (f'<div id="{anchor}" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] '
-            f'panel panel--brand px-4 py-4 md:px-8 md:py-6">'
+            f'panel panel--brand px-4 py-2 md:px-8 md:py-3">'
             f'<h2 class="text-2xl font-bold tracking-tight text-white">{text}</h2></div>')
 
 

@@ -150,9 +150,9 @@
          No `flex` on the <a> itself so the `hidden` attribute works — it's a flex item of
          <main>, so it still lays out as a block once shown; the inner span does the row. -->
     <a id="wx-mini" href="/naarden/weather/" hidden
-       class="group w-full md:w-4/5 max-w-[1280px] panel px-4 py-3 md:px-8 md:py-4 transition hover:bg-black/10 dark:hover:bg-white/15">
-        <span class="flex items-center justify-between gap-4">
-            <span class="text-base md:text-lg font-semibold tracking-tight text-stone-900 dark:text-white">Current weather conditions</span>
+       class="group w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6 transition hover:bg-black/10 dark:hover:bg-white/15">
+        <div class="flex items-center justify-between gap-4">
+            <h2 class="text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-white">Current weather conditions</h2>
             <span class="flex items-center gap-3">
                 <img id="wx-mini-icon" src="../vendor/meteocons/clear-day.svg" alt="" width="40" height="40" class="shrink-0"/>
                 <span id="wx-mini-temp" class="text-base md:text-lg font-semibold tabular-nums text-stone-900 dark:text-white"></span>
@@ -161,11 +161,13 @@
                     <path d="m12 5 7 7-7 7"/>
                 </svg>
             </span>
-        </span>
+        </div>
+        <!-- Plain-language forecast: weather.js loadForecast() fills #wx-forecast-text-body from the gist (same as the weather page). -->
+        <p id="wx-forecast-text-body" hidden class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300"></p>
     </a>
 
     <!-- The town I call home: green title panel + content panel -->
-    <div class="w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-4 md:px-8 md:py-6">
+    <div class="w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-2 md:px-8 md:py-3">
         <h2 class="text-2xl font-bold tracking-tight text-white">The town I call home</h2>
     </div>
     <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
@@ -256,7 +258,7 @@
     </section>
 
     <!-- Odds and ends: green title panel + content panel -->
-    <div class="w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-4 md:px-8 md:py-6">
+    <div class="w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-2 md:px-8 md:py-3">
         <h2 class="text-2xl font-bold tracking-tight text-white">Odds and ends</h2>
     </div>
     <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">

@@ -410,7 +410,7 @@ def render_articles(posts: list[dict]) -> str:
         # The wrapper carries the anchor and lets the tag filter hide a whole
         # month — brand title panel included — when nothing in it matches.
         title_panel = (
-            '<div class="w-full panel panel--brand px-4 py-4 md:px-8 md:py-6">'
+            '<div class="w-full panel panel--brand px-4 py-2 md:px-8 md:py-3">'
             f'<h2 class="text-2xl font-bold tracking-tight text-white">{MONTHS[month - 1]} {year}</h2></div>'
         )
         sections.append(
