@@ -595,7 +595,7 @@ def render_teasers(posts: list[dict]) -> str:
             # into the strip instead of ballooning the card — and there's no
             # empty space below it, whatever the text length.
             layout_cls = "flex flex-row items-stretch gap-3 md:gap-4"
-            thumb_html = f"""<div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+            thumb_html = f"""<div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="{thumb_rel}" alt="{alt}" loading="lazy"{dim_attrs}
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -605,7 +605,7 @@ def render_teasers(posts: list[dict]) -> str:
             f"""<a href="jottings/#{post['anchor']}"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="{position}"
-               class="group {layout_cls} rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+               class="group {layout_cls} panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
                 {thumb_html}{text_block}
             </a>"""
         )

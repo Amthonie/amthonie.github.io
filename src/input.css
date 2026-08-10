@@ -310,3 +310,23 @@
     background: #57534e;
   }
 }
+
+/* A panel nested inside another panel (e.g. the homepage "Worth a Click" link
+   cards). No border — instead a distinct, stronger fill than the parent panel
+   marks it as its own tile. Square like every panel; give the containing grid a
+   small gap so the tiles don't merge. */
+.panel-inset {
+  border: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+.panel-inset:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
+@media (prefers-color-scheme: dark) {
+  .panel-inset {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .panel-inset:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}

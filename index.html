@@ -161,7 +161,7 @@
          the band on lg+ and under the intro text below on smaller screens. The role
          subtitle is an h2 above the intro text (keeps this band the same height as the
          about/naarden header bands). -->
-    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden">
         <div class="relative aspect-[4/1] overflow-hidden">
             <img
                     src="images/theme/nouveau/header.webp"
@@ -173,7 +173,7 @@
             <img
                     src="images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
-                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800"
                     draggable="false"
             />
         </div>
@@ -224,10 +224,10 @@
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
     <!-- Profile + motto -->
-    <div class="mt-3 md:mt-6 flex w-full md:w-4/5 max-w-[1280px] flex-col gap-2.5 md:gap-5 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-6">
+    <div class="flex w-full md:w-4/5 max-w-[1280px] flex-col lg:flex-row lg:items-stretch">
 
         <section
-                class="flex flex-col justify-center rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 pt-5 pb-2.5 md:px-8 md:pt-10 md:pb-5 text-center shadow-xl lg:w-3/5">
+                class="flex flex-col justify-center panel px-4 pt-5 pb-2.5 md:px-8 md:pt-10 md:pb-5 text-center lg:w-3/5">
 
             <h2 class="text-lg md:text-xl font-medium text-brand-600 dark:text-brand-400">Software Developer &amp; Home Automation Enthusiast</h2>
 
@@ -243,7 +243,7 @@
         </section>
 
         <section
-                class="flex flex-col justify-center rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-5 md:px-8 md:py-10 shadow-xl lg:w-2/5">
+                class="flex flex-col justify-center panel px-4 py-5 md:px-8 md:py-10 lg:w-2/5">
             <figure class="w-full">
                 <blockquote class="text-center">
                     <p class="font-serif text-2xl md:text-3xl [font-variant:small-caps] tracking-wide text-stone-900 dark:text-white">
@@ -268,8 +268,8 @@
 
     <!-- Jottings — unboxed: no master panel; each teaser is its own first-level card in the grid -->
     <section
-            class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px]">
-        <div class="flex items-center justify-between gap-4 rounded-2xl border border-brand-600 bg-brand-600 dark:border-brand-700 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6 shadow-xl">
+            class="w-full md:w-4/5 max-w-[1280px]">
+        <div class="flex items-center justify-between gap-4 panel panel--brand px-4 py-4 md:px-8 md:py-6">
             <h2 class="text-2xl font-bold tracking-tight text-white">Jottings</h2>
             <a href="jottings/"
                class="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
@@ -287,13 +287,13 @@
           scripts/build_jottings.py — edit the markdown, not this block.
           Everything between the two markers is replaced on each build.
         -->
-        <div class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2">
+        <div class="grid sm:grid-cols-2">
             <!-- JOTTINGS:START -->
 <a href="jottings/#16-the-absent-organist"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="1"
-               class="group flex flex-row items-stretch gap-3 md:gap-4 rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
-                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+               class="group flex flex-row items-stretch gap-3 md:gap-4 panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="jottings/images/thumbnails/16-the-absent-organist.webp" alt="A triptych mid-century magazine illustration showing three surreal organ pipe scenes - Alpine mountains with a massive pipe organ and a hiker, a New Orleans skyline built of brass organ pipes, and a tropical beach where palm fronds are made of gleaming silver pipes." loading="lazy" width="640" height="430"
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -313,8 +313,8 @@
 <a href="jottings/#15-piezo-bach-and-pacman"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="2"
-               class="group flex flex-row items-stretch gap-3 md:gap-4 rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
-                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+               class="group flex flex-row items-stretch gap-3 md:gap-4 panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="jottings/images/thumbnails/15-piezo-bach-and-pacman.webp" alt="Man at a desk wiring a small buzzer, with pixelated musical notes of Bach and Pac‑Man floating toward an open door marked &quot;Home&quot;." loading="lazy" width="640" height="429"
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -334,8 +334,8 @@
 <a href="jottings/#14-the-unlimited-colleague"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="3"
-               class="group flex flex-row items-stretch gap-3 md:gap-4 rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
-                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+               class="group flex flex-row items-stretch gap-3 md:gap-4 panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="jottings/images/thumbnails/14-the-unlimited-colleague.webp" alt="A split-scene retro 1950s style magazine illustration contrasting working with an AI assistant at home versus a busy office environment. On the left, a smiling man sits happily at a bright desk with a friendly retro robot helper standing on a stack of books. On the right, exasperated office workers sigh and walk away from a stressed colleague sitting at his desk." loading="lazy" width="640" height="429"
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -355,8 +355,8 @@
 <a href="jottings/#13-brake-lessons"
                data-umami-event="jotting-teaser-click"
                data-umami-event-position="4"
-               class="group flex flex-row items-stretch gap-3 md:gap-4 rounded-xl border border-black/5 bg-black/5 shadow-md p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:hover:border-white/20 dark:hover:bg-white/20">
-                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden rounded-lg bg-black/10 dark:bg-white/5">
+               class="group flex flex-row items-stretch gap-3 md:gap-4 panel p-2.5 md:p-4 text-left transition hover:border-black/10 hover:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/20">
+                <div class="relative w-1/3 shrink-0 self-stretch overflow-hidden bg-black/10 dark:bg-white/5">
                     <img src="jottings/images/thumbnails/13-brake-lessons.webp" alt="A two-panel comic illustration showing a café owner in an apron dismissively gesturing at a bike handlebar while talking to a young delivery rider, followed by the anxious rider cycling down a steep cobblestone hill." loading="lazy" width="640" height="429"
                          class="absolute inset-0 h-full w-full object-cover grayscale sepia-[.4] transition duration-300 group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-105"/>
                 </div>
@@ -386,16 +386,18 @@
     <a
             href="chronicle/"
             aria-label="The Interplanetary Chronicle — a satirical, fictional newspaper"
-            class="group mt-2.5 md:mt-5 lg:mt-8 flex w-full md:w-4/5 max-w-[1280px] flex-col items-stretch gap-3 md:gap-6 overflow-hidden rounded-2xl border border-stone-700 bg-stone-700 dark:border-stone-600 dark:bg-stone-600 p-2.5 md:p-5 shadow-xl transition hover:border-stone-600 hover:bg-stone-600 dark:hover:border-stone-500 dark:hover:bg-stone-500 sm:flex-row sm:items-center">
-        <img
-                src="chronicle/header_small.webp"
-                alt="The Interplanetary Chronicle"
-                aria-hidden="true"
-                width="640" height="331"
-                class="w-full h-auto rounded-xl sm:w-1/3 sm:aspect-[640/331] sm:object-cover"
-                loading="lazy" decoding="async"
-                draggable="false"
-        />
+            class="group flex w-full md:w-4/5 max-w-[1280px] flex-col items-stretch gap-3 md:gap-6 overflow-hidden panel panel--muted p-2.5 md:p-5 transition hover:border-stone-600 hover:bg-stone-600 dark:hover:border-stone-500 dark:hover:bg-stone-500 sm:flex-row sm:items-center">
+        <div class="w-full sm:w-1/3 shrink-0 overflow-hidden">
+            <img
+                    src="chronicle/header_small.webp"
+                    alt="The Interplanetary Chronicle"
+                    aria-hidden="true"
+                    width="640" height="331"
+                    class="w-full h-auto sm:aspect-[640/331] sm:object-cover transition duration-300 group-hover:scale-105"
+                    loading="lazy" decoding="async"
+                    draggable="false"
+            />
+        </div>
         <div class="flex flex-1 flex-col justify-center">
             <p class="text-xs font-medium uppercase tracking-wide text-brand-400">Satire ·
                 Fiction</p>
@@ -425,7 +427,7 @@
       build_rtttl.py's job on /rtttl/ itself.
     -->
     <section
-            class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+            class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
         <div class="flex items-center justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Melodies for ESPHome</h2>
             <a href="melodies/"
@@ -446,7 +448,7 @@
 
     <!-- Links -->
     <section
-            class="mt-2.5 md:mt-5 lg:mt-8 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-8 shadow-xl">
+            class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
         <div class="flex items-center justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Worth a Click</h2>
             <button type="button" id="links-toggle" aria-expanded="false" aria-controls="links-grid"
@@ -464,13 +466,13 @@
             A small collection of people, causes and places that matter to me.
         </p>
 
-        <div id="links-grid" hidden class="mt-3 md:mt-6 grid gap-2 md:gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div id="links-grid" hidden class="mt-4 grid gap-2 md:gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
             <a
                     href="https://www.evawalks.com/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
                     <img
@@ -496,7 +498,7 @@
                     href="https://bloedziekten.nl/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-200">
                     <!-- background photo (the ladies), aligned left -->
@@ -531,7 +533,7 @@
                     href="https://gnr.nl/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-emerald-800">
                     <img
@@ -556,7 +558,7 @@
                     href="https://www.visitgooivecht.nl/en/plan-your-visit/see-all-destinations/naarden"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-sky-400">
                     <img
@@ -583,7 +585,7 @@
                     href="https://www.home-assistant.io/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-sky-400">
                     <img
@@ -610,7 +612,7 @@
                     href="https://nextpax.com/"
                     target="_blank"
                     rel="noopener"
-                    class="group flex flex-col overflow-hidden rounded-xl border border-black/5 bg-black/5 text-left transition hover:border-black/10 hover:bg-black/10 dark:border-white/5 dark:bg-white/5 dark:hover:border-white/10 dark:hover:bg-white/10"
+                    class="group flex flex-col overflow-hidden panel-inset text-left transition"
             >
                 <div class="aspect-[16/9] w-full overflow-hidden bg-slate-800">
                     <img
