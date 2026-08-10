@@ -163,7 +163,7 @@ def render_item(post: dict) -> str:
     desc_html = post["body_html"].replace(
         "<p>", '<p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">'
     )
-    return f"""<div class="rtttl-item" id="{post['slug']}">
+    return f"""<div id="{post['slug']}" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
             <div class="flex items-center justify-between gap-4">
                 <h3 class="text-lg font-bold text-stone-900 dark:text-white">{name_esc}</h3>
                 <div class="flex items-center gap-2 shrink-0">
@@ -200,19 +200,15 @@ def title_panel(text: str, anchor: str) -> str:
 
 
 def render_items(posts: list[dict]) -> str:
-    """One top-level box holding every tune, divided by <hr> — see issue #104."""
+    """The tune collection: a brand title panel, then each tune as its own
+    `.panel` (like the jottings jotting panels) — flush-stacked, no wrapper box."""
+    header = title_panel("My collection", "collection")
     if not posts:
-        body = ('<p class="text-stone-600 dark:text-stone-400">No tunes yet — '
-                 "check back soon.</p>")
-    else:
-        blocks = []
-        for i, post in enumerate(posts):
-            if i:
-                blocks.append('<hr class="my-6 border-black/10 dark:border-white/10"/>')
-            blocks.append(render_item(post))
-        body = "\n\n        ".join(blocks)
-    return (f'{title_panel("My collection", "collection")}\n'
-            f'    <section class="rtttl-list {SECTION_CLASS}">\n\n        {body}\n\n    </section>')
+        return (f'{header}\n'
+                f'    <section class="{SECTION_CLASS}"><p class="text-stone-600 '
+                'dark:text-stone-400">No tunes yet — check back soon.</p></section>')
+    tunes = "\n    ".join(render_item(post) for post in posts)
+    return f"{header}\n    {tunes}"
 
 
 # "Try it yourself" and "The format" are page furniture, not sourced from
@@ -425,8 +421,7 @@ def build_melodies_page(posts: list[dict]) -> None:
         <p class="mt-3 text-base font-semibold leading-relaxed text-stone-600 dark:text-stone-400">{DESCRIPTION_P2}</p>
     </section>
 
-    <!-- RTTTL: the tunes themselves. One top-level box, one item per
-         content/rtttl/*.md entry, divided by <hr>. -->
+    <!-- RTTTL: the collection — a brand title panel then one .panel per tune. -->
     {items}
 
     {TRY_IT_YOURSELF}
