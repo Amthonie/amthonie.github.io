@@ -97,7 +97,7 @@
 
     <!-- Header: banner image + branded band merged into one box (matches the home page).
          The Amthonie wordmark sits in the band with a back-home button; no subtitle or socials. -->
-    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+    <div class="w-full md:w-4/5 max-w-[1280px] overflow-hidden">
         <a href="/naarden/" aria-label="Back to Naarden" class="group relative block aspect-[4/1] overflow-hidden">
             <img
                     src="../../images/theme/nouveau/header.webp"
@@ -109,12 +109,12 @@
             <img
                     src="../../images/theme/nouveau/avatar.webp"
                     alt="Profile picture of Amthonie"
-                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800 shadow-md"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square h-[150%] rounded-full object-cover bg-stone-800 ring-2 ring-stone-800"
                     draggable="false"
             />
         </a>
         <div class="flex items-center justify-between gap-6 bg-brand-600 dark:bg-brand-700 px-4 py-4 md:px-8 md:py-6">
-            <p class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie</p>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">Amthonie <span class="font-normal text-white/70">|</span> The weather in Naarden</h1>
             <a href="/naarden/"
                aria-label="Back to Naarden"
                class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25">
@@ -131,29 +131,29 @@
 
 <main id="main" class="flex w-full flex-col items-center px-2.5 md:px-6 pb-12 md:pb-24">
 
-    <!-- Page title box: the H1 followed by the plain-language forecast. The prose is
-         pushed to a GitHub gist by Home Assistant and fetched client-side (see the
-         <script> near </body>); the paragraph stays hidden until it loads, so a failed
-         or empty fetch just leaves the heading — never a dangling empty paragraph. -->
-    <section aria-labelledby="wx-title"
-             class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <h1 id="wx-title" class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">The weather in Naarden</h1>
-        <p id="wx-forecast-text-body" hidden class="mt-2 text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
+    <!-- Forecast panel: only the plain-language forecast (the page title now lives in
+         the header band). Both the panel and the paragraph start hidden; weather.js
+         reveals them when the gist text loads, so an empty/failed forecast shows no
+         empty panel. -->
+    <section aria-label="Weather forecast for Naarden" hidden
+             class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
+        <p id="wx-forecast-text-body" hidden class="text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
     </section>
 
     <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
          gist and fetched client-side; see the <script> near </body>. Meteocons
          icons (MIT) self-hosted in /vendor/meteocons. Two cards (current + forecast)
          sit side by side on wide screens, stacked on narrow. Hidden until data loads. -->
-    <div id="weather" hidden aria-label="Current weather and forecast for Naarden"
-         class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <!-- Secondary-data ticker: a marquee of the extra gist fields that don't fit the
-             card proper (humidity, rain today, dew point, pressure, cloud cover, visibility,
-             UV index). Populated by weather.js. A bonus layer — hidden entirely under
-             prefers-reduced-motion (see weather.css), so motion-averse visitors get the
-             clean core card. -->
-        <div class="wx-ticker-wrap"><div class="wx-ticker-track" id="wx-ticker"></div></div>
-        <!-- Six uniform blocks in one grid: 1 column on small screens, 2 on wider ones. -->
+    <!-- #weather is a transparent grouping wrapper (kept so weather.js's reveal and the
+         #weather-scoped weather.css still work); each part sits in its own panel inside it. -->
+    <div id="weather" hidden aria-label="Current weather and forecast for Naarden" class="w-full">
+        <!-- Marquee panel: the secondary-data ticker (humidity, rain, pressure, …).
+             Populated by weather.js; hidden under prefers-reduced-motion (weather.css). -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
+            <div class="wx-ticker-wrap"><div class="wx-ticker-track" id="wx-ticker"></div></div>
+        </div>
+        <!-- Weather elements panel: six blocks in one grid (.wx-div between the rows). -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
         <div class="wx-cols">
             <!-- Block 1: current condition -->
             <div class="wx-sub">
@@ -207,53 +207,16 @@
                 <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
             </div>
         </div>
-        <!-- Source attribution + freshness. weather.js only rewrites #wx-updated,
-             so the static "Sourced from…" note beside it is safe. -->
-        <div class="wx-foot wx-foot-right"><span>Sourced from my Home Assistant</span> · <span id="wx-updated">Updated —</span></div>
+        </div>
+        <!-- Footer: a bare panel (no box), right-aligned. weather.js only rewrites #wx-updated. -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel panel--bare px-4 py-2 md:px-8 md:py-3">
+            <div class="wx-foot wx-foot-right"><span>Sourced from my Home Assistant</span> · <span id="wx-updated">Updated —</span></div>
+        </div>
     </div>
 
-    <!-- KNMI weather maps (425×467 GIFs from cdn.knmi.nl; each already carries the KNMI
-         source label). weather.js fills the four slots and picks which maps to show by
-         time of day (Europe/Amsterdam): before 18:00 → current + today + tonight +
-         tomorrow; from 18:00 → current + tonight + tomorrow + tomorrow-night. External
-         images (no CSP here); a slot hides itself if its image fails to load. -->
-    <section id="wx-maps" aria-label="Weather maps for the Netherlands (KNMI)"
-             class="mt-3 md:mt-6 w-full md:w-4/5 max-w-[1280px] rounded-2xl border border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10 px-4 py-4 md:px-8 md:py-6 shadow-xl">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <h2 class="text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-white">Weather maps</h2>
-                <p class="mt-0.5 text-xs text-stone-500 dark:text-stone-400">Maps source: <a href="https://www.knmi.nl" target="_blank" rel="noopener" class="font-medium text-brand-600 dark:text-brand-400 hover:underline">knmi.nl</a></p>
-            </div>
-            <!-- KNMI images are third-party; the grid is gated behind this toggle and only
-                 fetched on first expand (see weather.js) so nothing hits cdn.knmi.nl until
-                 the visitor opts in. Title + source stay visible either way. -->
-            <button type="button" id="wx-maps-toggle" aria-expanded="false" aria-controls="wx-maps-grid"
-                    class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
-                <span data-maps-label>Show</span>
-                <svg data-maps-chevron class="h-4 w-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="m6 9 6 6 6-6"/>
-                </svg>
-            </button>
-        </div>
-        <div id="wx-maps-grid" hidden class="mt-3 md:mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            <a id="wx-map-1-link" href="https://www.knmi.nl/nederland-nu/weer/verwachtingen" target="_blank" rel="noopener">
-                <img id="wx-map-1" alt="" width="425" height="467" loading="lazy" class="w-full aspect-[425/467] object-fill rounded-lg bg-[#808080] ring-1 ring-black/5 dark:ring-white/10"/>
-                <span id="wx-map-1-cap" class="mt-1.5 block text-center text-xs font-medium text-stone-600 dark:text-stone-300"></span>
-            </a>
-            <a id="wx-map-2-link" href="https://www.knmi.nl/nederland-nu/weer/verwachtingen" target="_blank" rel="noopener">
-                <img id="wx-map-2" alt="" width="425" height="467" loading="lazy" class="w-full aspect-[425/467] object-fill rounded-lg bg-[#808080] ring-1 ring-black/5 dark:ring-white/10"/>
-                <span id="wx-map-2-cap" class="mt-1.5 block text-center text-xs font-medium text-stone-600 dark:text-stone-300"></span>
-            </a>
-            <a id="wx-map-3-link" href="https://www.knmi.nl/nederland-nu/weer/verwachtingen" target="_blank" rel="noopener" class="hidden md:block">
-                <img id="wx-map-3" alt="" width="425" height="467" loading="lazy" class="w-full aspect-[425/467] object-fill rounded-lg bg-[#808080] ring-1 ring-black/5 dark:ring-white/10"/>
-                <span id="wx-map-3-cap" class="mt-1.5 block text-center text-xs font-medium text-stone-600 dark:text-stone-300"></span>
-            </a>
-            <a id="wx-map-4-link" href="https://www.knmi.nl/nederland-nu/weer/verwachtingen" target="_blank" rel="noopener" class="hidden lg:block">
-                <img id="wx-map-4" alt="" width="425" height="467" loading="lazy" class="w-full aspect-[425/467] object-fill rounded-lg bg-[#808080] ring-1 ring-black/5 dark:ring-white/10"/>
-                <span id="wx-map-4-cap" class="mt-1.5 block text-center text-xs font-medium text-stone-600 dark:text-stone-300"></span>
-            </a>
-        </div>
-    </section>
+    <!-- Placeholder: shown only if the weather gists are missing/empty (weather.js reveals
+         it when the card fetch fails and nothing else loaded). -->
+    <div id="wx-empty" hidden class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6 text-center text-sm text-stone-500 dark:text-stone-400">No weather data available right now.</div>
 
 </main>
 
