@@ -126,11 +126,53 @@
         <div class="update-body mt-4 text-base">
             <p>This website is built to be lightweight, transparent, and fully under my control. It uses no tracking, and only minimal, privacy&#8209;friendly analytics via <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Cloud<span class="sr-only"> (opens in a new tab)</span></a>. It sets no cookies either — with one optional exception: switch on “remember my tinkering” on the Melodies page and it keeps the melody you’re editing on your own device, nothing more.</p>
 
-            <p>Every page is hand&#8209;crafted in HTML, CSS and a little vanilla JavaScript — styled with Tailwind and compiled to static CSS, with no client&#8209;side frameworks. The full source is <a href="https://github.com/Amthonie/amthonie.github.io" target="_blank" rel="noopener">public on GitHub<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+            <p>Every page is hand&#8209;crafted in HTML, CSS and a little vanilla JavaScript — styled with Tailwind and compiled to static CSS, with no client&#8209;side frameworks. The full source is <a href="https://github.com/Amthonie/amthonie.github.io" target="_blank" rel="noopener">public on GitHub<span class="sr-only"> (opens in a new tab)</span></a>, and the site itself is hosted on GitHub Pages.</p>
 
             <p>All photographs are my own unless noted otherwise, and all illustrations are created by me with the assistance of AI tools.</p>
         </div>
 
+    </section>
+
+    <!-- Built with: credits for the self-hosted, third-party open-source
+         libraries the site ships. Each links to its source repository. -->
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Built with</h2>
+
+        <div class="update-body mt-4 text-base">
+            <p>A handful of small open-source libraries do some of the heavy lifting — all self&#8209;hosted, with no third&#8209;party CDNs:</p>
+            <ul>
+                <li><a href="https://github.com/dimsemenov/PhotoSwipe" target="_blank" rel="noopener">PhotoSwipe<span class="sr-only"> (opens in a new tab)</span></a> — the image lightbox, by Dmitry Semenov (MIT).</li>
+                <li><a href="https://github.com/basmilius/weather-icons" target="_blank" rel="noopener">Meteocons<span class="sr-only"> (opens in a new tab)</span></a> — the animated weather icons, by Bas Milius (MIT).</li>
+                <li><a href="https://github.com/adamonsoon/rtttl-play" target="_blank" rel="noopener">rtttl&#8209;play<span class="sr-only"> (opens in a new tab)</span></a> — the melody player on the Melodies page, by Adam Rahwane (MIT).</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Site map: a human-readable index of the top-level pages. The
+         machine-readable counterpart for crawlers is /sitemap.xml. Top-level
+         pages only — individual jottings and Chronicle articles live under
+         their section landing pages. -->
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Site map</h2>
+
+        <ul class="mt-4 text-base text-stone-700 dark:text-stone-200">
+            <li>
+                <a href="/" class="font-medium text-brand-600 dark:text-brand-400 hover:underline">Home</a>
+                <ul class="mt-1 ml-1 space-y-1 border-l border-black/10 pl-4 dark:border-white/15">
+                    <li><a href="/about/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">About me</a></li>
+                    <li><a href="/colophon/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">Colophon</a></li>
+                    <li>
+                        <a href="/naarden/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">About Naarden</a>
+                        <ul class="mt-1 ml-1 space-y-1 border-l border-black/10 pl-4 dark:border-white/15">
+                            <li><a href="/naarden/weather/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">The weather in Naarden</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/jottings/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">Jottings</a></li>
+                    <li><a href="/melodies/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">Melodies</a></li>
+                    <li><a href="/chronicle/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">The Interplanetary Chronicle</a></li>
+                </ul>
+            </li>
+        </ul>
     </section>
 </main>
 
