@@ -236,7 +236,9 @@
 .site-nav.center {
   justify-content: center;
   font-size: 0.8rem;
-  margin-bottom: 0.4rem;
+  /* A little more than the nav's own wrapped-row gap (0.55rem) so the tappable
+     copyright/colophon line below doesn't crowd the last nav row. */
+  margin-bottom: 0.7rem;
 }
 .site-nav a {
   color: #4a7a2c; /* brand-600 */
