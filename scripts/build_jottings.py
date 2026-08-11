@@ -566,7 +566,7 @@ def render_teasers(posts: list[dict]) -> str:
                     <h3 class="mt-1 font-semibold text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         {html.escape(post['title'])}
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                    <p class="mt-1 text-base leading-relaxed text-stone-600 dark:text-stone-300">
                         {summary}
                     </p>
                 </div>"""
@@ -978,7 +978,7 @@ def build_jottings_page(posts: list[dict]) -> None:
         <span class="sep">·</span>
         <a href="/melodies/">Melodies</a>
     </nav>
-    <p>&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
+    <p>&copy; <span id="year"></span> Amthonie — <a href="/colophon/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">A light static site, minimal footprint</a></p>
 </footer>
 
 <script>

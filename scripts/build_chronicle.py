@@ -450,7 +450,7 @@ def render_page(
      page (this is the shared shell). -->
 <footer class="w-full mt-auto py-6 text-center text-xs text-stone-500 dark:text-stone-400">
     <p class="mx-auto max-w-xl px-4 leading-relaxed font-semibold">{DISCLAIMER}</p>
-    <p class="mt-2">&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
+    <p class="mt-2">&copy; <span id="year"></span> Amthonie — <a href="/colophon/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">A light static site, minimal footprint</a></p>
 </footer>
 
 <script>
@@ -504,7 +504,7 @@ def render_index_cards(posts: list[dict]) -> str:
                     <h3 class="mt-1 font-semibold uppercase leading-tight tracking-tight text-stone-900 dark:text-white transition group-hover:text-brand-600 dark:group-hover:text-brand-400">
                         {html.escape(post['title'])}
                     </h3>
-                    <p class="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                    <p class="mt-1 text-base leading-relaxed text-stone-600 dark:text-stone-300">
                         {html.escape(post['summary'])}
                     </p>
                 </div>

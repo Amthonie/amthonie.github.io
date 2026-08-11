@@ -3,6 +3,7 @@
 /* Scan the pages for the utility classes actually used */
 @source "../index.html";
 @source "../about/index.html";
+@source "../colophon/index.html";
 @source "../naarden/index.html";
 @source "../naarden/weather/index.html";
 @source "../jottings/index.html";

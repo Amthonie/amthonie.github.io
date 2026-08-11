@@ -328,9 +328,10 @@ Tailwind CLI against the input file and output to `styles.css`.
 
 Tailwind only scans the files listed via `@source` in `src/input.css`, so when
 adding a **new** HTML page, register it there too (currently `index.html`,
-`naarden/index.html`, `naarden/weather/index.html`, `jottings/index.html`,
-`melodies/index.html`, `chronicle/index.html`, the `chronicle/*/index.html`
-article pages and `404.html` are listed) — otherwise
+`about/index.html`, `colophon/index.html`, `naarden/index.html`,
+`naarden/weather/index.html`, `jottings/index.html`, `melodies/index.html`,
+`chronicle/index.html`, the `chronicle/*/index.html` article pages and
+`404.html` are listed) — otherwise
 its utility classes are dropped from the build.
 
 ### Production-parity preview
