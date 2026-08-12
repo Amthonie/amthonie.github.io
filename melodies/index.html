@@ -175,6 +175,86 @@
             </div>
             <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The opening bars of Bach’s <em>Invention No. 8</em>, pared down to their core melodic shape and delivered with the bright insistence typical of piezo buzzers. I use this miniature as my hourly chime — a polite, slightly anachronistic reminder of the passing time.</p>
         </div>
+    <div id="beep-ascending" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Beep ascending</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="ascending:d=16,o=6,b=220:p,e,c,e,g,a#;"
+                            aria-label="Play Beep ascending">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>ascending:d=16,o=6,b=220:p,e,c,e,g,a#;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">A brisk little arpeggio in C7, stepping upward with the earnest determination of a device trying its very best to start the day. If used as a startup tune, it gives an ESPHome‑driven buzzer a touch more personality than a solitary beep ever could.</p>
+        </div>
+    <div id="beep-descending" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Beep descending</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="descending:d=16,o=6,b=220:p,g,a#,g,e,c;"
+                            aria-label="Play Beep descending">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>descending:d=16,o=6,b=220:p,g,a#,g,e,c;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">The inverse arpeggio in C7, politely walking itself back down the scale. If used as a shutdown cue, it provides a neat auditory full‑stop that feels more intentional than a perfunctory click or chirp.</p>
+        </div>
+    <div id="beep-once" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Beep once</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="beep-once:d=16,o=6,b=180:p,32d#,e;"
+                            aria-label="Play Beep once">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>beep-once:d=16,o=6,b=180:p,32d#,e;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">A single, tidy chirp — just enough to confirm a button press without pretending to be musical. If used for left and right navigation buttons, it’s the minimal acknowledgement a piezo buzzer can give while still sounding intentional.</p>
+        </div>
+    <div id="beep-twice" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+            <div class="flex items-center justify-between gap-4">
+                <h3 class="text-lg font-bold text-stone-900 dark:text-white">Beep twice</h3>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" class="rtttl-play inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
+                            data-rtttl="beep-twice:d=16,o=6,b=180:p,32d#,e,p,32d#,e;"
+                            aria-label="Play Beep twice">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button type="button" class="rtttl-stop inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                            aria-label="Stop playback">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="update-body mt-3">
+                <pre><code>beep-twice:d=16,o=6,b=180:p,32d#,e,p,32d#,e;</code></pre>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">Two quick chirps in succession, typically used as a refresh‑button confirmation. It’s the same gesture as Beep Once, merely repeated, giving the device a faint sense of hierarchy in its button responses.</p>
+        </div>
     <div id="pac-man" class="rtttl-item scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
             <div class="flex items-center justify-between gap-4">
                 <h3 class="text-lg font-bold text-stone-900 dark:text-white">Pac‑Man</h3>
