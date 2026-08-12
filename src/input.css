@@ -46,10 +46,11 @@
 .update-body > * + * {
   margin-top: 1rem;
 }
-/* Space consecutive paragraphs even when wrapped (e.g. two <p> inside a
-   .flow-root next to a floated figure), since > * + * only reaches direct
-   children. Avoids empty &nbsp; spacer nodes. */
-.update-body p + p {
+/* Space adjacent blocks even when wrapped (e.g. a <blockquote> then a <p>, or
+   two <p>, inside a .flow-root next to a floated figure), since > * + * only
+   reaches direct children. Excludes the element right after the floated figure
+   so it stays top-aligned with the image. Avoids empty &nbsp; spacer nodes. */
+.update-body .flow-root > :not(figure) + * {
   margin-top: 1rem;
 }
 .update-body h2,
