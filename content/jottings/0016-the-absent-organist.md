@@ -6,8 +6,8 @@ tags: [music,local-life]
 title: The Absent Organist
 summary: On carrying Bach across continents and missing a neighbour two streets away.
 image: 16-the-absent-organist.webp
-image_alt: A triptych mid-century magazine illustration showing three surreal organ pipe scenes - Alpine mountains with a massive pipe organ and a hiker, a New Orleans skyline built of brass organ pipes, and a tropical beach where palm fronds are made of gleaming silver pipes.
-image_caption: Bach for every place
+image_alt: A comic-style illustration split into three panels showing a man listening to headphones while sitting in an Alpine meadow, on a New Orleans street, and on a tropical beach, each scene featuring a giant pipe organ in the background.
+image_caption: Organ music travels remarkably well
 ---
 
 My favourite recording of all time—setting aside the Easy Aloha’s Cashmere Cat album for another day—is the 1982 release of Bach’s six Trio Sonatas for organ, recorded for Archiv Production by Ton Koopman. I first heard it shortly after it came out, and it has followed me ever since.
