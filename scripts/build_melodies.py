@@ -444,8 +444,10 @@ def build_melodies_page(posts: list[dict]) -> None:
         <a href="/jottings/">Jottings</a>
         <span class="sep">·</span>
         <a href="/melodies/">Melodies</a>
+        <span class="sep">·</span>
+        <a href="/colophon/">Colophon</a>
     </nav>
-    <p>&copy; <span id="year"></span> Amthonie — <a href="/colophon/" class="hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition">A light static site, minimal footprint</a></p>
+    <p>&copy; <span id="year"></span> Amthonie — A light static site, minimal footprint</p>
 </footer>
 
 <script>
