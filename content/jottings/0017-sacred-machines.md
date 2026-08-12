@@ -2,7 +2,7 @@
 id: 17
 date: 2026-08-12
 slug: sacred-machines
-tags: [ethics, reflection]
+tags: [ethics, reflection, literature]
 title: Sacred Machines
 summary: A Beckman passage prompts an uncomfortable glance at one’s own technological habits.
 image: 17-sacred-machines.webp
