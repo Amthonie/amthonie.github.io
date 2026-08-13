@@ -126,6 +126,23 @@
     <!-- PhotoSwipe: self-hosted stylesheet for the inline bio-image lightbox -->
     <link rel="stylesheet" href="../vendor/photoswipe/photoswipe.css"/>
 
+    <!-- The "Neptune" word opens a hidden photo in the lightbox. It stays
+         unmarked in the prose (no colour/underline), revealing the brand link
+         look only on hover/focus so it doesn't disturb the reading rhythm. -->
+    <style>
+        .update-body a.neptune-open {
+            color: inherit;
+            text-decoration: none;
+            cursor: zoom-in;
+        }
+        .update-body a.neptune-open:hover,
+        .update-body a.neptune-open:focus-visible {
+            color: #4a7a2c; /* brand-600 */
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+    </style>
+
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="profile"></script>
 </head>
@@ -197,7 +214,7 @@
 
             <p>I was born and raised in a small village in the <b>Betuwe</b>, where I attended my primary school and later cycled fifteen kilometres each day to my secondary school, the CLV in Veenendaal. It was there that I encountered the first love of my life — a discovery far more memorable than Latin declensions or physics formulae. My “broad curriculum” — a term used with admirable optimism — included Latin, together with the usual assortment of foreign languages, history, maths, chemistry, biology and physics, and of course a bit of Dutch. From the age of ten I earned money as a church organist, playing at more occasions than any child should reasonably be exposed to.</p>
 
-            <p>After finishing school, I moved to <b>Amsterdam</b> to study at the University of Amsterdam — mainly because the Betuwe and I did not entirely agree on how life should be lived. Sociology proved a poor fit, but I supported myself working as a caretaker at an Amex travel bureau and, more unexpectedly, as a decorator specialising in very small balloons, later also instructing others in the same improbable craft. That unlikely occupation took me to Houston, New Orleans, Bordeaux, Toulouse, Belgium and Germany. In New Orleans I even led a parade down Canal Street in a four‑metre‑tall latex Neptune contraption — a career highlight that defies further explanation.</p>
+            <p>After finishing school, I moved to <b>Amsterdam</b> to study at the University of Amsterdam — mainly because the Betuwe and I did not entirely agree on how life should be lived. Sociology proved a poor fit, but I supported myself working as a caretaker at an Amex travel bureau and, more unexpectedly, as a decorator specialising in very small balloons, later also instructing others in the same improbable craft. That unlikely occupation took me to Houston, New Orleans, Bordeaux, Toulouse, Belgium and Germany. In New Orleans I even led a parade down Canal Street in a four‑metre‑tall latex <a id="neptune-link" href="images/neptune.webp" data-pswp-width="1536" data-pswp-height="1030" data-caption="Leading a Canal Street parade inside a four‑metre latex Neptune" class="neptune-open" aria-label="Open a photo: leading a Canal Street parade inside a four-metre latex Neptune">Neptune</a> contraption — a career highlight that defies further explanation.</p>
 
             <a href="images/about_2.webp"
                data-pswp-width="1536" data-pswp-height="652"
@@ -309,17 +326,11 @@
 <script type="module">
     import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
-    const lightbox = new PhotoSwipeLightbox({
-        gallery: '.update-body',
-        // Only the bio-image links, not any other anchors in the prose.
-        children: 'a[data-pswp-width]',
-        // The main PhotoSwipe module is loaded on demand the first time you
-        // open an image, so nothing heavy runs on page load.
-        pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
-    });
+    const pswpModule = () => import('../vendor/photoswipe/photoswipe.esm.min.js');
 
-    // Show the image's alt text as a caption inside the lightbox.
-    lightbox.on('uiRegister', () => {
+    // Show the narrative data-caption (falling back to the image's alt text)
+    // as a caption inside the lightbox. Shared by both lightboxes below.
+    const addCaption = (lightbox) => lightbox.on('uiRegister', () => {
         lightbox.pswp.ui.registerElement({
             name: 'caption',
             order: 9,
@@ -332,8 +343,6 @@
                     'color:#fff;font:14px/1.4 system-ui,sans-serif;padding:0 16px;' +
                     'text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;';
                 pswp.on('change', () => {
-                    // Prefer the narrative data-caption; fall back to the
-                    // image's descriptive alt text.
                     const link = pswp.currSlide.data.element;
                     const img = link?.querySelector('img');
                     el.textContent =
@@ -344,6 +353,22 @@
         });
     });
 
+    // The four bio images plus the whimsical "Neptune" word (an easter egg in
+    // the prose) form one navigable gallery, in document order.
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '.update-body',
+        children: 'a[data-pswp-width]',
+        pswpModule,
+    });
+    // The bio images copy their alt from a thumbnail <img>; the Neptune slide
+    // has no thumbnail, so give just that one a proper alt of its own.
+    lightbox.addFilter('itemData', (itemData) => {
+        if (itemData.element?.id === 'neptune-link') {
+            itemData.alt = 'A four-metre-tall latex Neptune costume leading a parade down Canal Street in New Orleans.';
+        }
+        return itemData;
+    });
+    addCaption(lightbox);
     lightbox.init();
 </script>
 
