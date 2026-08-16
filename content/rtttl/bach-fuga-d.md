@@ -1,6 +1,6 @@
 ---
 name: Bach, Fuga d‑moll
-rtttl: fuga-d:d=16,o=5,b=120:a,g,a,f,a,e,a,d,a,c#,a,d,a,e,a,f,a,a4,a,b4,a,c#,a,d,a,c#,a,d,a,e,a,f,p;
+rtttl: fuga-d:d=32,o=6,b=100:p,a,a5,g5,g,a,a5,f5,f,a,a5,e5,e,a,a5,d5,d,a,a5,c#5,c#,a,a5,d5,d,a,a5,e5,e,a,a5,f5,f,a,a5,a4,a5,a,a5,b4,b5,a,a5,c#5,c#,a,a5,d5,d,a,a5,c#5,c#,a,a5,d5,d,a,a5,e5,e,a,a5,f5,f,p;
 ---
 
-A compact rendering of the exposition from Bach’s *Fugue in D minor*. The subject is reduced to its essential contour, yet retains the rhythmic drive and clarity of the original line.
+This version of the exposition from Bach’s *Fugue in D minor* reimagines the subject through interlocking contrary-motion octaves: the alternating intervals remain instantly recognizable, translated into a rhythmic pseudo-polyphony tailored for embedded performance.
