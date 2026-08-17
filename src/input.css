@@ -8,6 +8,11 @@
 @source "../naarden/weather/index.html";
 @source "../jottings/index.html";
 @source "../melodies/index.html";
+/* The unindexed, unmeasured "bare" copies (see the CLAUDE.md section). Their
+   classes are a subset of their full siblings' today, but scan them anyway so
+   an edit to one can't silently miss its CSS. */
+@source "../naarden/weather/bare.html";
+@source "../melodies/bare.html";
 @source "../chronicle/index.html";
 @source "../chronicle/*/index.html";
 @source "../404.html";

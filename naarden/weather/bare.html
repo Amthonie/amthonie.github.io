@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Amthonie | Weather in Naarden (bare)</title>
+    <link rel="icon" href="../../favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="../../images/a.png"/>
+    <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
+    <!-- Private working copy of /naarden/weather/ for Ralph's own frequent
+         weather checks, so they don't pollute the Umami stats for the real
+         page: no Umami tag, no outbound-link script. Keep it out of the index
+         too — no canonical (it would only muddle the signal), no OG, no
+         JSON-LD; it's absent from sitemap.xml and llms.txt, and nothing links
+         to it. Header band, banner image and footer dropped; everything else
+         (markup ids, weather.css, weather.js) is identical to index.html, so
+         the card behaves exactly the same. -->
+    <meta name="robots" content="noindex,nofollow"/>
+
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="../../styles.css"/>
+
+    <!-- Weather-card styling (scoped .wx-*, palette from src/input.css, dark via
+         prefers-color-scheme). -->
+    <link rel="stylesheet" href="weather.css"/>
+</head>
+
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
+
+<main class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+
+    <!-- The page title lived in the header band that this copy drops, so it
+         survives as a screen-reader-only <h1> — the page still starts with one. -->
+    <h1 class="sr-only">The weather in Naarden</h1>
+
+    <!-- Forecast panel: only the plain-language forecast. Both the panel and the
+         paragraph start hidden; weather.js reveals them when the gist text loads,
+         so an empty/failed forecast shows no empty panel. -->
+    <section aria-label="Weather forecast for Naarden" hidden
+             class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
+        <p id="wx-forecast-text-body" hidden class="text-base leading-relaxed text-stone-700 dark:text-stone-300"></p>
+    </section>
+
+    <!-- Live weather in Naarden. Data pushed hourly by Home Assistant to a GitHub
+         gist and fetched client-side by weather.js. Meteocons icons (MIT) self-hosted
+         in /vendor/meteocons. Hidden until data loads. -->
+    <!-- #weather is a transparent grouping wrapper (kept so weather.js's reveal and the
+         #weather-scoped weather.css still work); each part sits in its own panel inside it. -->
+    <div id="weather" hidden aria-label="Current weather and forecast for Naarden" class="w-full">
+        <!-- Marquee panel: the secondary-data ticker (humidity, rain, pressure, …).
+             Populated by weather.js; hidden under prefers-reduced-motion (weather.css). -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
+            <div class="wx-ticker-wrap"><div class="wx-ticker-track" id="wx-ticker"></div></div>
+        </div>
+        <!-- Weather elements panel: six blocks in one grid (.wx-div between the rows). -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6">
+        <div class="wx-cols">
+            <!-- Block 1: current condition -->
+            <div class="wx-sub">
+                <div class="wx-group">
+                    <img id="wx-icon" class="wx-icon" src="../../vendor/meteocons/not-available.svg" alt="" width="56" height="56"/>
+                    <div>
+                        <div id="wx-condition" class="wx-val">—</div>
+                        <div class="wx-lbl">Naarden</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Block 2: temperature + wind -->
+            <div class="wx-sub wx-tempwind">
+                <div>
+                    <div class="wx-val"><span id="wx-temp">—</span><span class="u">°C</span></div>
+                    <div class="wx-lbl"><span id="wx-feels"></span></div>
+                </div>
+                <div class="wx-group">
+                    <svg class="wx-compass" viewBox="0 0 100 100" aria-hidden="true">
+                        <circle class="wx-ring" cx="50" cy="50" r="44"/>
+                        <path id="wx-windmarker" class="wx-marker" d="M50 4 L44 17 L56 17 Z"/>
+                        <text id="wx-winddir" class="wx-dir" x="50" y="59" text-anchor="middle">—</text>
+                    </svg>
+                    <div>
+                        <div class="wx-val"><span id="wx-bft">—</span><span id="wx-bft-gust"></span> <span class="u">Bft</span></div>
+                        <div class="wx-lbl"><span id="wx-beaufort">—</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Separator between the current-conditions blocks and the forecast blocks -->
+            <div class="wx-div" aria-hidden="true"></div>
+            <!-- Block 3: hourly forecast -->
+            <div id="wx-hourly-block" class="wx-sub wx-fc-group" hidden>
+                <div class="wx-fc-head">Hourly forecast</div>
+                <div id="wx-hourly" class="wx-fc"></div>
+            </div>
+            <!-- Block 4: daily forecast -->
+            <div id="wx-daily-block" class="wx-sub wx-fc-group" hidden>
+                <div class="wx-fc-head">Daily forecast</div>
+                <div id="wx-forecast" class="wx-fc"></div>
+            </div>
+            <!-- Separator between the forecast blocks and the sun/moon blocks -->
+            <div class="wx-div" aria-hidden="true"></div>
+            <!-- Block 5: sun times -->
+            <div id="wx-sun" class="wx-sub wx-sun" hidden>
+                <span id="wx-astro-sunrise" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunrise.svg" alt="Sunrise" width="36" height="36"/><span id="wx-sunrise"></span></span>
+                <span id="wx-astro-sunset" class="wx-astro-item"><img class="wx-astro-icon" src="../../vendor/meteocons/sunset.svg" alt="Sunset" width="36" height="36"/><span id="wx-sunset"></span></span>
+            </div>
+            <!-- Block 6: moon phase -->
+            <div id="wx-moon-card" class="wx-sub wx-moon" hidden>
+                <span id="wx-astro-moon" class="wx-astro-item"><img id="wx-moon-icon" class="wx-astro-icon" src="../../vendor/meteocons/moon-full.svg" alt="" width="36" height="36"/><span id="wx-moon"></span></span>
+            </div>
+        </div>
+        </div>
+        <!-- Footer: a bare panel (no box), right-aligned. weather.js only rewrites #wx-updated. -->
+        <div class="mx-auto w-full md:w-4/5 max-w-[1280px] panel panel--bare px-4 py-2 md:px-8 md:py-3">
+            <div class="wx-foot wx-foot-right"><span>Sourced from my Home Assistant</span> · <span id="wx-updated">Updated —</span></div>
+        </div>
+    </div>
+
+    <!-- Placeholder: shown only if the weather gists are missing/empty (weather.js reveals
+         it when the card fetch fails and nothing else loaded). -->
+    <div id="wx-empty" hidden class="mx-auto w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-6 text-center text-sm text-stone-500 dark:text-stone-400">No weather data available right now.</div>
+
+</main>
+
+<!-- Live weather tile + forecast-in-words box: both fetched by weather.js. -->
+<script src="weather.js"></script>
+
+</body>
+</html>

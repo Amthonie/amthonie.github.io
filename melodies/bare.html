@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Amthonie | RTTTL playbox (bare)</title>
+    <link rel="icon" href="../favicon.ico" sizes="any"/>
+    <link rel="icon" type="image/png" href="../images/a.png"/>
+    <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#3A5F22" media="(prefers-color-scheme: dark)"/>
+    <!-- Private working copy of /melodies/ for Ralph's own RTTTL tinkering, so it
+         doesn't pollute the Umami stats of the real page: no Umami tag and no
+         outbound-link script. Keep it out of the index too — no canonical (it
+         would only muddle the signal), no OG, no JSON-LD; it's absent from
+         sitemap.xml and llms.txt, and nothing links to it.
+         Only the playbox and the syntax primer are kept: no header band or
+         banner image, no intro, no tune collection (so no in-page nav), no
+         footer. A hand-written static page — unlike index.html it is NOT
+         emitted by scripts/build_melodies.py, since it uses nothing from
+         content/rtttl/*.md; if the playbox or syntax markup changes there,
+         mirror it here. -->
+    <meta name="robots" content="noindex,nofollow"/>
+
+    <!-- Precompiled Tailwind (built from src/input.css by the Pages workflow) -->
+    <link rel="stylesheet" href="../styles.css"/>
+    <!-- Hand-authored page styles (the "remember my tinkering" toggle). -->
+    <link rel="stylesheet" href="melodies.css"/>
+</head>
+
+<body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
+
+<main class="flex w-full flex-col items-center px-2.5 md:px-6 pt-6 md:pt-12 pb-12 md:pb-24">
+
+    <!-- The page title lived in the header band this copy drops, so it survives
+         as a screen-reader-only <h1> — the page still starts with a heading. -->
+    <h1 class="sr-only">RTTTL playbox</h1>
+
+    <div id="try-it" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-2 md:px-8 md:py-3"><h2 class="text-2xl font-bold tracking-tight text-white">Try it yourself</h2></div>
+    <!-- RTTTL: try your own -- reads live from the textarea rather than a
+         fixed data-rtttl attribute, so it gets its own listener in melodies.js. -->
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <p class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">Paste or write your own RTTTL string below and give it a play. A brief disclaimer: experimenting with this may prove unexpectedly addictive and could test the patience of nearby housemates.</p>
+        <label for="rtttl-input" class="sr-only">Your RTTTL string</label>
+        <textarea id="rtttl-input" rows="6" spellcheck="false"
+                  placeholder="name:d=4,o=5,b=125:notes"
+                  class="mt-3 w-full border border-black/10 bg-white/60 p-3 font-mono text-sm text-stone-800 shadow-inner focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30 dark:border-white/15 dark:bg-stone-900/40 dark:text-stone-100 dark:focus:border-brand-400 dark:focus:ring-brand-400/30"></textarea>
+        <div class="mt-3 flex items-center gap-2">
+            <button type="button" id="rtttl-input-play"
+                    class="inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                Play
+            </button>
+            <button type="button" class="rtttl-stop inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-black/10 dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg>
+                Stop
+            </button>
+        </div>
+        <!-- Opt-in "remember my tinkering" switch. The cookies are scoped
+             Path=/melodies/, which covers this page as well as index.html, so a
+             tune saved here is restored there and vice versa. -->
+        <label class="rtttl-remember">
+            <input type="checkbox" id="rtttl-remember"/>
+            <span class="rtttl-remember-track" aria-hidden="true"></span>
+            <span class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                <span class="font-medium text-stone-800 dark:text-stone-200">Remember my tinkering on this device</span>
+                <span class="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">Saves just the melody text above — and this switch’s state — in simple, anonymous first‑party cookies for about a week, so it’s still here when you come back. Nothing else, no tracking; switch it off to delete them.</span>
+            </span>
+        </label>
+    </section>
+
+    <div id="syntax" class="scroll-mt-28 w-full md:w-4/5 max-w-[1280px] panel panel--brand px-4 py-2 md:px-8 md:py-3"><h2 class="text-2xl font-bold tracking-tight text-white">The syntax</h2></div>
+    <!-- RTTTL: a basic explanation of the syntax. -->
+    <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
+        <div class="update-body">
+            <p>An RTTTL string packs a whole melody into one line of plain text: a name, a few default settings, then the notes themselves.</p>
+            <pre><code>name:d=4,o=5,b=125:notes
+      │   │    │
+      │   │    └─ tempo (BPM)
+      │   └────── default octave
+      └────────── default note length (4 = quarter)
+
+note = [length]letter[#][octave][.]
+  1/4/8/16/32    → length
+  c d e f g a b  → notes
+  p              → rest (instead of a note)
+  #              → sharp (flat not supported)
+  7              → octave
+  .              → dotted ×1.5
+  length/octave omitted → uses the d / o defaults
+
+Examples:  8g#6 = eighth G# octave 6
+           4c   = quarter C (default octave)
+           8c6. = dotted eighth C6
+           16p  = short rest</code></pre>
+            <p>For a detailed explanation of the format as implemented in ESPHome, see the <a href="https://esphome.io/components/rtttl.html" target="_blank" rel="noopener">RTTTL component documentation</a>.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- RTTTL player (self-hosted; see vendor/rtttl-play/LICENSE) + page behaviour
+     in the hand-authored melodies.js, loaded after the player so rtttlPlay
+     exists. Same pair as the full page; melodies.js no-ops on the parts that
+     aren't here (there are no per-tune .rtttl-play buttons to wire). -->
+<script src="../vendor/rtttl-play/index.umd.min.js"></script>
+<script src="melodies.js"></script>
+
+</body>
+</html>
