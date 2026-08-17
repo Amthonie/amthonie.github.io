@@ -91,11 +91,6 @@
 .update-body li + li {
   margin-top: 0.25rem;
 }
-/* Fun-facts list on the Naarden page holds paragraph-length items, so give
-   them more breathing room than the default tight list spacing. */
-.update-body .facts-list li + li {
-  margin-top: 0.6rem;
-}
 .update-body img {
   border-radius: 0; /* squared for the flat panel redesign (was 0.75rem) */
 }
