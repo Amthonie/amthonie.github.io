@@ -99,6 +99,91 @@
 
     <!-- Umami tag -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="7ea47516-43a9-4ffe-b65d-52642e7b3c28" data-domains="amthonie.nl" data-tag="homepage"></script>
+
+    <!--
+      "Odds and ends" cards: each fact gets an illustration in an ivory mat with
+      a small caption under it, the way an old cigarette card frames its
+      picture. Stacked inside one card on small screens; picture left of the
+      text from 768px up. Decoration only — the images are not links, so no
+      lightbox. Kept here rather than in src/input.css so it renders without
+      waiting for a Tailwind rebuild (same reasoning as the jottings tag
+      filter); the `.update-body` prefixes stop that file's generic list and
+      heading rules out-specifying these.
+    -->
+    <style>
+        .update-body .oe-cards {
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .update-body .oe-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            padding: 0.9rem;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .update-body .oe-card figure {
+            margin: 0;
+            padding: 0.5rem;
+            background: #f7f2e6;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+        .update-body .oe-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .update-body .oe-card figcaption {
+            margin-top: 0.45rem;
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            color: #57534e; /* stone-600 */
+        }
+        .update-body .oe-title {
+            margin: 0 0 0.35rem;
+            font-size: 1.05rem;
+            line-height: 1.3;
+        }
+        .update-body .oe-title .oe-gloss {
+            font-weight: 400;
+            opacity: 0.65;
+        }
+        .update-body .oe-text {
+            min-width: 0;
+        }
+        .update-body .oe-text p {
+            margin: 0;
+        }
+
+        @media (min-width: 768px) {
+            .update-body .oe-card {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 1.25rem;
+            }
+            .update-body .oe-card figure {
+                flex: 0 0 18rem;
+                width: 18rem;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .update-body .oe-card {
+                background: rgba(255, 255, 255, 0.15);
+            }
+            .update-body .oe-card figure {
+                background: #ece5d4;
+                border-color: rgba(0, 0, 0, 0.25);
+            }
+        }
+    </style>
 </head>
 
 <body class="flex flex-col min-h-screen bg-paper text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100">
@@ -263,16 +348,58 @@
     </div>
     <section class="w-full md:w-4/5 max-w-[1280px] panel px-4 py-4 md:px-8 md:py-8">
         <div class="update-body">
-                <ul class="facts-list">
-                    <li>People from Naarden have long been known by the nickname <b>Kraaien</b> (“crows”). Depending on who you ask, it either refers to the supposed temperament of old Naarden folk or to the legend that crows once helped hoist the largest church bell into the tower. Both explanations are equally dubious, which is half the charm.</li>
+                <ul class="oe-cards">
+                    <li class="oe-card">
+                        <figure>
+                            <img src="images/kraaien.webp"
+                                 alt="Cartoon of crows in hats hauling a church bell up the tower of the Grote Kerk while townspeople watch, the star-shaped fortress laid out behind them"
+                                 loading="lazy"/>
+                            <figcaption>No. 1 · Kraaien</figcaption>
+                        </figure>
+                        <div class="oe-text">
+                            <h3 class="oe-title">Kraaien <span class="oe-gloss">— crows</span></h3>
+                            <p>People from Naarden have long been known by the nickname Kraaien (“crows”). Depending on who you ask, it either refers to the supposed temperament of old Naarden folk or to the legend that crows once helped hoist the largest church bell into the tower. Both explanations are equally dubious, which is half the charm.</p>
+                        </div>
+                    </li>
 
-                    <li>The historic tramway between Amsterdam and the Gooi earned its grim nickname <b>De Gooise Moordenaar</b> (“the Gooi Murderer”) because it was notoriously accident‑prone. In its early decades, the tram struck so many pedestrians, cyclists and horse‑drawn carts that locals began referring to it with a mix of fear and dry humour. Despite the name, it remained a beloved part of regional transport history.</li>
+                    <li class="oe-card">
+                        <figure>
+                            <img src="images/gooise-moordenaar.webp"
+                                 alt="Cartoon of the old Gooi tram with a skull-shaped front, scattering cyclists along the polder track"
+                                 loading="lazy"/>
+                            <figcaption>No. 2 · De Gooise Moordenaar</figcaption>
+                        </figure>
+                        <div class="oe-text">
+                            <h3 class="oe-title">De Gooise Moordenaar <span class="oe-gloss">— the Gooi Murderer</span></h3>
+                            <p>The historic tramway between Amsterdam and the Gooi earned its grim nickname because it was notoriously accident‑prone. In its early decades, the tram struck so many pedestrians, cyclists and horse‑drawn carts that locals began referring to it with a mix of fear and dry humour. Despite the name, it remained a beloved part of regional transport history.</p>
+                        </div>
+                    </li>
 
-                    <li>After the 1813–1814 siege, locals kept finding stray cannonballs in gardens, cellars and fields for decades — the so‑called <b>Naarden cannonball problem</b>. They turned up during renovations, in vegetable patches, even embedded in old walls. A surprising number still surface today, usually handed over to the Fortress Museum with quiet local pride.</li>
+                    <li class="oe-card">
+                        <figure>
+                            <img src="images/kanonskogels.webp"
+                                 alt="Cartoon of a gardener digging up cannonballs beside the Fortress Museum, where two curators admire another one"
+                                 loading="lazy"/>
+                            <figcaption>No. 3 · The cannonball problem</figcaption>
+                        </figure>
+                        <div class="oe-text">
+                            <h3 class="oe-title">The cannonball problem</h3>
+                            <p>After the 1813–1814 siege, locals kept finding stray cannonballs in gardens, cellars and fields for decades. They turned up during renovations, in vegetable patches, even embedded in old walls. A surprising number still surface today, usually handed over to the Fortress Museum with quiet local pride.</p>
+                        </div>
+                    </li>
 
-                    <li>Supposedly, the Grote Kerk once kept an informal tradition that any <b>mouse</b> caught inside the church had to be released <em>within</em> the fortress walls, never outside them. The idea was that even the mice were considered part of the protected heritage. It was never an official policy, but locals treated it as a kind of gentle, running joke about Naarden’s obsession with preservation.</li>
-
-                    <li>As the tale goes, Naarden’s ceremonial <b>fortress keys</b> were handed to visiting dignitaries only after a small speech reminding them that the town had been destroyed and rebuilt so many times that the keys were mostly symbolic. It became a local joke that the keys “opened nothing but history”.</li>
+                    <li class="oe-card">
+                        <figure>
+                            <img src="images/kerkmuis.webp"
+                                 alt="Cartoon of a man tiptoeing a trapped mouse out of the Grote Kerk while the congregation applauds"
+                                 loading="lazy"/>
+                            <figcaption>No. 4 · The church mouse</figcaption>
+                        </figure>
+                        <div class="oe-text">
+                            <h3 class="oe-title">The church mouse</h3>
+                            <p>Supposedly, the Grote Kerk once kept an informal tradition that any mouse caught inside the church had to be released <em>within</em> the fortress walls, never outside them. The idea was that even the mice were considered part of the protected heritage. It was never an official policy, but locals treated it as a kind of gentle, running joke about Naarden’s obsession with preservation.</p>
+                        </div>
+                    </li>
                 </ul>
         </div>
     </section>
