@@ -1,5 +1,5 @@
 ---
-id: 0018
+id: 18
 date: 2026-08-23
 slug: the-art-of-not-connecting
 tags: [reflection, travel]
