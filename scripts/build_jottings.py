@@ -392,10 +392,25 @@ def render_articles(posts: list[dict]) -> str:
             blocks.append(
                 f"""
             <article id="{post['anchor']}" class="scroll-mt-28 w-full panel px-4 py-4 md:px-8 md:py-8" data-tags="{','.join(post['tags'])}">
-                <time datetime="{post['date']:%Y-%m-%d}"
-                      class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
-                    {human_date(post['date'])}
-                </time>
+                <div class="flex items-center justify-between">
+                    <time datetime="{post['date']:%Y-%m-%d}"
+                          class="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                        {human_date(post['date'])}
+                    </time>
+                    <button type="button" data-jot-share
+                            aria-label="Share this jotting"
+                            data-umami-event="jotting-share-click"
+                            data-umami-event-jotting="{post['anchor']}"
+                            class="inline-flex items-center gap-2 text-xs font-medium transition text-stone-500 hover:text-brand-600 dark:text-stone-400 dark:hover:text-brand-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/>
+                            <path d="M12 3v12"/>
+                            <path d="M8 7l4-4 4 4"/>
+                        </svg>
+                        <span data-jot-share-label aria-live="polite" hidden>Share</span>
+                    </button>
+                </div>
                 <h3 class="mt-1 text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
                     {html.escape(post['title'])}
                 </h3>
@@ -844,6 +859,52 @@ FILTER_SCRIPT = """<!-- Jottings tag filter (progressive enhancement — hidden 
         active.clear();
         pills.forEach(p => p.setAttribute('aria-pressed', 'false'));
         apply();
+    });
+})();
+
+/* Share a single jotting. The jottings all live on this one page, so the browser's own share
+   button would only ever offer /jottings/ — this offers the jotting's own anchor instead.
+   On a phone that opens the native share sheet; elsewhere it copies the link and says so.
+   The label is hidden until hovered, focused, or just used, so the icon stays quiet. */
+(() => {
+    document.querySelectorAll('[data-jot-share]').forEach(btn => {
+        const label = btn.querySelector('[data-jot-share-label]');
+        let copied = false;
+
+        const show = () => { label.hidden = false; };
+        const hide = () => { if (!copied) label.hidden = true; };
+
+        btn.addEventListener('mouseenter', show);
+        btn.addEventListener('mouseleave', hide);
+        btn.addEventListener('focus', show);
+        btn.addEventListener('blur', hide);
+
+        btn.addEventListener('click', async () => {
+            const article = btn.closest('article');
+            const url = location.origin + location.pathname + '#' + article.id;
+            const title = article.querySelector('h3')?.textContent.trim() || document.title;
+
+            if (navigator.share) {
+                try { await navigator.share({ title, url }); } catch (e) { /* dismissed */ }
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(url);
+                label.textContent = 'Link copied';
+            } catch (e) {
+                label.textContent = 'Copy failed';
+            }
+            copied = true;
+            show();
+
+            /* Clicking leaves the button focused, so only hover keeps the label up. */
+            setTimeout(() => {
+                copied = false;
+                label.textContent = 'Share';
+                if (!btn.matches(':hover')) label.hidden = true;
+            }, 1800);
+        });
     });
 })();
 </script>
