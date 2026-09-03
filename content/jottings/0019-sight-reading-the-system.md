@@ -2,7 +2,7 @@
 id: 19
 date: 2026-09-03
 slug: sight-reading-the-system
-tags: [coding, music, reflection]
+tags: [coding, music]
 title: Sight-Reading the System
 summary: Why I treat code as a music score, and what follows from it.
 image: 19-sight-reading-the-system.webp
