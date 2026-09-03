@@ -405,7 +405,7 @@ def render_page(
     <link rel="canonical" href="{canonical}">
     <link rel="icon" href="{prefix}chronicle/favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="{prefix}chronicle/icon.png"/>
-    <link rel="apple-touch-icon" href="{prefix}chronicle/icon.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{prefix}chronicle/apple-touch-icon.png"/>
     <meta name="description"
           content="{html.escape(description, quote=True)}"/>
     <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>

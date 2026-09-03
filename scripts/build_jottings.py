@@ -944,6 +944,7 @@ def build_jottings_page(posts: list[dict]) -> None:
     <link rel="canonical" href="{SITE}/jottings/">
     <link rel="icon" href="../favicon.ico" sizes="any"/>
     <link rel="icon" type="image/png" href="../images/a.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png"/>
     <meta name="description"
           content="{META_DESCRIPTION}"/>
     <meta name="theme-color" content="#4A7A2C" media="(prefers-color-scheme: light)"/>
