@@ -7,7 +7,7 @@ title: The Art of Not Connecting
 summary: Travelling across Germany by train, where punctuality is optional and connections are a dangerous form of optimism.
 image: 18-the-art-of-not-connecting.webp
 image_alt: Stylised split illustration showing an ICE train gliding through green valleys above, contrasted with a delayed local train and a tense passenger waiting on the platform below.
-image_caption: Beauty in motion, uncertainty in tow.
+image_caption: Beauty in motion, uncertainty in tow
 ---
 
 I have booked a holiday to Germany, seduced once again by the quiet charm of trundling through narrow, winding valleys on little local trains.

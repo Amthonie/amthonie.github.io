@@ -7,7 +7,7 @@ title: Sight-Reading the System
 summary: Why I treat code as a music score, and what follows from it.
 image: 19-sight-reading-the-system.webp
 image_alt: Retro magazine style illustration of a 1950s computer room where a conductor stands on a podium, baton raised, directing programmers at their terminals instead of musicians. Behind him a whiteboard shows a flowchart on the left turning into four staves of music on the right. Open binders on stands in the foreground are labelled VOICE 1, VOICE 2, THEME A and BAR 94. Everyone is working cheerfully and in step, and a small bug sits unnoticed on a server rack at the right.
-image_caption: A fugue for terminals.
+image_caption: A fugue for terminals
 ---
 
 Nobody ever taught me to write software. I read musicology, not computer science, and my first serious programming was spent coaxing three voices of Bach out of a Commodore 64 — three being what the sound chip allowed and, conveniently, what a fugue requires. Fifteen years of writing and debugging code for a living have not dislodged that training. It still does most of the structural work.
