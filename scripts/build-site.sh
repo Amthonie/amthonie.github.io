@@ -95,10 +95,14 @@ if [ "$CSS_ONLY" = "1" ]; then
 fi
 
 echo "==> 1/3  Python venv + page generators"
-if [ ! -x .venv/bin/python ]; then
+# A system Python upgrade leaves the venv's python pointing at the new version
+# while its packages (pip included) sit under the old lib/pythonX.Y — so check
+# that the venv actually works, and rebuild it from scratch when it doesn't.
+if ! .venv/bin/python -c 'import markdown' 2>/dev/null; then
+    rm -rf .venv
     python3 -m venv .venv
+    .venv/bin/pip install --quiet markdown
 fi
-.venv/bin/pip install --quiet markdown
 .venv/bin/python scripts/build_jottings.py
 .venv/bin/python scripts/build_chronicle.py
 .venv/bin/python scripts/build_melodies.py
