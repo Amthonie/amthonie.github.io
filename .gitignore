@@ -23,3 +23,6 @@ __pycache__/
 
 # Standalone Tailwind CLI downloaded by scripts/build-site.sh
 /tailwindcss
+
+# Local-only tools, served by the 4599 preview but never published
+/tools/
